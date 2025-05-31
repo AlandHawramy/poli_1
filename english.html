@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English Language</title>
+    <title>English Language - Alphabet</title> <!-- Specific title for this page -->
     <!-- CSS Styles -->
     <style>
         /* style.css - Updated Styles */
@@ -340,7 +340,7 @@
             /* Default flexbox removed, using grid now */
             /* display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.5rem; */
             overflow-y: auto; /* Allow vertical scrolling if needed */
-            max-height: 400px; /* Limit height to prevent excessive scrolling */
+            max-height: 400px; Weirder max-height to prevent excessive scrolling */
             display: grid; /* Use grid for controlled layout */
             gap: 0.5rem; /* Default gap */
              justify-items: center; /* Center items within their grid cells */
@@ -479,7 +479,18 @@
              color: var(--theme-text-secondary);
              background-color: var(--theme-bg-accent);
              font-size: 0.9rem;
+             min-height: 2rem; /* Give it some height even when empty */
+             display: flex;
+             align-items: center;
+             justify-content: center;
          }
+         /* Style for error messages */
+         .tts-status-message.error {
+             border-color: #d9534f; /* Reddish border */
+             color: #d9534f; /* Reddish text */
+             background-color: #fdf7f7; /* Very light red background */
+         }
+
     </style>
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -496,15 +507,16 @@
         <h1 style="text-align: center; margin-bottom: 2rem; color: var(--theme-text-accent); font-size: 2.5rem; font-weight: bold;">Alphabet</h1>
 
         <!-- TTS Status Message -->
-        <div class="tts-status-message" x-cloak x-show="showTTSWarning">
+        <div class="tts-status-message" :class="{ 'error': ttsMessageType === 'error' }" x-cloak x-show="showTTSWarning">
             <span x-text="ttsWarningMessage"></span>
         </div>
+
 
         <div class="grid-container">
              <!-- Loop through letters data -->
             <template x-for="letterData in letters" :key="letterData.letter">
                 <div class="grid-item"
-                     @click="speakText(letterData.letter); openModal(letterData);"> <!-- Speak letter, then open modal -->
+                     @click="handleLetterClick(letterData);"> <!-- Use handler function -->
                     <span x-text="letterData.letter"></span>
                 </div>
             </template>
@@ -512,9 +524,9 @@
 
         <!-- Modal -->
         <template x-if="showModal">
-            <div class="modal-backdrop" @click.self="closeModal()"> <!-- Close modal when clicking outside (on backdrop) -->
+            <div class="modal-backdrop" @click.self="closeModal()" x-cloak> <!-- Close modal when clicking outside (on backdrop) -->
                 <div class="modal-content" @click.stop> <!-- Prevent click inside modal from closing it -->
-                    <button class="back-button" @click="closeModal()" aria-label="Back">
+                    <button class="back-button" @click="closeModal()" aria-label="Close modal"> <!-- Changed label -->
                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
                        </svg>
@@ -527,7 +539,7 @@
                         <template x-for="example in examples" :key="example.text">
                             <div class="example-item" @click="speakText(example.text)">
                                 <!-- TODO: Replace with actual image paths -->
-                                <img :src="example.image" :alt="example.text + ' image'">
+                                <img :src="example.image" :alt="example.text + ' image'" @error="onImageError"> <!-- Added error handling -->
                                 <span x-text="example.text"></span>
                             </div>
                         </template>
@@ -602,19 +614,22 @@
                 synth: null,
                 voices: [],
                 selectedVoice: null,
-                isTTSAvailable: false, // Flag to check if TTS is supported
-                voicesLoaded: false,   // Flag to check if voices have been loaded
-                showTTSWarning: false, // Flag to show warning message
+                isTTSAvailable: false, // Flag to check if TTS is supported by browser
+                voicesLoaded: false,   // Flag to check if voices have been loaded from the system
+                showTTSWarning: false, // Flag to show warning message div
                 ttsWarningMessage: '', // Message content
+                ttsMessageType: 'info', // 'info' or 'error'
+
 
                 init() {
-                    console.log("English App Initializing");
+                    console.log("English App Initializing...");
 
                     // Check if TTS is supported by the browser
                     if (!('speechSynthesis' in window)) {
                          console.error('Text-to-Speech not supported in this browser.');
                          this.isTTSAvailable = false;
-                         this.ttsWarningMessage = 'Sorry, Text-to-Speech is not supported by your browser.';
+                         this.setTTSWarning('Sorry, Text-to-Speech is not supported by your browser.', 'error');
+                         // Keep showTTSWarning true to permanently show the error
                          this.showTTSWarning = true;
                          return; // Exit init if not supported
                     }
@@ -633,80 +648,98 @@
                          console.log("Voices already available on init.");
                          this.loadAndSelectVoice();
                     } else {
-                        console.log("Voices not immediately available, attempting workaround.");
-                        // Attempt a workaround to prompt voice loading in some browsers (especially mobile)
-                        // Speak a tiny, silent utterance with the target language.
-                         const dummyUtterance = new SpeechSynthesisUtterance(' '); // Space might be needed
-                         dummyUtterance.lang = 'en-US';
-                         try {
+                         console.log("Voices not immediately available, attempting workaround...");
+                         // Attempt a workaround to prompt voice loading in some browsers (especially mobile)
+                         // Speak a tiny, silent utterance. Needs a lang set.
+                          try {
+                             const dummyUtterance = new SpeechSynthesisUtterance(' '); // A space or empty string might work
+                             dummyUtterance.lang = 'en-US';
+                             // Set volume to 0 just in case, though not always necessary/supported
+                             dummyUtterance.volume = 0;
                              this.synth.speak(dummyUtterance);
-                              console.log("Spoke dummy utterance to prompt voice loading.");
-                              // Cancel the dummy utterance immediately so it's not heard
-                               this.synth.cancel();
+                             console.log("Spoke dummy utterance to prompt voice loading.");
+                              // Immediately cancel the dummy utterance
+                             this.synth.cancel();
                          } catch (e) {
                              console.warn("Failed to speak dummy utterance:", e);
                          }
 
-                        // Set a timeout to check if voices loaded after a short delay
-                        // This is a fallback in case onvoiceschanged doesn't fire as expected
-                        setTimeout(() => {
-                            if (!this.voicesLoaded) { // Only run if voices are still not marked as loaded
+                         // Set a timeout to check if voices loaded after a short delay
+                         // This is a fallback in case onvoiceschanged doesn't fire as expected
+                         setTimeout(() => {
+                             // Re-run loadAndSelectVoice to check synth.getVoices() again
+                             this.loadAndSelectVoice();
+
+                             if (!this.voicesLoaded) {
                                 console.warn("Voices still not loaded after workaround delay.");
-                                this.ttsWarningMessage = 'Text-to-Speech voices are loading or not available. Tap again if speech fails.';
+                                this.setTTSWarning('Text-to-Speech voices are loading or not available. Tap a letter/word again if speech fails.');
                                 this.showTTSWarning = true; // Show warning
-                                // Attempt to load/select voice again in case the event was missed
-                                this.loadAndSelectVoice(); // This will also set voicesLoaded if successful
-                                if (!this.voicesLoaded && this.isTTSAvailable) {
-                                    console.error("TTS available but no voices found even after delay.");
-                                     this.ttsWarningMessage = 'TTS voices not found on your system. Speech may not work.';
-                                     this.showTTSWarning = true;
-                                }
-                            } else {
+                             } else {
                                  console.log("Voices confirmed loaded after delay.");
                                  this.showTTSWarning = false; // Hide warning if it was shown
-                            }
-                        }, 1500); // Increased delay slightly
+                             }
+                         }, 2000); // Increased delay slightly for mobile
                     }
                 },
 
                 loadAndSelectVoice() {
                     this.voices = this.synth.getVoices();
                     console.log(`Found ${this.voices.length} voices.`);
+
+                    if (this.voices.length === 0) {
+                         console.warn('No TTS voices found on the system.');
+                         this.voicesLoaded = false;
+                         this.setTTSWarning('No TTS voices found on your system. Speech may not work.', 'error');
+                         this.showTTSWarning = true;
+                         return;
+                    }
+
                     console.log("Available voices:", this.voices.map(v => `${v.name} (${v.lang})`).join(', '));
 
-                     // Try to find a female English voice, prioritizing Google
+                     // Try to find a suitable English voice, prioritizing 'en-US' and female
                     this.selectedVoice = this.voices.find(voice =>
-                         voice.lang === 'en-US' && voice.name.toLowerCase().includes('female') && voice.name.toLowerCase().includes('google')
+                         voice.lang === 'en-US' && (voice.name.toLowerCase().includes('female') || voice.name.toLowerCase().includes('zira')) // Often 'Zira' is a common US female voice name
                     ) || this.voices.find(voice =>
-                         voice.lang === 'en-US' && voice.name.toLowerCase().includes('female')
+                         voice.lang === 'en-US' // Fallback to any US English voice
                     ) || this.voices.find(voice =>
-                         voice.lang.startsWith('en') && voice.name.toLowerCase().includes('female') // Any English female
-                    ) || this.voices.find(voice =>
-                        voice.lang === 'en-US' // Fallback to any US English voice
+                         voice.lang.startsWith('en') && (voice.name.toLowerCase().includes('female') || voice.name.toLowerCase().includes('zira')) // Any English female
                     ) || this.voices.find(voice =>
                          voice.lang.startsWith('en') // Fallback to any English voice
-                    ) || this.voices[0] || null; // Fallback to first available voice or null
+                    ) || this.voices[0]; // Fallback to the very first available voice
 
                     if (this.selectedVoice) {
                          console.log('Selected voice:', this.selectedVoice.name);
                          this.voicesLoaded = true; // Mark voices as loaded if a voice is selected
-                         this.showTTSWarning = false; // Hide any warning
+                         // If a warning was shown because voices were loading, hide it now
+                         if (this.ttsWarningMessage.includes("voices are loading")) {
+                             this.showTTSWarning = false;
+                             this.ttsWarningMessage = '';
+                             this.ttsMessageType = 'info';
+                         }
                     } else {
-                        console.warn('No suitable English female voice found. Using browser default or falling back.');
-                         // If no specific voice is selected, the browser will use its default for 'en-US' if available.
-                         // Keep voicesLoaded as false or show a different warning if needed.
-                         this.ttsWarningMessage = 'No preferred voice found. Using default voice if available.';
-                         // Decide if you want to show a warning here or not. Showing it might be confusing.
+                        // This case should ideally not be reached if voices.length > 0 due to the last fallback
+                        // But if it is, it means no English or default voice was found.
+                        console.warn('Could not find a suitable English voice. Using browser default if any.');
+                         this.voicesLoaded = true; // Voices ARE loaded, just didn't find a preferred one
+                         this.setTTSWarning('No preferred English voice found. Using browser default.', 'info');
+                         // Decide if you want to show a warning here or not.
                          // this.showTTSWarning = true; // Optional: show warning
-                          if(this.voices.length > 0) {
-                              this.voicesLoaded = true; // Voices ARE loaded, just didn't find the *preferred* one
-                               this.showTTSWarning = false; // Hide warning about loading
-                          } else {
-                             this.voicesLoaded = false;
-                             this.ttsWarningMessage = 'TTS voices are still loading or not found on your system.';
-                             this.showTTSWarning = true;
-                          }
                     }
+                },
+
+                setTTSWarning(message, type = 'info') {
+                    this.ttsWarningMessage = message;
+                    this.ttsMessageType = type;
+                    this.showTTSWarning = true; // Make sure the div is visible
+                },
+
+                hideTTSWarning() {
+                     // Only hide if it's not a permanent "not supported" error
+                     if (!this.ttsWarningMessage.includes("not supported")) {
+                         this.showTTSWarning = false;
+                         this.ttsWarningMessage = '';
+                         this.ttsMessageType = 'info';
+                     }
                 },
 
                 stopSpeaking() {
@@ -716,49 +749,82 @@
                     }
                 },
 
+                handleLetterClick(letterData) {
+                     // Speak the letter immediately on click
+                     this.speakText(letterData.letter);
+                     // Then open the modal
+                     this.openModal(letterData);
+                 },
+
                 speakText(text) {
                      if (!this.isTTSAvailable) {
                          console.warn('Text-to-Speech not available. Cannot speak.');
+                         this.setTTSWarning('Text-to-Speech not supported by your browser.', 'error');
                          return; // Don't try if not supported
                      }
                       if (!this.synth) {
                           console.error('SpeechSynthesis object not initialized.');
                           // This shouldn't happen if isTTSAvailable is true, but safety check
+                           this.setTTSWarning('Text-to-Speech initialization failed.', 'error');
                           return;
                       }
-
 
                      // Stop any current speech before starting a new one
                       this.stopSpeaking();
 
+                      // Explicitly try to get voices again just before speaking if they weren't loaded initially.
+                      // This can sometimes prompt mobile browsers to make them available.
+                     if (!this.voicesLoaded && this.synth.getVoices().length === 0) {
+                         console.log("Voices not loaded, attempting to retrieve just before speaking...");
+                         this.loadAndSelectVoice(); // This will update voicesLoaded and selectedVoice if successful
+                     }
+
                      const utterance = new SpeechSynthesisUtterance(text);
                      utterance.lang = 'en-US'; // Specify language
 
-                     // Use the selected voice if available
-                     if (this.selectedVoice) {
+                     // Use the selected voice if available and voices are loaded
+                     if (this.voicesLoaded && this.selectedVoice) {
                           utterance.voice = this.selectedVoice;
                           console.log(`Attempting to speak "${text}" with voice "${this.selectedVoice.name}"`);
                      } else if (this.voicesLoaded) {
-                         console.warn(`No specific voice selected, but voices loaded. Attempting to speak "${text}" with browser default for en-US.`);
-                         // Browser *should* use default US English voice
+                         console.warn(`Voices loaded but no preferred voice found. Attempting to speak "${text}" with browser default for en-US.`);
+                         // Browser should use its default US English voice
                      } else {
-                         console.warn(`Voices not yet loaded or found. Attempting to speak "${text}" with browser default for en-US. This might fail.`);
+                         console.warn(`Voices not confirmed loaded. Attempting to speak "${text}" with browser default for en-US. This might fail.`);
                          // This is the tricky mobile case. The speak() call itself might trigger voices to load.
                          // If it fails, the onerror handler should catch it.
+                          this.setTTSWarning('TTS voices still loading. Try tapping again.', 'info'); // Inform user voices might be loading
                      }
 
 
                      utterance.rate = 0.9; // Adjust speech rate (slightly slower)
                      utterance.pitch = 1; // Default pitch
 
-                     utterance.onstart = () => { console.log(`Speech started: "${text}"`); };
+                     utterance.onstart = () => {
+                          console.log(`Speech started: "${text}"`);
+                          this.hideTTSWarning(); // Hide transient warnings when speech starts
+                     };
                      utterance.onend = () => { console.log(`Speech finished: "${text}"`); };
                      utterance.onerror = (event) => {
                          console.error('Speech synthesis error:', event.error, event);
-                          this.ttsWarningMessage = `Speech failed: ${event.error}. Please check device voice settings.`;
-                          this.showTTSWarning = true; // Show error message
-                         // On mobile, 'not-allowed' is common for the first attempt without user gesture,
-                         // but since we tied it to click, it might indicate no voices or other issues.
+                          let errorMessage = `Speech failed: ${event.error}.`;
+                          if (event.error === 'not-allowed') {
+                               errorMessage += ' Browser requires user interaction.'; // Less likely with click, but possible timing issue
+                          } else if (event.error === 'network') {
+                               errorMessage += ' Network error.'; // For online voices
+                          } else if (event.error === 'synthesis-failed') {
+                               errorMessage += ' Synthesis failed.'; // Generic failure
+                          } else if (event.error === 'synthesis-unavailable') {
+                                errorMessage += ' Voice unavailable.'; // Selected voice not found or failed
+                          } else if (event.error === 'too-many-requests') {
+                               errorMessage += ' Too many speech requests.';
+                          } else if (event.error === 'cancellation') {
+                              console.log("Speech cancelled, this is normal on modal close."); // Don't show error for cancellation
+                              return; // Exit without showing error
+                          }
+
+                          this.setTTSWarning(errorMessage + ' Please check device voice settings or try again.', 'error');
+                         // Keep showTTSWarning true to display the error
                      };
 
 
@@ -767,27 +833,34 @@
                         this.synth.speak(utterance);
                      } catch (e) {
                          console.error("Error calling speak:", e);
-                          this.ttsWarningMessage = `Error speaking: ${e.message}. Try tapping again.`;
-                          this.showTTSWarning = true; // Show error message
+                          this.setTTSWarning(`Error speaking: ${e.message}. Try tapping again.`, 'error');
+                         // Keep showTTSWarning true to display the error
                      }
                 },
+
                 openModal(letterData) {
                     console.log("Opening modal for:", letterData.letter);
                     this.currentLetter = letterData.letter;
                     this.examples = letterData.examples;
                     this.showModal = true;
-                    // Speaking the letter on modal open is removed, handled by initial click
+                    // Speaking the letter on modal open is removed, handled by initial click handler
                 },
+
                 closeModal() {
                     console.log("Closing modal");
-                    this.showModal = false;
                     this.stopSpeaking(); // Stop speaking when closing modal
-                     // Clear any temporary TTS warning when modal closes
-                     if (this.ttsWarningMessage.includes("Speech failed") || this.ttsWarningMessage.includes("Error speaking")) {
-                         this.showTTSWarning = false;
-                         this.ttsWarningMessage = '';
-                     }
-                }
+                    this.showModal = false;
+                    // Clear any temporary TTS warning when modal closes
+                    this.hideTTSWarning();
+                },
+
+                onImageError(event) {
+                     console.warn('Image failed to load:', event.target.src);
+                     // Optionally, replace the broken image with a placeholder or hide it
+                     event.target.src = 'images/placeholder.png'; // Or some default placeholder
+                     // event.target.style.display = 'none'; // Or hide the image element
+                     event.target.alt = 'Image not available';
+                 }
             }
         }
     </script>
