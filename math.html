@@ -363,27 +363,29 @@
             margin: 0 auto; /* This centers the container itself */
         }
 
-        /* New style for the flex container holding the problem text and answer box */
-         /* This container flows right-to-left by default because its parent (body) is RTL */
+        /* Container for the problem line (equation + answer box) */
+         /* This container flows Left-to-Right because we set dir="ltr" */
         .problem-line {
             display: flex; /* Arrange items in a row */
             align-items: center; /* Vertically align items (text, box) */
-            gap: 1rem; /* Space between problem text and answer box */
+            gap: 1rem; /* Space between equation and answer box */
             width: 100%; /* Allow the line to take available width */
-            justify-content: center; /* Center the entire problem-line block */
-             /* Items within this flex container will flow right-to-left by default (parent dir="rtl") */
+            justify-content: center; /* Center the entire problem-line block within the parent */
+             /* Crucially, set LTR direction here */
+            direction: ltr;
+            unicode-bidi: plaintext; /* Ensure internal flow is LTR regardless of external context */
         }
 
         /* Style for the part showing num1 operator num2 = */
-        .problem-text {
+        .problem-equation { /* Renamed from problem-text */
             font-size: 2rem;
             font-weight: bold;
             color: var(--theme-text-accent);
             display: flex; /* Arrange numbers and operator in a row */
             align-items: center;
-            gap: 1rem; /* Space between num1, operator, num2, = */
-             /* Force LTR layout for the math expression itself */
-            direction: ltr;
+            gap: 1rem; /* Space between num1, operator, num2, and = */
+             /* Ensure internal numbers/operators are displayed LTR */
+            direction: ltr; /* This might be redundant if parent is LTR, but explicit is safe */
             unicode-bidi: plaintext;
              /* Prevent shrinking so the math expression stays together */
              flex-shrink: 0;
@@ -843,44 +845,29 @@
 
             <!-- Problem Area -->
             <div x-show="currentArithmeticView === 'problem'" class="arithmetic-container" x-cloak>
-                 <!-- Container for the problem line (answer box + problem text) -->
-                 <!-- This flex container flows right-to-left by default -->
+                 <!-- Container for the problem line (equation + answer box) -->
+                 <!-- This flex container flows Left-to-Right because we set dir="ltr" -->
                 <div class="problem-line">
-                     <!-- Answer Box - This comes *first* in HTML so it appears on the *right* -->
-                     <!-- But the user wants it on the *left*? -->
-                     <!-- Let's re-read: "١٤ + ٤ = ٥ بکەوێتە دەستە ڕاست (چوارگۆشەکەی بکەوێتە دەستە چەپ)" -->
-                     <!-- This means the ANSWER should be on the RIGHT of the "=" -->
-                     <!-- Okay, my previous interpretation "١٤ + ٤ = [Answer Box]" was correct. -->
-                     <!-- The user means the *square box* (answer) should be on the left *of the whole line* -->
-                     <!-- which means the equation part should be on the right of the box. -->
-                     <!-- The visual order required in RTL is: [Answer Box] 14 + 4 = -->
-                     <!-- So the answer box should be the FIRST item in the RTL flex container -->
-
-                     <!-- Answer Box - Appears on the visual RIGHT in an RTL flex row -->
-                     <!-- We want it on the visual LEFT. So it should be the *LAST* item in HTML order. -->
-
-                     <!-- Let's restructure again based on the clarified goal: [Answer Box] 14 + 4 = -->
-                     <!-- In an RTL flex container (problem-line), the LAST item in HTML appears on the LEFT -->
-                     <!-- and the FIRST item in HTML appears on the RIGHT. -->
-                     <!-- So, problem text first, answer box last in HTML. -->
-
-                     <!-- This flex container flows right-to-left by default. -->
-                     <!-- Item 1 (problem text) goes right, Item 2 (answer box) goes left. PERFECT. -->
-
-                     <!-- Problem Text - Appears on the visual RIGHT in an RTL flex row -->
-                     <div class="problem-text" dir="ltr"> <!-- Force LTR for the equation content -->
+                    <!-- Problem Equation (Number 1 Operator Number 2) - Appears on the visual RIGHT in an LTR flex row -->
+                    <!-- This div holds Num1, Operator, Num2. The '=' sign is now outside this div -->
+                     <div class="problem-equation" dir="ltr"> <!-- Force LTR for the equation content -->
                           <span x-text="toKurdishDigits(problem.num1)"></span>
                           <span x-text="problem.operator"></span>
                           <span x-text="toKurdishDigits(problem.num2)"></span>
-                          <span>=</span>
                      </div>
 
-                     <!-- Answer Box - Appears on the visual LEFT in an RTL flex row -->
-                      <div class="answer-display"
-                           dir="ltr"
-                           x-text="toKurdishDigits(userAnswer)"
-                           @click="clearAnswer()">
-                      </div>
+                    <!-- Equals sign + Answer Box container - Appears on the visual LEFT in an LTR flex row -->
+                    <!-- This div will contain the '=' sign and the answer box side-by-side, LTR -->
+                     <div class="problem-equals-answer" style="display: flex; align-items: center; gap: 1rem; direction: ltr; unicode-bidi: plaintext;">
+                         <span>=</span>
+                         <!-- Answer Box - Appears right after the '=' sign in LTR flow -->
+                          <div class="answer-display"
+                               dir="ltr"
+                               x-text="toKurdishDigits(userAnswer)"
+                               @click="clearAnswer()">
+                          </div>
+                     </div>
+
                  </div>
 
 
@@ -1030,7 +1017,9 @@
      <!-- Need audio files named exactly 'plus.mp3', 'minus.mp3', 'equals.mp3' in your audio/math folder -->
      <audio id="sound-plus" src="audio/math/plus.mp3" preload="auto"></audio>
      <audio id="sound-minus" src="audio/math/minus.mp3" preload="auto"></audio>
-     <!-- audio id="sound-equals" src="audio/math/equals.mp3" preload="auto"></audio -->
+     <audio id="sound-equals" src="audio/math/equals.mp3" preload="auto"></audio> <!-- Added equals audio tag back -->
+     <!-- Add general feedback sounds if desired -->
+     <!-- Need audio files named exactly 'success.mp3', 'failure.mp3', 'tryagain.mp3' -->
      <audio id="sound-success" src="audio/math/success.mp3" preload="auto"></audio>
      <audio id="sound-failure" src="audio/math/failure.mp3" preload="auto"></audio>
      <audio id="sound-tryagain" src="audio/math/tryagain.mp3" preload="auto"></audio>
@@ -1264,12 +1253,18 @@
                           console.warn(`Audio element not found for operator ID: ${operatorSoundId}. Skipping operator audio.`);
                       }
 
-
                      audioQueue.push(`sound-${num2}`); // Second number sound ID
 
-                      // Optional: Add equals and the answer sound (Need audio files and IDs)
-                      // const equalsSoundId = 'sound-equals';
-                      // if(this.arithmeticSoundElements[equalsSoundId]) audioQueue.push(equalsSoundId);
+                     // Add equals sound if element exists
+                     const equalsSoundId = 'sound-equals';
+                     if(this.arithmeticSoundElements[equalsSoundId]) {
+                         audioQueue.push(equalsSoundId);
+                     } else {
+                         console.warn(`Audio element not found for ID: sound-equals. Skipping equals audio.`);
+                     }
+
+
+                      // Optional: Add the answer sound (Need audio files and IDs)
                       // const answerSoundId = `sound-${this.problem.answer}`;
                       // if(this.numberSoundElements[answerSoundId]) audioQueue.push(answerSoundId);
 
@@ -1541,7 +1536,7 @@
                               setTimeout(() => this.generateProblem(), 3000); // Longer delay after failed attempts
                          } else {
                              // Attempts still remaining, clear answer field for retry
-                             this.feedbackMessage = `هەڵەیە. دووبارە هەوڵ بدەوە. (${this.toKurdishDigits(this.attemptsLeft)} هەڵەی ماو)`;
+                             this.feedbackMessage = 'هەڵەیە. دووبارە هەوڵ بدەوە.'; // Simple "هەڵەیە" message
                              this.feedbackClass = 'incorrect';
                               this.userAnswer = ''; // Clear the input for the next attempt
                              this.playFeedbackSound('tryagain'); // Need sound-tryagain.mp3
@@ -1567,7 +1562,7 @@
      <!-- Need audio files named exactly 'plus.mp3', 'minus.mp3', 'equals.mp3' in your audio/math folder -->
      <audio id="sound-plus" src="audio/math/plus.mp3" preload="auto"></audio>
      <audio id="sound-minus" src="audio/math/minus.mp3" preload="auto"></audio>
-     <!-- audio id="sound-equals" src="audio/math/equals.mp3" preload="auto"></audio -->
+     <audio id="sound-equals" src="audio/math/equals.mp3" preload="auto"></audio>
      <!-- Add general feedback sounds if desired -->
      <!-- Need audio files named exactly 'success.mp3', 'failure.mp3', 'tryagain.mp3' -->
      <audio id="sound-success" src="audio/math/success.mp3" preload="auto"></audio>
