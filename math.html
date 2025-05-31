@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بیرکاری</title>
+    <!-- Tailwind CSS (Optional, but your original code included it) -->
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <!-- Your Custom CSS Styles -->
+    <style>
+        /* style.css - Updated Styles (Copy the whole block again) */
+
+        /* Define theme colors using CSS variables */
+        :root {
+            --theme-bg-main: #fbfaf7; /* Light background */
+            --theme-bg-content: #fffefc; /* Slightly lighter content background */
+            --theme-bg-accent: #f5f0e8; /* Accent background, similar to sidebar in previous code */
+
+            --theme-border-light: #e8e0d4;
+            --theme-border-medium: #d8c8b8;
+            --theme-border-strong: #c8a97e;
+            --theme-border-accent: #d2b48c;
+
+            --theme-text-primary: #5a4d41; /* Dark brown */
+            --theme-text-secondary: #7a6d61; /* Medium brown */
+            --theme-text-accent: #8b5a2b; /* Accent brown/orange */
+
+            --theme-button-primary-bg: #8b5a2b; /* Primary button background */
+            --theme-button-primary-text: white; /* Primary button text color */
+            --theme-button-primary-hover-bg: #a07d5b; /* Primary button hover background */
+
+            --theme-card-bg: #fffefc; /* Background for cards/items */
+            --theme-card-border: #e8e0d4; /* Border for cards/items */
+            --theme-card-hover-border: #d2b48c; /* Hover border for cards */
+        }
+
+        /* Apply font and background to body */
+        body {
+            font-family: "NRT Reg", "Rudaw", "Unikurd Web", "Vazirmatn", "Tahoma", sans-serif;
+            background-color: var(--theme-bg-main);
+            color: var(--theme-text-primary);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            text-align: right; /* Default text alignment for RTL */
+        }
+
+        /* Basic container styling */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+         /* Back button style */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 1rem;
+            left: 1rem; /* Position on the left visually in RTL */
+            right: auto; /* Ensure it's not affected by RTL right */
+            background-color: var(--theme-bg-accent); /* Use an accent background */
+            color: var(--theme-text-accent); /* Use accent text color */
+            border: 1px solid var(--theme-border-medium);
+            border-radius: 0.5rem; /* Rounded corners */
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+            z-index: 10; /* Stay on top */
+            text-decoration: none; /* Remove underline for links */
+        }
+
+        .back-button:hover {
+            background-color: var(--theme-border-light); /* Lighter on hover */
+            border-color: var(--theme-border-accent);
+            transform: translateY(-1px); /* Slight lift on hover */
+        }
+
+        .back-button svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            /* Arrow points left in RTL */
+            transform: rotate(0deg);
+        }
+        html[dir="ltr"] .back-button svg {
+             transform: rotate(180deg); /* Arrow points left in LTR */
+        }
+
+        /* Subject Button Styles (for index.html and math.html main screen) */
+        .subject-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--theme-card-bg);
+            border: 2px solid var(--theme-card-border);
+            border-radius: 1rem; /* More rounded for a friendly look */
+            padding: 1.5rem;
+            text-decoration: none;
+            color: var(--theme-text-primary);
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* Subtle shadow */
+            min-height: 180px; /* Minimum height for consistency */
+            width: 100%;
+        }
+
+        .subject-button:hover {
+            border-color: var(--theme-card-hover-border);
+            transform: translateY(-5px); /* More pronounced lift on hover */
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .subject-button img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 0.75rem;
+        }
+
+        /* --- Letter/Number Grid Styles --- */
+        .grid-container {
+            display: grid;
+            gap: 1rem; /* Space between items */
+            padding-top: 1rem;
+             text-align: center; /* Center grid items text */
+             /* Default (Mobile): Aim for more items per row to reduce scroll */
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+        }
+
+        .grid-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--theme-card-bg);
+            border: 1px solid var(--theme-card-border);
+            border-radius: 0.75rem; /* Slightly rounded */
+            font-size: 2rem; /* Large font size for letters/numbers */
+            font-weight: bold;
+            color: var(--theme-text-accent);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none; /* Prevent text selection */
+            min-height: 80px; /* Minimum size for touch targets */
+             /* Added animation on hover as requested */
+             transition: all 0.3s ease, transform 0.3s ease; /* Add transform to transition */
+        }
+
+        .grid-item:hover {
+            background-color: var(--theme-bg-accent);
+            border-color: var(--theme-card-hover-border);
+            transform: scale(1.05); /* Slightly enlarge on hover */
+        }
+
+        /* Subtle animation for letters (Applied to the span inside) */
+         @keyframes gentle-pulse {
+             0%, 100% { transform: scale(1); }
+             50% { transform: scale(1.02); }
+         }
+
+         .grid-item span {
+             display: block; /* Allow transform */
+             transform-origin: center; /* Center the transform */
+        }
+         .grid-item:hover span {
+             animation: gentle-pulse 1.5s infinite ease-in-out; /* Apply animation on hover */
+        }
+
+
+        /* --- Modal Styles --- */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6); /* Dark semi-transparent overlay */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50; /* Above other content */
+            padding: 1rem;
+             overflow-y: auto; /* Allow scrolling if modal is taller than screen */
+        }
+
+        .modal-content {
+            background-color: var(--theme-bg-content);
+            border-radius: 1rem; /* Rounded corners */
+            padding: 1.5rem;
+            max-width: 600px; /* Maximum width */
+            width: 100%;
+            position: relative; /* Needed for back button positioning */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+             text-align: right; /* Align modal content text to the right */
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--theme-text-accent);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Back button inside modal (positioning relative to modal-content) */
+        .modal-content .back-button {
+            position: absolute;
+            top: 1rem;
+            left: 1rem; /* Position on the left visually in RTL */
+            right: auto;
+            padding: 0.35rem; /* Smaller padding */
+            background-color: var(--theme-bg-accent);
+            color: var(--theme-text-accent); /* Match modal elements */
+            border: 1px solid var(--theme-border-medium);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            z-index: 20; /* Ensure it's above modal content */
+             /* Arrow direction adjustment handled by global back-button rule */
+             transform: none; /* Reset potential rotation from grid-item */
+        }
+         .modal-content .back-button:hover {
+             background-color: var(--theme-border-light);
+             border-color: var(--theme-border-accent);
+         }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Responsive grid for examples */
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        @media (max-width: 767px) { /* Specifically for mobile/smaller screens */
+            .example-grid {
+                 grid-template-columns: repeat(2, 1fr); /* Force 2 columns on small screens */
+                 gap: 0.75rem; /* Slightly smaller gap on mobile */
+             }
+         }
+
+
+        .example-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            padding: 0.75rem;
+            border: 1px solid var(--theme-card-border);
+            border-radius: 0.75rem;
+            background-color: var(--theme-card-bg);
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .example-item:hover {
+            background-color: var(--theme-bg-accent);
+            border-color: var(--theme-card-hover-border);
+            transform: scale(1.03);
+        }
+
+        .example-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 0.5rem;
+        }
+
+        .example-item span {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--theme-text-primary);
+            text-align: center;
+        }
+
+         /* --- Special Button Style inside Modal (Wanakan Button) --- */
+         .modal-footer-button {
+             display: block; /* Make it a block element to take full width */
+             width: fit-content; /* Shrink to content width */
+             margin: 1.5rem auto 0 auto; /* Center horizontally, add space above */
+             padding: 0.75rem 1.5rem;
+             font-size: 1.1rem;
+             font-weight: 600;
+             text-align: center;
+             text-decoration: none; /* Remove underline */
+             color: var(--theme-button-primary-text);
+             background-color: var(--theme-button-primary-bg);
+             border: 1px solid var(--theme-button-primary-bg);
+             border-radius: 0.5rem;
+             transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+             cursor: pointer;
+         }
+         .modal-footer-button:hover {
+             background-color: var(--theme-button-primary-hover-bg);
+             border-color: var(--theme-button-primary-hover-bg);
+             transform: translateY(-2px); /* Lift on hover */
+         }
+
+
+         /* --- Math Icons Section Styles --- */
+         .icon-display-area {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border: 1px solid var(--theme-card-border);
+            border-radius: 1rem;
+            background-color: var(--theme-card-bg);
+            /* Default flexbox removed, using grid now */
+            /* display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.5rem; */
+            overflow-y: auto; /* Allow vertical scrolling if needed */
+            max-height: 400px; /* Limit height to prevent excessive scrolling */
+            display: grid; /* Use grid for controlled layout */
+            gap: 0.5rem; /* Default gap */
+             justify-items: center; /* Center items within their grid cells */
+             align-items: center;
+        }
+
+         /* Specific styles for math icons scaling and grid density based on number size */
+        .icon-display-area.grid-icons {
+            /* Base density for large numbers (e.g. > 50) */
+            grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
+            gap: 0.2rem; /* Small gap */
+        }
+         .icon-display-area.large-icons {
+             /* For numbers up to ~25 */
+             grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
+             gap: 0.5rem;
+         }
+         .icon-display-area.medium-icons {
+             /* For numbers up to ~50 */
+             grid-template-columns: repeat(auto-fit, minmax(25px, 1fr));
+             gap: 0.3rem;
+         }
+         .icon-display-area.xlarge-icons {
+              /* For numbers up to ~10 */
+             grid-template-columns: repeat(auto-fit, minmax(40px, 1fr)); /* Might fit 5-10 per row depending on screen */
+             gap: 1rem;
+         }
+
+
+         .math-icon { object-fit: contain; flex-shrink: 0;}
+
+         /* Define icon sizes */
+        .math-icon.small { width: 20px; height: 20px; }
+        .math-icon.medium { width: 30px; height: 30px; }
+        .math-icon.large { width: 40px; height: 40px; }
+        .math-icon.xlarge { width: 50px; height: 50px; }
+
+
+         /* --- Math Arithmetic Section Styles (Used in math.html) --- */
+         .arithmetic-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid var(--theme-card-border);
+            border-radius: 1rem;
+            background-color: var(--theme-card-bg);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .problem-display {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--theme-text-accent);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+             /* Ensure LTR layout for numbers */
+            direction: ltr;
+            unicode-bidi: plaintext; /* Ensures digits are not affected by RTL */
+        }
+
+        .problem-display input {
+            width: 80px; /* Fixed width for input */
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 0.5rem;
+            border: 1px solid var(--theme-card-border);
+            border-radius: 0.5rem;
+            background-color: var(--theme-bg-main);
+            color: var(--theme-text-primary);
+             /* Ensure LTR input for numbers */
+            direction: ltr;
+            unicode-bidi: plaintext;
+        }
+
+        .arithmetic-buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 5 columns for numbers 0-9 */
+            gap: 0.5rem;
+            width: 100%;
+        }
+
+        .arithmetic-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 0.5rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background-color: var(--theme-bg-accent);
+            border: 1px solid var(--theme-card-border);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .arithmetic-button:hover {
+            background-color: var(--theme-border-light);
+            border-color: var(--theme-card-hover-border);
+            transform: scale(1.05);
+        }
+
+        .arithmetic-button.action { /* For Check button */
+            grid-column: span 2; /* Make action button wider */
+            font-size: 1rem;
+            color: var(--theme-button-primary-text);
+            background-color: var(--theme-button-primary-bg);
+            border-color: var(--theme-button-primary-bg);
+        }
+
+        .arithmetic-button.clear {
+            grid-column: span 1; /* Make clear button smaller */
+            font-size: 1rem;
+            background-color: var(--theme-text-secondary); /* Different color */
+            border-color: var(--theme-text-secondary);
+        }
+
+        .arithmetic-button.action:hover {
+            background-color: var(--theme-button-primary-hover-bg);
+            border-color: var(--theme-button-primary-hover-bg);
+        }
+
+        .arithmetic-button.clear:hover {
+            background-color: #6b5f54; /* Darker shade */
+            border-color: #6b5f54;
+        }
+
+        .feedback-message {
+            font-size: 1.2rem;
+            font-weight: bold;
+            min-height: 1.5rem; /* Reserve space */
+        }
+
+        .feedback-message.correct {
+            color: green;
+        }
+
+        .feedback-message.incorrect {
+            color: red;
+        }
+
+        /* Arithmetic Level Selection Styles */
+         .level-selection-grid {
+             display: grid;
+             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+             gap: 1rem;
+             margin-bottom: 2rem;
+             justify-content: center;
+             text-align: center; /* Center the grid items' content */
+         }
+         .level-button {
+            display: flex;
+            flex-direction: column; /* Stack icon and text */
+            align-items: center;
+            justify-content: center;
+             padding: 1rem;
+             border: 2px solid var(--theme-card-border);
+             border-radius: 0.75rem;
+             background-color: var(--theme-card-bg);
+             color: var(--theme-text-primary);
+             font-size: 1.1rem;
+             font-weight: bold;
+             cursor: pointer;
+             transition: all 0.3s ease;
+             user-select: none;
+             min-height: 120px; /* Ensure some height */
+         }
+         .level-button:hover {
+             border-color: var(--theme-card-hover-border);
+             background-color: var(--theme-bg-accent);
+             transform: translateY(-3px);
+             box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+         }
+         .level-button.selected {
+             border-color: var(--theme-text-accent); /* Highlight selected level */
+             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+         }
+         .level-button img {
+             width: 50px;
+             height: 50px;
+             object-fit: contain;
+             margin-bottom: 0.5rem;
+         }
+
+         /* Results Display Styles */
+         .results-container {
+             text-align: center;
+             padding: 1.5rem;
+             border: 1px solid var(--theme-card-border);
+             border-radius: 1rem;
+             background-color: var(--theme-card-bg);
+             max-width: 400px;
+             margin: 2rem auto;
+         }
+         .results-container h3 {
+             font-size: 1.5rem;
+             color: var(--theme-text-accent);
+             margin-bottom: 1rem;
+         }
+         .results-container p {
+             font-size: 1.1rem;
+             margin-bottom: 0.75rem;
+             color: var(--theme-text-secondary);
+         }
+         .results-container .correct {
+             color: green;
+             font-weight: bold;
+         }
+         .results-container .incorrect {
+             color: red;
+             font-weight: bold;
+         }
+         .results-container button {
+             /* Reuse modal-footer-button styles or define new ones */
+             display: inline-block;
+             margin-top: 1.5rem;
+             padding: 0.75rem 1.5rem;
+             font-size: 1.1rem;
+             font-weight: 600;
+             text-align: center;
+             text-decoration: none;
+             color: var(--theme-button-primary-text);
+             background-color: var(--theme-button-primary-bg);
+             border: 1px solid var(--theme-button-primary-bg);
+             border-radius: 0.5rem;
+             transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+             cursor: pointer;
+         }
+          .results-container button:hover {
+             background-color: var(--theme-button-primary-hover-bg);
+             border-color: var(--theme-button-primary-hover-bg);
+             transform: translateY(-2px);
+         }
+
+
+        /* --- Responsive Adjustments --- */
+         /* Home page buttons grid layout (Not used here) */
+        .home-buttons-grid {
+            display: grid;
+            gap: 1.5rem; /* Space between buttons */
+            /* Default: 1 column on very small screens */
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            justify-content: center; /* Center grid if items don't fill line */
+             /* Inherits padding-top from .container */
+        }
+         @media (min-width: 500px) { /* Custom breakpoint for 2 columns */
+             .home-buttons-grid {
+                 grid-template-columns: repeat(2, minmax(250px, 1fr)); /* Force 2 columns */
+             }
+         }
+
+
+        @media (min-width: 768px) { /* md */
+            .container {
+                padding: 2rem;
+            }
+            /* Home page buttons side by side */
+             .home-buttons-grid {
+                 grid-template-columns: repeat(3, 1fr);
+                 gap: 2rem; /* Slightly larger gap */
+             }
+             /* Math main buttons grid layout */
+             .math-main-buttons-grid {
+                display: grid; /* Ensure display is grid */
+                grid-template-columns: repeat(3, 1fr); /* Force 3 columns on md+ */
+                gap: 2rem; /* Larger gap on md+ */
+                 justify-content: center;
+             }
+
+             /* Grid container for numbers/letters becomes denser on larger screens */
+            .grid-container {
+                grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            }
+            .example-grid {
+                grid-template-columns: repeat(4, 1fr); /* 4 examples per row on medium screens */
+            }
+            .modal-content {
+                max-width: 700px; /* Wider modal */
+            }
+            .modal-content .back-button {
+                left: 2rem; /* Position slightly further in on larger screens */
+            }
+             html[dir="rtl"] .modal-content .back-button {
+                 left: 2rem;
+            }
+            html[dir="ltr"] .modal-content .back-button {
+                left: 2rem;
+            }
+        }
+        @media (max-width: 767px) { /* Styles specific to screens smaller than md */
+             /* Math main buttons grid responsive on small screens */
+            .math-main-buttons-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive on small */
+                 gap: 1.5rem;
+                 justify-content: center;
+            }
+         }
+
+
+        @media (min-width: 1024px) { /* lg */
+             /* Grid container for numbers/letters even denser on large screens */
+            .grid-container {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+        }
+
+        /* Hide element when AlpineJS x-cloak is used */
+        [x-cloak] { display: none !important; }
+
+         .math-section-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--theme-text-secondary);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--theme-border-light);
+            padding-bottom: 0.5rem;
+            text-align: center; /* Center titles */
+        }
+    </style>
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body x-data="mathApp()" dir="rtl">
+
+    <div class="container relative"> <!-- Added relative positioning for back button -->
+        <!-- Back Button (always visible on math pages, position depends on view) -->
+         <!-- Back Button for sub-sections -->
+         <button @click="goBackToMain()" class="back-button" x-show="currentView !== 'main' && currentArithmeticView !== 'results'" aria-label="گەڕانەوە">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
+              </svg>
+          </button>
+         <!-- Back Button for Arithmetic Results -->
+          <button @click="resetArithmetic()" class="back-button" x-show="currentArithmeticView === 'results'" aria-label="دووبارە ژماردنەوە">
+               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                   <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
+               </svg>
+           </button>
+         <!-- Back Button to Home (only visible on main math page) -->
+         <a href="index.html" class="back-button" x-show="currentView === 'main'" aria-label="گەڕانەوە بۆ سەرەتا">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
+            </svg>
+         </a>
+
+
+        <h1 class="text-3xl md:text-4xl font-bold text-center mb-6" style="color: var(--theme-text-accent);">
+            بیرکاری
+        </h1>
+
+        <!-- Main Math Menu -->
+        <div class="math-main-buttons-grid" x-show="currentView === 'main'">
+            <button @click="setView('numbers-read')" class="subject-button">
+                 <!-- TODO: Replace with actual image for reading numbers -->
+                 <img src="images/math/numbers_read.png" alt="خوێندنەوەی ژمارەکان">
+                <span>خوێندنەوەی ژمارەکان</span>
+            </button>
+
+            <button @click="setView('numbers-icons')" class="subject-button">
+                 <!-- TODO: Replace with actual image for numbers with icons -->
+                 <img src="images/math/numbers_icons.png" alt="ژمارەکان بە ئایکۆن">
+                <span>ژمارەکان بە ئایکۆن</span>
+            </button>
+
+            <button @click="setView('arithmetic')" class="subject-button">
+                 <!-- TODO: Replace with actual image for arithmetic -->
+                 <img src="images/math/arithmetic.png" alt="کۆکردنەوە و لێدەرکردن">
+                <span>کۆکردنەوە و لێدەرکردن</span>
+            </button>
+        </div>
+
+        <!-- Section 1: Read Numbers (0-100) -->
+        <div x-show="currentView === 'numbers-read'" x-cloak>
+             <h2 class="math-section-title">
+                ژمارەکان (٠ تا ١٠٠) - خوێندنەوەی دەنگی
+             </h2>
+             <p style="text-align: center; color: var(--theme-text-secondary);">دەست بنێ بە هەر ژمارەیەکدا بۆ ئەوەی گوێت لە خوێندنەوەکەی ببێت.</p>
+             <div class="grid-container">
+                 <template x-for="number in numbers" :key="'read-num-' + number">
+                     <div class="grid-item" @click="playNumberSound(number)">
+                         <span x-text="toKurdishDigits(number)" dir="ltr"></span> <!-- Convert to Kurdish digits -->
+                     </div>
+                 </template>
+             </div>
+        </div>
+
+        <!-- Section 2: Numbers with Icons (0-100) -->
+        <div x-show="currentView === 'numbers-icons'" x-cloak>
+            <h2 class="math-section-title">
+                ژمارەکان بە ئایکۆن (٠ تا ١٠٠)
+            </h2>
+             <p style="text-align: center; color: var(--theme-text-secondary);">دەست بنێ بە هەر ژمارەیەکدا بۆ ئەوەی ژمارەکە بە ئایکۆن ببینیت.</p>
+            <div class="grid-container">
+                <template x-for="number in numbers" :key="'icon-num-' + number">
+                    <div class="grid-item" @click="openIconModal(number)">
+                        <span x-text="toKurdishDigits(number)" dir="ltr"></span> <!-- Convert to Kurdish digits -->
+                    </div>
+                </template>
+            </div>
+
+            <!-- Icon Detail Modal -->
+             <template x-if="modalOpen">
+                 <div class="modal-backdrop" @click.self="closeModal()"> <!-- Close modal when clicking outside (on backdrop) -->
+                     <div class="modal-content" @click.stop> <!-- Prevent click inside modal from closing it -->
+                          <!-- Modal Back Button -->
+                         <button @click="closeModal()" class="back-button" aria-label="گەڕانەوە">
+                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                   <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
+                               </svg>
+                           </button>
+
+                         <h3 class="modal-title">
+                             ژمارەی <span x-text="toKurdishDigits(selectedNumberForIcons)" dir="ltr"></span> <!-- Convert to Kurdish digits -->
+                         </h3>
+
+                         <!-- Area to display Icons -->
+                         <!-- Conditional class based on number size for better layout -->
+                         <div class="icon-display-area" :class="iconGridClass">
+                             <template x-for="(iconSrc, index) in displayedIcons" :key="'icon-item-' + index">
+                                 <!-- TODO: Replace with actual animal icon image paths -->
+                                 <img :src="iconSrc" :alt="'Icon ' + (index + 1)" class="math-icon" :class="iconSizeClass">
+                             </template>
+                             <p x-show="selectedNumberForIcons === 0" class="text-center text-xl" style="color: var(--theme-text-secondary);">هیچ</p>
+                         </div>
+                     </div>
+                 </div>
+             </template>
+        </div>
+
+        <!-- Section 3: Simple Arithmetic (Addition/Subtraction) -->
+        <div x-show="currentView === 'arithmetic'" x-cloak>
+            <h2 class="math-section-title">
+                کۆکردنەوە و لێدەرکردنی سادە
+            </h2>
+
+            <!-- Level Selection -->
+            <div x-show="currentArithmeticView === 'levels'" class="level-selection-grid">
+                 <button @click="selectLevel('easy')" class="level-button" :class="{'selected': selectedLevel === 'easy'}">
+                     <!-- TODO: Replace with actual easy icon -->
+                     <img src="images/math/easy.png" alt="ئاستی ئاسان">
+                     <span>ئاسان</span>
+                 </button>
+                 <button @click="selectLevel('medium')" class="level-button" :class="{'selected': selectedLevel === 'medium'}">
+                     <!-- TODO: Replace with actual medium icon -->
+                     <img src="images/math/medium.png" alt="ئاستی مامناوەند">
+                     <span>مامناوەند</span>
+                 </button>
+                 <button @click="selectLevel('hard')" class="level-button" :class="{'selected': selectedLevel === 'hard'}">
+                     <!-- TODO: Replace with actual hard icon -->
+                     <img src="images/math/hard.png" alt="ئاستی قورس">
+                     <span>قورس</span>
+                 </button>
+             </div>
+
+            <!-- Problem Area -->
+            <div x-show="currentArithmeticView === 'problem'" class="arithmetic-container">
+                <div class="problem-display" dir="ltr"> <!-- Force LTR for problem display -->
+                     <span x-text="toKurdishDigits(problem.num1)"></span> <!-- Convert to Kurdish digits -->
+                     <span x-text="problem.operator"></span>
+                     <span x-text="toKurdishDigits(problem.num2)"></span> <!-- Convert to Kurdish digits -->
+                     <span>=</span>
+                     <input type="text" inputmode="numeric" pattern="[0-9]*" x-model="userAnswer" readonly @click="clearAnswer()" style="text-align: center;" dir="ltr"> <!-- Force LTR input -->
+                </div>
+
+                <div class="arithmetic-buttons">
+                     <!-- Numbers 1-9 -->
+                     <template x-for="i in 9" :key="'btn-' + i">
+                         <button class="arithmetic-button" @click="appendAnswer(i)" x-text="toKurdishDigits(i)"></button> <!-- Convert to Kurdish digits -->
+                     </template>
+                      <!-- Number 0 -->
+                     <button class="arithmetic-button" @click="appendAnswer(0)" x-text="toKurdishDigits(0)"></button> <!-- Convert to Kurdish digits -->
+
+                      <button class="arithmetic-button clear" @click="clearAnswer()">پاککردنەوە</button>
+                     <button class="arithmetic-button action" @click="checkAnswer()">پشکنین</button>
+                     <!-- No "New Problem" button here, it's handled after check or attempts run out -->
+                </div>
+
+                 <div class="feedback-message text-center" :class="feedbackClass" x-text="feedbackMessage"></div>
+
+                 <!-- Display attempts remaining -->
+                 <p class="text-center text-sm mt-4" style="color: var(--theme-text-secondary);">پرسیار: <span x-text="toKurdishDigits(questionCount)"></span> / <span x-text="toKurdishDigits(totalQuestions)"></span> | هەڵەی ماو: <span x-text="toKurdishDigits(attemptsLeft)"></span></p>
+
+            </div>
+
+             <!-- Results Area -->
+            <div x-show="currentArithmeticView === 'results'" class="results-container">
+                 <h3>ئەنجامەکانی تاقیکردنەوە</h3>
+                 <p class="correct">ڕاستەکان: <span x-text="toKurdishDigits(correctAnswers)"></span></p> <!-- Convert to Kurdish digits -->
+                 <p class="incorrect">هەڵەکان: <span x-text="toKurdishDigits(incorrectAnswers)"></span></p> <!-- Convert to Kurdish digits -->
+                 <button @click="resetArithmetic()">دووبارە دەستپێکردنەوە</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Audio elements for Math Numbers (0-100) -->
+    <!-- You MUST add 101 <audio> tags here, one for each number from 0 to 100 -->
+    <!-- Ensure the src path is correct, e.g., "audio/math/0.mp3" -->
+    <!-- IMPORTANT: Add ALL audio tags from 0.mp3 to 100.mp3 here -->
+     <audio id="sound-0" src="audio/math/0.mp3" preload="auto"></audio>
+     <audio id="sound-1" src="audio/math/1.mp3" preload="auto"></audio>
+     <audio id="sound-2" src="audio/math/2.mp3" preload="auto"></audio>
+     <audio id="sound-3" src="audio/math/3.mp3" preload="auto"></audio>
+     <audio id="sound-4" src="audio/math/4.mp3" preload="auto"></audio>
+     <audio id="sound-5" src="audio/math/5.mp3" preload="auto"></audio>
+     <audio id="sound-6" src="audio/math/6.mp3" preload="auto"></audio>
+     <audio id="sound-7" src="audio/math/7.mp3" preload="auto"></audio>
+     <audio id="sound-8" src="audio/math/8.mp3" preload="auto"></audio>
+     <audio id="sound-9" src="audio/math/9.mp3" preload="auto"></audio>
+     <audio id="sound-10" src="audio/math/10.mp3" preload="auto"></audio>
+     <audio id="sound-11" src="audio/math/11.mp3" preload="auto"></audio>
+     <audio id="sound-12" src="audio/math/12.mp3" preload="auto"></audio>
+     <audio id="sound-13" src="audio/math/13.mp3" preload="auto"></audio>
+     <audio id="sound-14" src="audio/math/14.mp3" preload="auto"></audio>
+     <audio id="sound-15" src="audio/math/15.mp3" preload="auto"></audio>
+     <audio id="sound-16" src="audio/math/16.mp3" preload="auto"></audio>
+     <audio id="sound-17" src="audio/math/17.mp3" preload="auto"></audio>
+     <audio id="sound-18" src="audio/math/18.mp3" preload="auto"></audio>
+     <audio id="sound-19" src="audio/math/19.mp3" preload="auto"></audio>
+     <audio id="sound-20" src="audio/math/20.mp3" preload="auto"></audio>
+     <audio id="sound-21" src="audio/math/21.mp3" preload="auto"></audio>
+     <audio id="sound-22" src="audio/math/22.mp3" preload="auto"></audio>
+     <audio id="sound-23" src="audio/math/23.mp3" preload="auto"></audio>
+     <audio id="sound-24" src="audio/math/24.mp3" preload="auto"></audio>
+     <audio id="sound-25" src="audio/math/25.mp3" preload="auto"></audio>
+     <audio id="sound-26" src="audio/math/26.mp3" preload="auto"></audio>
+     <audio id="sound-27" src="audio/math/27.mp3" preload="auto"></audio>
+     <audio id="sound-28" src="audio/math/28.mp3" preload="auto"></audio>
+     <audio id="sound-29" src="audio/math/29.mp3" preload="auto"></audio>
+     <audio id="sound-30" src="audio/math/30.mp3" preload="auto"></audio>
+     <audio id="sound-31" src="audio/math/31.mp3" preload="auto"></audio>
+     <audio id="sound-32" src="audio/math/32.mp3" preload="auto"></audio>
+     <audio id="sound-33" src="audio/math/33.mp3" preload="auto"></audio>
+     <audio id="sound-34" src="audio/math/34.mp3" preload="auto"></audio>
+     <audio id="sound-35" src="audio/math/35.mp3" preload="auto"></audio>
+     <audio id="sound-36" src="audio/math/36.mp3" preload="auto"></audio>
+     <audio id="sound-37" src="audio/math/37.mp3" preload="auto"></audio>
+     <audio id="sound-38" src="audio/math/38.mp3" preload="auto"></audio>
+     <audio id="sound-39" src="audio/math/39.mp3" preload="auto"></audio>
+     <audio id="sound-40" src="audio/math/40.mp3" preload="auto"></audio>
+     <audio id="sound-41" src="audio/math/41.mp3" preload="auto"></audio>
+     <audio id="sound-42" src="audio/math/42.mp3" preload="auto"></audio>
+     <audio id="sound-43" src="audio/math/43.mp3" preload="auto"></audio>
+     <audio id="sound-44" src="audio/math/44.mp3" preload="auto"></audio>
+     <audio id="sound-45" src="audio/math/45.mp3" preload="auto"></audio>
+     <audio id="sound-46" src="audio/math/46.mp3" preload="auto"></audio>
+     <audio id="sound-47" src="audio/math/47.mp3" preload="auto"></audio>
+     <audio id="sound-48" src="audio/math/48.mp3" preload="auto"></audio>
+     <audio id="sound-49" src="audio/math/49.mp3" preload="auto"></audio>
+     <audio id="sound-50" src="audio/math/50.mp3" preload="auto"></audio>
+     <audio id="sound-51" src="audio/math/51.mp3" preload="auto"></audio>
+     <audio id="sound-52" src="audio/math/52.mp3" preload="auto"></audio>
+     <audio id="sound-53" src="audio/math/53.mp3" preload="auto"></audio>
+     <audio id="sound-54" src="audio/math/54.mp3" preload="auto"></audio>
+     <audio id="sound-55" src="audio/math/55.mp3" preload="auto"></audio>
+     <audio id="sound-56" src="audio/math/56.mp3" preload="auto"></audio>
+     <audio id="sound-57" src="audio/math/57.mp3" preload="auto"></audio>
+     <audio id="sound-58" src="audio/math/58.mp3" preload="auto"></audio>
+     <audio id="sound-59" src="audio/math/59.mp3" preload="auto"></audio>
+     <audio id="sound-60" src="audio/math/60.mp3" preload="auto"></audio>
+     <audio id="sound-61" src="audio/math/61.mp3" preload="auto"></audio>
+     <audio id="sound-62" src="audio/math/62.mp3" preload="auto"></audio>
+     <audio id="sound-63" src="audio/math/63.mp3" preload="auto"></audio>
+     <audio id="sound-64" src="audio/math/64.mp3" preload="auto"></audio>
+     <audio id="sound-65" src="audio/math/65.mp3" preload="auto"></audio>
+     <audio id="sound-66" src="audio/math/66.mp3" preload="auto"></audio>
+     <audio id="sound-67" src="audio/math/67.mp3" preload="auto"></audio>
+     <audio id="sound-68" src="audio/math/68.mp3" preload="auto"></audio>
+     <audio id="sound-69" src="audio/math/69.mp3" preload="auto"></audio>
+     <audio id="sound-70" src="audio/math/70.mp3" preload="auto"></audio>
+     <audio id="sound-71" src="audio/math/71.mp3" preload="auto"></audio>
+     <audio id="sound-72" src="audio/math/72.mp3" preload="auto"></audio>
+     <audio id="sound-73" src="audio/math/73.mp3" preload="auto"></audio>
+     <audio id="sound-74" src="audio/math/74.mp3" preload="auto"></audio>
+     <audio id="sound-75" src="audio/math/75.mp3" preload="auto"></audio>
+     <audio id="sound-76" src="audio/math/76.mp3" preload="auto"></audio>
+     <audio id="sound-77" src="audio/math/77.mp3" preload="auto"></audio>
+     <audio id="sound-78" src="audio/math/78.mp3" preload="auto"></audio>
+     <audio id="sound-79" src="audio/math/79.mp3" preload="auto"></audio>
+     <audio id="sound-80" src="audio/math/80.mp3" preload="auto"></audio>
+     <audio id="sound-81" src="audio/math/81.mp3" preload="auto"></audio>
+     <audio id="sound-82" src="audio/math/82.mp3" preload="auto"></audio>
+     <audio id="sound-83" src="audio/math/83.mp3" preload="auto"></audio>
+     <audio id="sound-84" src="audio/math/84.mp3" preload="auto"></audio>
+     <audio id="sound-85" src="audio/math/85.mp3" preload="auto"></audio>
+     <audio id="sound-86" src="audio/math/86.mp3" preload="auto"></audio>
+     <audio id="sound-87" src="audio/math/87.mp3" preload="auto"></audio>
+     <audio id="sound-88" src="audio/math/88.mp3" preload="auto"></audio>
+     <audio id="sound-89" src="audio/math/89.mp3" preload="auto"></audio>
+     <audio id="sound-90" src="audio/math/90.mp3" preload="auto"></audio>
+     <audio id="sound-91" src="audio/math/91.mp3" preload="auto"></audio>
+     <audio id="sound-92" src="audio/math/92.mp3" preload="auto"></audio>
+     <audio id="sound-93" src="audio/math/93.mp3" preload="auto"></audio>
+     <audio id="sound-94" src="audio/math/94.mp3" preload="auto"></audio>
+     <audio id="sound-95" src="audio/math/95.mp3" preload="auto"></audio>
+     <audio id="sound-96" src="audio/math/96.mp3" preload="auto"></audio>
+     <audio id="sound-97" src="audio/math/97.mp3" preload="auto"></audio>
+     <audio id="sound-98" src="audio/math/98.mp3" preload="auto"></audio>
+     <audio id="sound-99" src="audio/math/99.mp3" preload="auto"></audio>
+     <audio id="sound-100" src="audio/math/100.mp3" preload="auto"></audio>
+
+
+    <!-- Alpine.js data object -->
+    <script>
+        function mathApp() {
+            return {
+                currentView: 'main', // 'main', 'numbers-read', 'numbers-icons', 'arithmetic'
+                currentArithmeticView: 'levels', // 'levels', 'problem', 'results'
+                numbers: Array.from({ length: 101 }, (_, i) => i), // Numbers from 0 to 100
+                modalOpen: false, // For icon modal
+                selectedNumberForIcons: 0, // Number selected for icon display
+                displayedIcons: [], // Array to hold the src of icons to display
+                selectedAnimalIcon: '', // Store the path of the single selected animal icon
+
+                 // Arithmetic Section State
+                selectedLevel: null, // 'easy', 'medium', 'hard'
+                problem: { num1: null, num2: null, operator: null, answer: null },
+                userAnswer: '',
+                feedbackMessage: '',
+                feedbackClass: '',
+                questionCount: 0,
+                totalQuestions: 10, // Total questions per level
+                correctAnswers: 0,
+                incorrectAnswers: 0,
+                attemptsLeft: 3, // Attempts per question per problem
+
+                 // Audio player elements
+                 numberSoundElements: {}, // To store references to individual number audio elements
+                 synth: window.speechSynthesis, // For potential TTS fallback
+
+                 // List of animal icon paths (TODO: Replace with your actual paths)
+                 animalIconPaths: [
+                     'images/icons/animal_cat.png',
+                     'images/icons/animal_dog.png',
+                     'images/icons/animal_elephant.png',
+                     'images/icons/animal_fish.png',
+                     'images/icons/animal_lion.png',
+                     'images/icons/animal_monkey.png',
+                     'images/icons/animal_owl.png',
+                     'images/icons/animal_pig.png',
+                     'images/icons/animal_rabbit.png',
+                     'images/icons/animal_zebra.png',
+                     'images/icons/animal_bird.png',
+                     'images/icons/animal_cow.png',
+                     'images/icons/animal_frog.png',
+                     'images/icons/animal_horse.png',
+                     'images/icons/animal_mouse.png',
+                     'images/icons/animal_snake.png',
+                     'images/icons/animal_tiger.png',
+                     'images/icons/animal_wolf.png',
+                      // Add more animal icon paths here
+                 ],
+
+                 // Kurdish digits mapping
+                 kurdishDigits: ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'],
+
+                init() {
+                     console.log("Math App Initializing"); // Debugging log
+                     // Initialize number sound elements (find them by ID)
+                     this.$nextTick(() => { // Ensure DOM is ready and audio tags exist
+                          for(let i = 0; i <= 100; i++) {
+                               const soundElement = document.getElementById(`sound-${i}`);
+                               if(soundElement) {
+                                   this.numberSoundElements[i] = soundElement;
+                                   // Optional: Add error handling for individual audio elements
+                                    soundElement.onerror = (e) => console.error(`Error loading audio for number ${i}:`, soundElement.src, e);
+                               } else {
+                                    // Create a dummy object if element not found, so calls don't error
+                                   this.numberSoundElements[i] = { play: () => { console.warn(`Audio tag not found for number ${i}. Expected ID: sound-${i}.`); }, pause: () => {}, currentTime: 0 };
+                               }
+                          }
+                         console.log('Math sound elements count:', Object.keys(this.numberSoundElements).length); // Debugging
+                     });
+
+                    // Watch for view changes
+                     this.$watch('currentView', (newView, oldView) => {
+                        if (newView === 'arithmetic') {
+                             // Reset arithmetic state when entering the main arithmetic view
+                             this.resetArithmetic();
+                             this.currentArithmeticView = 'levels'; // Go to level selection
+                         } else {
+                             // Clear arithmetic state if leaving the arithmetic section entirely
+                             // This happens if you go from arithmetic back to main math menu
+                             this.problem = { num1: null, num2: null, operator: null, answer: null };
+                             this.userAnswer = '';
+                             this.feedbackMessage = '';
+                             this.feedbackClass = '';
+                              this.selectedLevel = null;
+                              this.questionCount = 0;
+                              this.correctAnswers = 0;
+                              this.incorrectAnswers = 0;
+                              this.attemptsLeft = 3;
+                             this.currentArithmeticView = 'levels'; // Reset arithmetic view state
+
+
+                            if (oldView === 'numbers-icons') {
+                                this.closeModal(); // Close modal if leaving icon view
+                            }
+                         }
+                         // Stop sounds when changing views
+                         this.stopAllMathSounds();
+                          if (this.synth && this.synth.speaking) { // Also stop TTS fallback if it was used
+                              this.synth.cancel();
+                         }
+                     });
+
+                     // Stop sounds if the window/tab becomes inactive (optional but good practice)
+                      document.addEventListener('visibilitychange', () => {
+                         if (document.hidden) {
+                            this.stopAllMathSounds();
+                             if (this.synth && this.synth.speaking) {
+                                 this.synth.cancel();
+                            }
+                         }
+                     });
+
+                },
+
+                 // Convert Western number to Kurdish digits string
+                 toKurdishDigits(number) {
+                     return String(number).split('').map(digit => {
+                         if (digit === '.') return '.'; // Handle decimals if needed (though not used here)
+                         const westernDigit = parseInt(digit, 10);
+                         return isNaN(westernDigit) ? digit : this.kurdishDigits[westernDigit];
+                     }).join('');
+                 },
+
+
+                setView(view) {
+                    this.currentView = view;
+                    // Optional: scroll to top of the container when changing view
+                    this.$nextTick(() => {
+                         // Find the main container or body and scroll
+                         document.documentElement.scrollTo({top: 0, behavior: 'smooth'}); // Scroll window
+                         // Or if scrolling specific container: document.querySelector('.container').scrollTo({top: 0, behavior: 'smooth'});
+                    });
+                },
+
+                goBackToMain() {
+                    this.setView('main');
+                },
+
+                 // --- Numbers Read Section ---
+                 stopAllMathSounds() {
+                      // Stop all currently playing number sounds
+                      Object.values(this.numberSoundElements).forEach(audio => {
+                           if (audio && typeof audio.pause === 'function' && !audio.paused) {
+                              audio.pause();
+                              audio.currentTime = 0;
+                           }
+                      });
+                 },
+                playNumberSound(number) {
+                    console.log("Attempting to play sound for number:", number); // Debugging log
+                    const soundElement = this.numberSoundElements[number];
+                    if (soundElement && typeof soundElement.play === 'function') {
+                        this.stopAllMathSounds(); // Stop any other number sound
+                        soundElement.currentTime = 0; // Reset to start
+                        soundElement.play().catch(error => console.error(`Error playing sound for number ${number}:`, error));
+                    } else {
+                        console.warn(`Sound element not found or play function missing for number ${number}. Check audio tags and paths.`);
+                         // Fallback: Text-to-Speech for numbers if audio is missing (optional)
+                         // TTS might struggle with Kurdish numbers like ٢٥ for 25. Speaking the Western digit string might be better.
+                        if (window.speechSynthesis && this.synth) {
+                             this.synth.cancel(); // Stop any other TTS
+                             const utterance = new SpeechSynthesisUtterance(number.toString()); // Speak the actual number string (e.g., "25")
+                             utterance.lang = 'en-US'; // Use English TTS for numbers, which is more likely to pronounce digits correctly
+                             // Optional: Try to find a male/child voice if available
+                             const voice = this.synth.getVoices().find(v => v.lang === 'en-US' && (v.name.toLowerCase().includes('child') || v.name.toLowerCase().includes('male')));
+                             if (voice) utterance.voice = voice;
+
+                             this.synth.speak(utterance);
+                             utterance.onerror = (event) => {
+                                 console.error('TTS fallback error for number:', number, event);
+                             };
+                         }
+                    }
+                },
+
+                // --- Numbers with Icons Section ---
+                generateAnimalIcons(count) {
+                     if (count === 0) {
+                         this.displayedIcons = [];
+                         this.selectedAnimalIcon = '';
+                         return;
+                     }
+                     const numAnimals = this.animalIconPaths.length;
+                     if (numAnimals === 0) {
+                         console.warn("No animal icons available in animalIconPaths array.");
+                         this.displayedIcons = [];
+                         this.selectedAnimalIcon = '';
+                         return;
+                     }
+
+                     // Pick one random animal type for this number
+                     const randomIndex = Math.floor(Math.random() * numAnimals);
+                     this.selectedAnimalIcon = this.animalIconPaths[randomIndex];
+
+                     // Create an array with the selected icon path repeated 'count' times
+                     this.displayedIcons = Array(count).fill(this.selectedAnimalIcon);
+                     console.log(`Generated ${count} icons of type: ${this.selectedAnimalIcon}`); // Debugging log
+                },
+
+                openIconModal(number) {
+                    console.log("Opening icon modal for number:", number); // Debugging log
+                    this.selectedNumberForIcons = number;
+                    this.generateAnimalIcons(number); // Generate icons based on the number
+                     // Play the number sound when the modal opens
+                    this.playNumberSound(number);
+                    this.modalOpen = true;
+                     // Scroll modal content to top
+                     this.$nextTick(() => {
+                         const modalContent = document.querySelector('.modal-content');
+                         if (modalContent) {
+                            modalContent.scrollTo({top: 0, behavior: 'smooth'});
+                         }
+                     });
+                },
+
+                closeModal() {
+                    console.log("Closing icon modal"); // Debugging log
+                    this.modalOpen = false;
+                    this.selectedNumberForIcons = 0; // Reset icon count
+                    this.displayedIcons = []; // Clear icons array
+                    this.selectedAnimalIcon = ''; // Clear selected animal icon
+                    this.stopAllMathSounds(); // Stop sounds when modal closes
+                     if (this.synth && this.synth.speaking) { // Also stop TTS fallback if it was used
+                         this.synth.cancel();
+                     }
+                },
+
+                 // Computed property/function to dynamically calculate icon size class based on number
+                iconSizeClass() {
+                    if (this.selectedNumberForIcons === 0) return ''; // No icons
+                    if (this.selectedNumberForIcons <= 10) return 'xlarge'; // up to 10 icons, largest size
+                    if (this.selectedNumberForIcons <= 25) return 'large'; // up to 25 icons, large size
+                    if (this.selectedNumberForIcons <= 50) return 'medium'; // up to 50 icons, medium size
+                    return 'small'; // For numbers > 50 icons, small size
+                },
+                 // Computed class for the icon container grid layout
+                 iconGridClass() {
+                     if (this.selectedNumberForIcons === 0) return '';
+                      // Use specific grid classes based on size to control column density
+                     if (this.selectedNumberForIcons <= 10) return 'xlarge-icons'; // Use xlarge-icons class
+                     if (this.selectedNumberForIcons <= 25) return 'large-icons'; // Use large-icons class
+                     if (this.selectedNumberForIcons <= 50) return 'medium-icons'; // Use medium-icons class
+                      // For very large numbers, use the base grid-icons with smallest minmax/gap
+                     return 'grid-icons';
+                 },
+
+
+                // --- Simple Arithmetic Section ---
+                 selectLevel(level) {
+                     this.selectedLevel = level;
+                     this.resetArithmeticState(); // Reset stats for the new level
+                     this.currentArithmeticView = 'problem'; // Switch to the problem view
+                     this.generateProblem(); // Generate the first problem
+                 },
+
+                 resetArithmetic() {
+                     this.selectedLevel = null;
+                     this.resetArithmeticState();
+                     this.currentArithmeticView = 'levels'; // Go back to level selection
+                 },
+
+                 resetArithmeticState() {
+                     this.questionCount = 0;
+                     this.correctAnswers = 0;
+                     this.incorrectAnswers = 0;
+                     this.attemptsLeft = 3; // Reset attempts for the first question
+                     this.problem = { num1: null, num2: null, operator: null, answer: null };
+                     this.userAnswer = '';
+                     this.feedbackMessage = '';
+                     this.feedbackClass = '';
+                 },
+
+                generateProblem() {
+                    // Check if we reached the total number of questions BEFORE generating a new one
+                    if (this.questionCount >= this.totalQuestions) {
+                         this.currentArithmeticView = 'results'; // Go to results screen
+                         this.stopAllMathSounds(); // Stop any sounds
+                          if (this.synth && this.synth.speaking) { this.synth.cancel(); }
+                         return; // Stop generating problems
+                     }
+
+                    this.questionCount++; // Increment question count only if generating
+
+                     let maxNumOperand, maxResult;
+                     // Set max numbers based on level
+                     switch (this.selectedLevel) {
+                         case 'easy':
+                             maxNumOperand = 5;
+                             maxResult = 10; // Max sum or min difference
+                             break;
+                         case 'medium':
+                             maxNumOperand = 10;
+                             maxResult = 15;
+                             break;
+                         case 'hard':
+                             maxNumOperand = 15;
+                             maxResult = 20; // Max sum or min difference
+                             break;
+                         default: // Should not happen if level is selected
+                             maxNumOperand = 5;
+                             maxResult = 10;
+                     }
+
+
+                    let num1, num2, operator, answer;
+
+                    // Randomly choose addition or subtraction (maybe adjust probability by level)
+                    if (Math.random() < (this.selectedLevel === 'hard' ? 0.4 : 0.6)) { // Slightly less chance for addition in hard level
+                        operator = '+';
+                        do {
+                             num1 = Math.floor(Math.random() * (maxNumOperand + 1));
+                             num2 = Math.floor(Math.random() * (maxNumOperand + 1));
+                             answer = num1 + num2;
+                             // Ensure addition result does not exceed maxResult for the level
+                        } while (answer > maxResult);
+                    } else { // Subtraction
+                         operator = '-';
+                         // Ensure num1 is greater than or equal to num2 AND the result is within a reasonable range if needed
+                         do {
+                              num1 = Math.floor(Math.random() * (maxNumOperand + 1));
+                             num2 = Math.floor(Math.random() * (maxNumOperand + 1)); // Allow num2 to be up to maxOperand
+                              // Ensure num1 >= num2 for subtraction
+                              if (num2 > num1) [num1, num2] = [num2, num1]; // Swap if num2 is larger
+                             answer = num1 - num2;
+                             // Ensure subtraction result is non-negative (already guaranteed by swap) and within range?
+                             // For first grade, maybe results should be <= maxNumOperand or slightly more?
+                             // Let's keep it simple: result is >= 0 and num1, num2 <= maxOperand
+                         } while (false); // No extra condition needed as num1 >= num2 and numbers are within maxOperand range
+                    }
+
+                    this.problem = { num1, num2, operator, answer };
+                    this.userAnswer = ''; // Clear previous answer
+                    this.feedbackMessage = ''; // Clear feedback
+                    this.feedbackClass = '';
+                    this.attemptsLeft = 3; // Reset attempts for the new question
+
+                     console.log(`Generated problem (Level: ${this.selectedLevel}, Q: ${this.questionCount}/${this.totalQuestions}): ${this.problem.num1} ${this.problem.operator} ${this.problem.num2} = ${this.problem.answer}`); // For debugging
+
+                     // Play the problem audio (e.g., "2 plus 3 equals") - requires audio files for numbers, plus, minus, equals
+                     // This is complex to implement perfectly in multiple languages via simple audio tags.
+                     // A simple approach is to just say the numbers and the operator.
+                     // Requires audio files like "plus.mp3", "minus.mp3", "equals.mp3"
+                     this.$nextTick(() => {
+                         this.playArithmeticAudioSequence(this.problem.num1, this.problem.operator, this.problem.num2);
+                     });
+
+                },
+
+                 playArithmeticAudioSequence(num1, operator, num2) {
+                     this.stopAllMathSounds(); // Stop existing number sounds
+
+                     const audioQueue = [];
+                     audioQueue.push(`sound-${num1}`); // First number
+
+                     // Determine operator audio file ID
+                     let operatorSoundId = null;
+                     if (operator === '+') operatorSoundId = 'sound-plus'; // Need sound-plus.mp3
+                     if (operator === '-') operatorSoundId = 'sound-minus'; // Need sound-minus.mp3
+                     if (operatorSoundId) audioQueue.push(operatorSoundId);
+
+                     audioQueue.push(`sound-${num2}`); // Second number
+
+                      // Add equals and the answer sound (optional but helpful)
+                      // audioQueue.push('sound-equals'); // Need sound-equals.mp3
+                      // audioQueue.push(`sound-${this.problem.answer}`);
+
+
+                     let currentAudioIndex = 0;
+
+                     const playNext = () => {
+                         if (currentAudioIndex < audioQueue.length) {
+                             const soundId = audioQueue[currentAudioIndex];
+                             const soundElement = document.getElementById(soundId);
+
+                             if (soundElement) {
+                                 soundElement.currentTime = 0; // Reset
+                                 soundElement.onended = playNext; // Play next when this one ends
+                                 soundElement.play().catch(e => console.error(`Error playing audio sequence part ${soundId}:`, e));
+                                 currentAudioIndex++;
+                             } else {
+                                 console.warn(`Audio element not found for ID: ${soundId}. Skipping.`);
+                                 currentAudioIndex++;
+                                 playNext(); // Try the next one immediately
+                             }
+                         }
+                         // Sequence finished when currentAudioIndex reaches queue length
+                     };
+
+                     playNext(); // Start the sequence
+                 },
+
+
+                 appendAnswer(number) {
+                     // Determine max digits allowed based on the maximum possible result for the level
+                     const maxAnswerDigits = String(this.getArithmeticMaxResult()).length;
+
+                     if (this.userAnswer.length < maxAnswerDigits) {
+                         this.userAnswer += number.toString();
+                         // Optional: Play a click sound or number sound
+                         // const clickSound = document.getElementById('sound-click'); // Need sound-click.mp3
+                         // if(clickSound) { clickSound.currentTime = 0; clickSound.play().catch(e => console.warn('Click sound failed', e)); }
+                     }
+                 },
+
+                clearAnswer() {
+                    this.userAnswer = '';
+                    this.feedbackMessage = ''; // Clear feedback on clear
+                    this.feedbackClass = '';
+                     // Optional: Play a clear sound
+                },
+
+                checkAnswer() {
+                    this.stopAllMathSounds(); // Stop any speaking problems
+
+                    // Convert userAnswer to a number. Use Number() which handles empty string as 0, parseInt is safer if we want to check for valid digits first
+                    const userAnswerNum = parseInt(this.userAnswer, 10); // Use parseInt to check if it's a valid integer
+
+                    // Check if the input is a valid number (not empty, not NaN)
+                    if (this.userAnswer === '' || isNaN(userAnswerNum)) {
+                        this.feedbackMessage = 'تکایە ژمارەیەک بنووسە.';
+                        this.feedbackClass = 'incorrect';
+                        // Do not decrease attempts for invalid input format, only for incorrect answer
+                        return;
+                    }
+
+                    if (userAnswerNum === this.problem.answer) {
+                        this.feedbackMessage = 'ڕاستە! زۆر باشە!';
+                        this.feedbackClass = 'correct';
+                        this.correctAnswers++; // Increment correct count
+                         // Optional: Play a success sound (Need sound-success.mp3)
+                         // const successSound = document.getElementById('sound-success');
+                         // if(successSound) { successSound.currentTime = 0; successSound.play().catch(e => console.warn('Success sound failed', e)); }
+
+                         // Generate next problem after a short delay
+                         setTimeout(() => this.generateProblem(), 1500); // Short delay after correct answer
+                    } else {
+                        this.feedbackMessage = 'هەڵەیە. دووبارە هەوڵ بدەوە.';
+                        this.feedbackClass = 'incorrect';
+                        this.attemptsLeft--; // Decrease attempts
+
+                         if (this.attemptsLeft <= 0) {
+                              // Attempts run out, show correct answer and move on
+                              this.feedbackMessage = `هەڵە بوو! وەڵامی ڕاست: ${this.toKurdishDigits(this.problem.answer)}`; // Show correct answer
+                              this.incorrectAnswers++; // Increment incorrect count (only when attempts run out for a question)
+                              // Optional: Play a failure sound (Need sound-failure.mp3)
+                              // const failureSound = document.getElementById('sound-failure');
+                              // if(failureSound) { failureSound.currentTime = 0; failureSound.play().catch(e => console.warn('Failure sound failed', e)); }
+
+                              // Generate next problem after a short delay
+                              setTimeout(() => this.generateProblem(), 3000); // Longer delay after failed attempts
+                         } else {
+                             // Attempts still remaining, clear answer field for retry
+                             this.userAnswer = '';
+                             // Optional: Play a try again sound (Need sound-tryagain.mp3)
+                             // const tryAgainSound = document.getElementById('sound-tryagain');
+                             // if(tryAgainSound) { tryAgainSound.currentTime = 0; tryAgainSound.play().catch(e => console.warn('Try Again sound failed', e)); }
+                         }
+                    }
+                },
+
+                getArithmeticMaxResult() {
+                    // Returns the maximum possible result for the selected level
+                     switch (this.selectedLevel) {
+                         case 'easy': return 10;
+                         case 'medium': return 15;
+                         case 'hard': return 30; // Max result for hard might be num1+num2 up to 15+15? Let's set it reasonably high.
+                         default: return 10; // Default for safety
+                     }
+                 }
+
+            }
+        }
+    </script>
+    <!-- Add audio tags for arithmetic operators if you want them to be read -->
+    <!-- <audio id="sound-plus" src="audio/math/plus.mp3" preload="auto"></audio> -->
+    <!-- <audio id="sound-minus" src="audio/math/minus.mp3" preload="auto"></audio> -->
+    <!-- <audio id="sound-equals" src="audio/math/equals.mp3" preload="auto"></audio> -->
+     <!-- Add general feedback sounds if desired -->
+     <!-- <audio id="sound-success" src="audio/math/success.mp3" preload="auto"></audio> -->
+     <!-- <audio id="sound-failure" src="audio/math/failure.mp3" preload="auto"></audio> -->
+     <!-- <audio id="sound-tryagain" src="audio/math/tryagain.mp3" preload="auto"></audio> -->
+</body>
+</html>

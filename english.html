@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Language</title>
+    <!-- CSS Styles -->
+    <style>
+        /* style.css - Updated Styles (Copy the whole block again) */
+
+        /* Define theme colors using CSS variables */
+        :root {
+            --theme-bg-main: #fbfaf7; /* Light background */
+            --theme-bg-content: #fffefc; /* Slightly lighter content background */
+            --theme-bg-accent: #f5f0e8; /* Accent background, similar to sidebar in previous code */
+
+            --theme-border-light: #e8e0d4;
+            --theme-border-medium: #d8c8b8;
+            --theme-border-strong: #c8a97e;
+            --theme-border-accent: #d2b48c;
+
+            --theme-text-primary: #5a4d41; /* Dark brown */
+            --theme-text-secondary: #7a6d61; /* Medium brown */
+            --theme-text-accent: #8b5a2b; /* Accent brown/orange */
+
+            --theme-button-primary-bg: #8b5a2b; /* Primary button background */
+            --theme-button-primary-text: white; /* Primary button text color */
+            --theme-button-primary-hover-bg: #a07d5b; /* Primary button hover background */
+
+            --theme-card-bg: #fffefc; /* Background for cards/items */
+            --theme-card-border: #e8e0d4; /* Border for cards/items */
+            --theme-card-hover-border: #d2b48c; /* Hover border for cards */
+        }
+
+        /* Apply font and background to body */
+        body {
+            font-family: "NRT Reg", "Rudaw", "Unikurd Web", "Vazirmatn", "Tahoma", sans-serif;
+            background-color: var(--theme-bg-main);
+            color: var(--theme-text-primary);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+             text-align: left; /* Default text alignment for LTR */
+        }
+
+        /* Basic container styling */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+         /* Back button style */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 1rem;
+            left: 1rem; /* Position on the left visually in LTR */
+            right: auto; /* Ensure it's not affected by RTL right */
+            background-color: var(--theme-bg-accent); /* Use an accent background */
+            color: var(--theme-text-accent); /* Use accent text color */
+            border: 1px solid var(--theme-border-medium);
+            border-radius: 0.5rem; /* Rounded corners */
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+            z-index: 10; /* Stay on top */
+             text-decoration: none; /* Remove underline for links */
+        }
+
+        .back-button:hover {
+            background-color: var(--theme-border-light); /* Lighter on hover */
+            border-color: var(--theme-border-accent);
+            transform: translateY(-1px); /* Slight lift on hover */
+        }
+
+        .back-button svg {
+            width: 1.5rem;
+            height: 1.5rem;
+             /* Changed: Default arrow is left-pointing, keep it that way */
+             transform: rotate(0deg);
+        }
+         /* Changed: For RTL, the button is on the visual left, should also point left */
+        html[dir="rtl"] .back-button svg {
+             transform: rotate(0deg); /* Points left */
+        }
+         /* Removed the html[dir="ltr"] rule as it's now redundant with the base rule */
+
+
+        /* Subject Button Styles (Not used here) */
+        .subject-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--theme-card-bg);
+            border: 2px solid var(--theme-card-border);
+            border-radius: 1rem; /* More rounded for a friendly look */
+            padding: 1.5rem;
+            text-decoration: none;
+            color: var(--theme-text-primary);
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* Subtle shadow */
+            min-height: 180px; /* Minimum height for consistency */
+            width: 100%;
+        }
+
+        .subject-button:hover {
+            border-color: var(--theme-card-hover-border);
+            transform: translateY(-5px); /* More pronounced lift on hover */
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .subject-button img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 0.75rem;
+        }
+
+        /* --- Letter/Number Grid Styles --- */
+        .grid-container {
+            display: grid;
+            gap: 1rem; /* Space between items */
+            padding-top: 1rem;
+             text-align: center; /* Center grid items text */
+             /* Default (Mobile): Aim for more items per row to reduce scroll */
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+        }
+
+        .grid-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--theme-card-bg);
+            border: 1px solid var(--theme-card-border);
+            border-radius: 0.75rem; /* Slightly rounded */
+            font-size: 2rem; /* Large font size for letters/numbers */
+            font-weight: bold;
+            color: var(--theme-text-accent);
+            cursor: pointer;
+            user-select: none; /* Prevent text selection */
+            min-height: 80px; /* Minimum size for touch targets */
+             /* Added animation on hover as requested */
+             transition: all 0.3s ease, transform 0.1s ease;
+        }
+
+        .grid-item:hover {
+            background-color: var(--theme-bg-accent);
+            border-color: var(--theme-card-hover-border);
+            transform: scale(1.05); /* Slightly enlarge on hover */
+        }
+
+        /* Animation on click/press */
+        .grid-item:active {
+            transform: scale(0.95);
+        }
+
+        /* Subtle animation for letters (Applied to the span inside) */
+         @keyframes gentle-pulse {
+             0%, 100% { transform: scale(1); }
+             50% { transform: scale(1.02); }
+         }
+
+         .grid-item span {
+             display: block; /* Allow transform */
+             transform-origin: center; /* Center the transform */
+        }
+         .grid-item:hover span {
+             animation: gentle-pulse 1.5s infinite ease-in-out; /* Apply animation on hover */
+        }
+
+
+        /* --- Modal Styles --- */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6); /* Dark semi-transparent overlay */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50; /* Above other content */
+            padding: 1rem;
+             overflow-y: auto; /* Allow scrolling if modal is taller than screen */
+        }
+
+        .modal-content {
+            background-color: var(--theme-bg-content);
+            border-radius: 1rem; /* Rounded corners */
+             /* Increased top padding to avoid clash with back button */
+            padding: 2.5rem 1.5rem 1.5rem;
+            max-width: 600px; /* Maximum width */
+            width: 100%;
+            position: relative; /* Needed for back button positioning */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+             text-align: left; /* Align modal content text to the left for English */
+        }
+
+        /* Keyframe animation for modal title */
+        @keyframes gentle-pulse-title {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .modal-title {
+            /* Reduced font size slightly */
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--theme-text-accent);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            /* Apply continuous animation */
+            animation: gentle-pulse-title 2.5s infinite ease-in-out;
+        }
+
+        /* Back button inside modal (positioning relative to modal-content) */
+        .modal-content .back-button {
+            position: absolute;
+            top: 1rem;
+            left: 1rem; /* Position on the left visually in LTR */
+            right: auto;
+            padding: 0.35rem; /* Smaller padding */
+            background-color: var(--theme-bg-accent);
+            color: var(--theme-text-accent); /* Match modal elements */
+            border: 1px solid var(--theme-border-medium);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            z-index: 20; /* Ensure it's above modal content */
+             /* Arrow direction adjustment handled by global back-button rule */
+             transform: none; /* Reset potential rotation from grid-item */
+        }
+         .modal-content .back-button:hover {
+             background-color: var(--theme-border-light);
+             border-color: var(--theme-border-accent);
+         }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Responsive grid for examples */
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        @media (max-width: 767px) { /* Specifically for mobile/smaller screens */
+            .example-grid {
+                 grid-template-columns: repeat(2, 1fr); /* Force 2 columns on small screens */
+                 gap: 0.75rem; /* Slightly smaller gap on mobile */
+             }
+         }
+
+
+        .example-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            padding: 0.75rem;
+            border: 1px solid var(--theme-card-border);
+            border-radius: 0.75rem;
+            background-color: var(--theme-card-bg);
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .example-item:hover {
+            background-color: var(--theme-bg-accent);
+            border-color: var(--theme-card-hover-border);
+            transform: scale(1.03);
+        }
+
+        .example-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 0.5rem;
+        }
+
+        .example-item span {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--theme-text-primary);
+            text-align: center;
+        }
+
+         /* --- Special Button Style inside Modal (Wanakan Button) --- */
+         .modal-footer-button {
+             display: block; /* Make it a block element to take full width */
+             width: fit-content; /* Shrink to content width */
+             margin: 1.5rem auto 0 auto; /* Center horizontally, add space above */
+             padding: 0.75rem 1.5rem;
+             font-size: 1.1rem;
+             font-weight: 600;
+             text-align: center;
+             text-decoration: none; /* Remove underline */
+             color: var(--theme-button-primary-text);
+             background-color: var(--theme-button-primary-bg);
+             border: 1px solid var(--theme-button-primary-bg);
+             border-radius: 0.5rem;
+             transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+             cursor: pointer;
+         }
+         .modal-footer-button:hover {
+             background-color: var(--theme-button-primary-hover-bg);
+             border-color: var(--theme-button-primary-hover-bg);
+             transform: translateY(-2px); /* Lift on hover */
+         }
+
+
+         /* --- Math Icons Section Styles (Not used here) --- */
+         .icon-display-area {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border: 1px solid var(--theme-card-border);
+            border-radius: 1rem;
+            background-color: var(--theme-card-bg);
+            /* Default flexbox removed, using grid now */
+            /* display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.5rem; */
+            overflow-y: auto; /* Allow vertical scrolling if needed */
+            max-height: 400px; /* Limit height to prevent excessive scrolling */
+            display: grid; /* Use grid for controlled layout */
+            gap: 0.5rem; /* Default gap */
+             justify-items: center; /* Center items within their grid cells */
+             align-items: center;
+        }
+
+         /* Specific styles for math icons scaling and grid density based on number size */
+        .icon-display-area.grid-icons {
+            /* Base density for large numbers (e.g. > 50) */
+            grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
+            gap: 0.2rem; /* Small gap */
+        }
+         .icon-display-area.large-icons {
+             /* For numbers up to ~25 */
+             grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
+             gap: 0.5rem;
+         }
+         .icon-display-area.medium-icons {
+             /* For numbers up to ~50 */
+             grid-template-columns: repeat(auto-fit, minmax(25px, 1fr));
+             gap: 0.3rem;
+         }
+         .icon-display-area.xlarge-icons {
+              /* For numbers up to ~10 */
+             grid-template-columns: repeat(auto-fit, minmax(40px, 1fr)); /* Might fit 5-10 per row depending on screen */
+             gap: 1rem;
+         }
+
+
+         .math-icon { object-fit: contain; flex-shrink: 0;}
+
+         /* Define icon sizes */
+        .math-icon.small { width: 20px; height: 20px; }
+        .math-icon.medium { width: 30px; height: 30px; }
+        .math-icon.large { width: 40px; height: 40px; }
+        .math-icon.xlarge { width: 50px; height: 50px; }
+
+
+         /* --- Math Arithmetic Section Styles (Not used here) --- */
+         /* (Arithmetic styles kept in math.html) */
+
+
+        /* --- Responsive Adjustments --- */
+         /* Home page buttons grid layout (Not used here) */
+        .home-buttons-grid {
+            display: grid;
+            gap: 1.5rem; /* Space between buttons */
+            /* Default: 1 column on very small screens */
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            justify-content: center; /* Center grid if items don't fill line */
+             /* Inherits padding-top from .container */
+        }
+         @media (min-width: 500px) { /* Custom breakpoint for 2 columns */
+             .home-buttons-grid {
+                 grid-template-columns: repeat(2, minmax(250px, 1fr)); /* Force 2 columns */
+             }
+         }
+
+
+        @media (min-width: 768px) { /* md */
+            .container {
+                padding: 2rem;
+            }
+            /* Home page buttons side by side */
+             .home-buttons-grid {
+                 grid-template-columns: repeat(3, 1fr);
+                 gap: 2rem; /* Slightly larger gap */
+             }
+             /* Math main buttons grid layout */
+             .math-main-buttons-grid {
+                display: grid; /* Ensure display is grid */
+                grid-template-columns: repeat(3, 1fr); /* Force 3 columns on md+ */
+                gap: 2rem; /* Larger gap on md+ */
+                 justify-content: center;
+             }
+
+             /* Grid container for numbers/letters becomes denser on larger screens */
+            .grid-container {
+                grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            }
+            .example-grid {
+                grid-template-columns: repeat(4, 1fr); /* 4 examples per row on medium screens */
+            }
+            .modal-content {
+                max-width: 700px; /* Wider modal */
+            }
+            .modal-content .back-button {
+                left: 2rem; /* Position slightly further in on larger screens */
+            }
+             html[dir="rtl"] .modal-content .back-button {
+                 left: 2rem;
+            }
+            html[dir="ltr"] .modal-content .back-button {
+                left: 2rem;
+            }
+        }
+         @media (max-width: 767px) { /* Styles specific to screens smaller than md */
+             /* Math main buttons grid responsive on small screens */
+            .math-main-buttons-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive on small */
+                 gap: 1.5rem;
+                 justify-content: center;
+            }
+         }
+
+
+        @media (min-width: 1024px) { /* lg */
+             /* Grid container for numbers/letters even denser on large screens */
+            .grid-container {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+        }
+
+        /* Hide element when AlpineJS x-cloak is used */
+        [x-cloak] { display: none !important; }
+
+         .math-section-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--theme-text-secondary);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--theme-border-light);
+            padding-bottom: 0.5rem;
+            text-align: center; /* Center titles */
+        }
+    </style>
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body dir="ltr">
+
+    <a href="index.html" class="back-button" aria-label="Back to home">
+       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+       </svg>
+    </a>
+
+    <div class="container" x-data="englishApp()">
+        <h1 style="text-align: center; margin-bottom: 2rem; color: var(--theme-text-accent); font-size: 2.5rem; font-weight: bold;">English Language - Alphabet</h1>
+
+        <div class="grid-container">
+             <!-- Loop through letters data -->
+            <template x-for="letterData in letters" :key="letterData.letter">
+                <div class="grid-item"
+                     @click="openModal(letterData)">
+                    <span x-text="letterData.letter"></span>
+                </div>
+            </template>
+        </div>
+
+        <!-- Modal -->
+        <template x-if="showModal">
+            <div class="modal-backdrop" @click.self="closeModal()"> <!-- Close modal when clicking outside (on backdrop) -->
+                <div class="modal-content" @click.stop> <!-- Prevent click inside modal from closing it -->
+                    <button class="back-button" @click="closeModal()" aria-label="Back">
+                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                       </svg>
+                    </button>
+                    <h2 class="modal-title" x-text="currentLetter"></h2>
+
+                    <div class="example-grid">
+                        <!-- Loop through examples -->
+                        <template x-for="example in examples" :key="example.text">
+                            <div class="example-item" @click="speakText(example.text)">
+                                <!-- TODO: Replace with actual image paths -->
+                                <img :src="example.image" :alt="example.text + ' image'">
+                                <span x-text="example.text"></span>
+                            </div>
+                        </template>
+                    </div>
+                     <!-- Optional: Add "Lessons" button here if needed for English -->
+                      <!-- TODO: Replace '#' with the actual URL you want to link to -->
+                     <!-- <a href="#" class="modal-footer-button" role="button">
+                         Lessons
+                     </a> -->
+                </div>
+            </div>
+        </template>
+
+    </div>
+    <!-- No specific audio tags needed here, using browser's TTS -->
+
+    <!-- Alpine.js data object -->
+    <script>
+        function englishApp() {
+            return {
+                showModal: false,
+                currentLetter: '',
+                examples: [],
+                letters: [
+                    { letter: 'A', examples: [
+                        { text: 'Apple', image: 'images/en/apple.png' },
+                        { text: 'Ant', image: 'images/en/ant.png' },
+                        { text: 'Aeroplane', image: 'images/en/aeroplane.png' },
+                        { text: 'Alligator', image: 'images/en/alligator.png' }
+                    ]},
+                     { letter: 'B', examples: [
+                        { text: 'Ball', image: 'images/en/ball.png' },
+                        { text: 'Bird', image: 'images/en/bird.png' },
+                        { text: 'Book', image: 'images/en/book.png' },
+                        { text: 'Banana', image: 'images/en/banana.png' }
+                    ]},
+                     { letter: 'C', examples: [
+                        { text: 'Cat', image: 'images/en/cat.png' },
+                        { text: 'Car', image: 'images/en/car.png' },
+                        { text: 'Cake', image: 'images/en/cake.png' },
+                        { text: 'Cow', image: 'images/en/cow.png' }
+                    ]},
+                     { letter: 'D', examples: [
+                        { text: 'Dog', image: 'images/en/dog.png' },
+                        { text: 'Duck', image: 'images/en/duck.png' },
+                        { text: 'Drum', image: 'images/en/drum.png' },
+                        { text: 'Dolphin', image: 'images/en/dolphin.png' }
+                    ]},
+                    { letter: 'E', examples: [{ text: 'Elephant', image: 'images/en/elephant.png' }, { text: 'Egg', image: 'images/en/egg.png' }, { text: 'Eagle', image: 'images/en/eagle.png' }, { text: 'Earth', image: 'images/en/earth.png' }] },
+                    { letter: 'F', examples: [{ text: 'Fish', image: 'images/en/fish.png' }, { text: 'Frog', image: 'images/en/frog.png' }, { text: 'Fan', image: 'images/en/fan.png' }, { text: 'Flower', image: 'images/en/flower.png' }] },
+                    { letter: 'G', examples: [{ text: 'Grape', image: 'images/en/grape.png' }, { text: 'Goat', image: 'images/en/goat.png' }, { text: 'Guitar', image: 'images/en/guitar.png' }, { text: 'Giraffe', image: 'images/en/giraffe.png' }] },
+                    { letter: 'H', examples: [{ text: 'Hat', image: 'images/en/hat.png' }, { text: 'House', image: 'images/en/house.png' }, { text: 'Horse', image: 'images/en/horse.png' }, { text: 'Hen', image: 'images/en/hen.png' }] },
+                    { letter: 'I', examples: [{ text: 'Ice', image: 'images/en/ice.png' }, { text: 'Igloo', image: 'images/en/igloo.png' }, { text: 'Insect', image: 'images/en/insect.png' }, { text: 'Iron', image: 'images/en/iron.png' }] },
+                    { letter: 'J', examples: [{ text: 'Jar', image: 'images/en/jar.png' }, { text: 'Jellyfish', image: 'images/en/jellyfish.png' }, { text: 'Jacket', image: 'images/en/jacket.png' }, { text: 'Jeep', image: 'images/en/jeep.png' }] },
+                    { letter: 'K', examples: [{ text: 'Kite', image: 'images/en/kite.png' }, { text: 'King', image: 'images/en/king.png' }, { text: 'Kangaroo', image: 'images/en/kangaroo.png' }, { text: 'Key', image: 'images/en/key.png' }] },
+                    { letter: 'L', examples: [{ text: 'Lion', image: 'images/en/lion.png' }, { text: 'Lamp', image: 'images/en/lamp.png' }, { text: 'Leaf', image: 'images/en/leaf.png' }, { text: 'Lemon', image: 'images/en/lemon.png' }] },
+                    { letter: 'M', examples: [{ text: 'Monkey', image: 'images/en/monkey.png' }, { text: 'Mouse', image: 'images/en/mouse.png' }, { text: 'Moon', image: 'images/en/moon.png' }, { text: 'Milk', image: 'images/en/milk.png' }] },
+                    { letter: 'N', examples: [{ text: 'Nest', image: 'images/en/nest.png' }, { text: 'Nurse', image: 'images/en/nurse.png' }, { text: 'Nine', image: 'images/en/nine.png' }, { text: 'Nose', image: 'images/en/nose.png' }] },
+                    { letter: 'O', examples: [{ text: 'Orange', image: 'images/en/orange.png' }, { text: 'Owl', image: 'images/en/owl.png' }, { text: 'Octopus', image: 'images/en/octopus.png' }, { text: 'Onion', image: 'images/en/onion.png' }] },
+                    { letter: 'P', examples: [{ text: 'Pig', image: 'images/en/pig.png' }, { text: 'Panda', image: 'images/en/panda.png' }, { text: 'Pencil', image: 'images/en/pencil.png' }, { text: 'Pear', image: 'images/en/pear.png' }] },
+                    { letter: 'Q', examples: [{ text: 'Queen', image: 'images/en/queen.png' }, { text: 'Quail', image: 'images/en/quail.png' }, { text: 'Quilt', image: 'images/en/quilt.png' }, { text: 'Question', image: 'images/en/question.png' }] },
+                    { letter: 'R', examples: [{ text: 'Rabbit', image: 'images/en/rabbit.png' }, { text: 'Rain', image: 'images/en/rain.png' }, { text: 'Rose', image: 'images/en/rose.png' }, { text: 'Ring', image: 'images/en/ring.png' }] },
+                    { letter: 'S', examples: [{ text: 'Sun', image: 'images/en/sun.png' }, { text: 'Snake', image: 'images/en/snake.png' }, { text: 'Star', image: 'images/en/star.png' }, { text: 'Shoe', image: 'images/en/shoe.png' }] },
+                    { letter: 'T', examples: [{ text: 'Tiger', image: 'images/en/tiger.png' }, { text: 'Tree', image: 'images/en/tree.png' }, { text: 'Train', image: 'images/en/train.png' }, { text: 'Table', image: 'images/en/table.png' }] },
+                    { letter: 'U', examples: [{ text: 'Umbrella', image: 'images/en/umbrella.png' }, { text: 'Uniform', image: 'images/en/uniform.png' }, { text: 'Up', image: 'images/en/up.png' }, { text: 'Us', image: 'images/en/us.png' }] },
+                    { letter: 'V', examples: [{ text: 'Van', image: 'images/en/van.png' }, { text: 'Violin', image: 'images/en/violin.png' }, { text: 'Vase', image: 'images/en/vase.png' }, { text: 'Vegetables', image: 'images/en/vegetables.png' }] },
+                    { letter: 'W', examples: [{ text: 'Wolf', image: 'images/en/wolf.png' }, { text: 'Water', image: 'images/en/water.png' }, { text: 'Watch', image: 'images/en/watch.png' }, { text: 'Window', image: 'images/en/window.png' }] },
+                    { letter: 'X', examples: [{ text: 'X-ray', image: 'images/en/xray.png' }, { text: 'Xylophone', image: 'images/en/xylophone.png' }, { text: 'Fox', image: 'images/en/fox.png' }, { text: 'Box', image: 'images/en/box.png' }] },
+                    { letter: 'Y', examples: [{ text: 'Yacht', image: 'images/en/yacht.png' }, { text: 'Yak', image: 'images/en/yak.png' }, { text: 'Yarn', image: 'images/en/yarn.png' }, { text: 'Yellow', image: 'images/en/yellow.png' }] },
+                    { letter: 'Z', examples: [{ text: 'Zebra', image: 'images/en/zebra.png' }, { text: 'Zipper', image: 'images/en/zipper.png' }, { text: 'Zoo', image: 'images/en/zoo.png' }, { text: 'Zero', image: 'images/en/zero.png' }] }
+                ],
+                synth: window.speechSynthesis,
+                voices: [], // To store available voices
+                selectedVoice: null, // To store the selected female voice
+
+                init() {
+                    console.log("English App Initializing"); // Debugging log
+                    // Load voices and select one
+                    if (this.synth) {
+                         // Wait for voices to be loaded
+                         this.synth.onvoiceschanged = () => {
+                             console.log("Voices changed event fired."); // Debugging log
+                             this.loadAndSelectVoice();
+                         };
+
+                         // Check if voices are already available (might happen on subsequent loads)
+                         if (this.synth.getVoices().length > 0) {
+                             console.log("Voices already available on init."); // Debugging log
+                             this.loadAndSelectVoice();
+                         } else {
+                             console.log("Voices not immediately available, trying workarounds."); // Debugging log
+                             // Common workarounds to prompt voice loading in some browsers
+                             const dummyUtterance = new SpeechSynthesisUtterance('');
+                              dummyUtterance.lang = 'en-US'; // Use English language tag
+                              this.synth.speak(dummyUtterance);
+                              // Try loading again after a short delay in case the event didn't fire
+                              setTimeout(() => {
+                                   if (this.synth.getVoices().length === 0) {
+                                       console.warn("Voices still not loaded after short delay.");
+                                   } else {
+                                        console.log("Voices loaded after delay workaround.");
+                                        this.loadAndSelectVoice(); // Load if successful now
+                                   }
+                              }, 500); // Adjust delay if needed
+                         }
+
+                    } else {
+                         console.error('Text-to-Speech not supported in this browser.');
+                         // alert("Sorry, text-to-speech is not supported in your browser."); // Avoid alerting on every load
+                    }
+                },
+
+                loadAndSelectVoice() {
+                    this.voices = this.synth.getVoices();
+                    console.log(`Found ${this.voices.length} voices after load.`); // Debugging log
+                    console.log("Available voices:", this.voices.map(v => `${v.name} (${v.lang})`)); // List voices
+
+                     // Try to find a female English voice, prioritizing Google voices if available
+                    this.selectedVoice = this.voices.find(voice =>
+                         voice.lang === 'en-US' && voice.name.toLowerCase().includes('female') && voice.name.toLowerCase().includes('google')
+                    ) || this.voices.find(voice =>
+                         voice.lang === 'en-US' && voice.name.toLowerCase().includes('female')
+                    ) || this.voices.find(voice =>
+                         voice.lang.startsWith('en') && voice.name.toLowerCase().includes('female') // Any English female
+                    ) || this.voices.find(voice =>
+                        voice.lang === 'en-US' // Fallback to any US English voice
+                    ) || this.voices.find(voice =>
+                         voice.lang.startsWith('en') // Fallback to any English voice
+                    ) || this.voices[0]; // Fallback to first available voice
+
+                    if (this.selectedVoice) {
+                         console.log('Selected voice:', this.selectedVoice.name); // Debugging log
+                    } else {
+                        console.warn('No suitable English voice found, using default if any.');
+                         this.selectedVoice = this.voices.find(voice => voice.lang.startsWith('en')) || this.voices[0] || null;
+                         if (this.selectedVoice) {
+                             console.warn('Falling back to voice:', this.selectedVoice.name);
+                         } else {
+                             console.error('No English voices available at all.');
+                             // alert("No English voices found on your system. Text-to-Speech will not work for English."); // Avoid alerting on every load
+                         }
+                    }
+                     // If voices were loaded late, and a modal is open, speak the current letter/example
+                     if (this.showModal && !this.synth.speaking && this.selectedVoice) {
+                          // Re-speak the current content if voices just became available and modal is open
+                           // A small delay might be needed after voice loading
+                          setTimeout(() => {
+                             if (this.currentLetter) this.speakText(this.currentLetter);
+                          }, 200); // Small delay
+                     }
+                },
+
+                stopSpeaking() {
+                    if (this.synth && this.synth.speaking) {
+                         console.log("Stopping speech."); // Debugging log
+                        this.synth.cancel();
+                    }
+                },
+
+                speakText(text) {
+                     if (!this.synth) {
+                         console.error('Text-to-Speech not supported.');
+                         // alert("Text-to-Speech is not supported by your browser."); // Avoid alerting on every click
+                         return;
+                     }
+                      if (!this.selectedVoice) {
+                           console.warn('Speech voice not ready yet or not found. Trying to speak with default...');
+                           // Attempt to load voices again just in case, but don't wait for it
+                           this.loadAndSelectVoice();
+                           // Continue trying to speak, browser might use default or it might fail
+                           if (this.synth.getVoices().length === 0) {
+                               console.error('No voices available to speak.');
+                               // alert("No voices available to speak. Please check your browser settings."); // Avoid alerting on every click
+                               return;
+                           }
+                       }
+
+
+                      this.stopSpeaking(); // Stop previous speech
+
+                     const utterance = new SpeechSynthesisUtterance(text);
+                     utterance.lang = 'en-US'; // Specify language
+                     if (this.selectedVoice) {
+                          utterance.voice = this.selectedVoice; // Use the selected voice if found
+                     }
+                     utterance.rate = 0.9; // Adjust speech rate (slightly slower) - was 0.9
+                     utterance.pitch = 1; // Default pitch
+
+                     console.log(`Speaking: "${text}" with voice "${this.selectedVoice ? this.selectedVoice.name : 'Default/None'}"`); // Debugging log
+                     this.synth.speak(utterance);
+
+                      // Optional: Add error handling for speaking itself
+                      utterance.onerror = (event) => {
+                         console.error('Speech synthesis error:', event);
+                         // alert("Sorry, text-to-speech failed."); // Avoid too many alerts
+                     };
+                },
+                openModal(letterData) {
+                    console.log("Opening modal for:", letterData.letter); // Debugging log
+                    this.currentLetter = letterData.letter;
+                    this.examples = letterData.examples;
+                    this.showModal = true;
+                    // Use $nextTick to ensure modal is rendered before speaking (sometimes helps)
+                    this.$nextTick(() => {
+                         // Speak the letter first
+                         this.speakText(letterData.letter);
+                         // Optional: Speak the first example after a delay
+                         // if (this.examples.length > 0) {
+                         //     setTimeout(() => this.speakText(this.examples[0].text), 1000); // Speak after 1 second
+                         // }
+                    });
+                },
+                closeModal() {
+                    console.log("Closing modal"); // Debugging log
+                    this.showModal = false;
+                    this.stopSpeaking(); // Stop speaking when closing modal
+                }
+            }
+        }
+    </script>
+</body>
+</html>

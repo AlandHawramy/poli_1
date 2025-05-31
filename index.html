@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>وانەکانی پۆلی یەکەم</title>
+    <!-- CSS Styles -->
+    <style>
+        /* style.css - Updated Styles */
+
+        /* Define theme colors using CSS variables */
+        :root {
+            --theme-bg-main: #fbfaf7; /* Light background */
+            --theme-bg-content: #fffefc; /* Slightly lighter content background */
+            --theme-bg-accent: #f5f0e8; /* Accent background, similar to sidebar in previous code */
+
+            --theme-border-light: #e8e0d4;
+            --theme-border-medium: #d8c8b8;
+            --theme-border-strong: #c8a97e;
+            --theme-border-accent: #d2b48c;
+
+            --theme-text-primary: #5a4d41; /* Dark brown */
+            --theme-text-secondary: #7a6d61; /* Medium brown */
+            --theme-text-accent: #8b5a2b; /* Accent brown/orange */
+
+            --theme-button-primary-bg: #8b5a2b; /* Primary button background */
+            --theme-button-primary-text: white; /* Primary button text color */
+            --theme-button-primary-hover-bg: #a07d5b; /* Primary button hover background */
+
+            --theme-card-bg: #fffefc; /* Background for cards/items */
+            --theme-card-border: #e8e0d4; /* Border for cards/items */
+            --theme-card-hover-border: #d2b48c; /* Hover border for cards */
+
+            /* Overlay color (can be very light or removed) */
+            --theme-overlay-color: rgba(0, 0, 0, 0.05); /* Very subtle dark overlay */
+        }
+
+        /* Apply font and background to body */
+        body {
+            font-family: "NRT Reg", "Rudaw", "Unikurd Web", "Vazirmatn", "Tahoma", sans-serif;
+            background-color: var(--theme-bg-main);
+            color: var(--theme-text-primary);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            text-align: right; /* Default text alignment for RTL */
+        }
+
+        /* Basic container styling */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+         /* Back button style (Not used on this page) */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 1rem;
+            left: 1rem; /* Position on the left visually in RTL */
+            right: auto; /* Ensure it's not affected by RTL right */
+            background-color: var(--theme-bg-accent); /* Use an accent background */
+            color: var(--theme-text-accent); /* Use accent text color */
+            border: 1px solid var(--theme-border-medium);
+            border-radius: 0.5rem; /* Rounded corners */
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+            z-index: 10; /* Stay on top */
+            text-decoration: none; /* Remove underline for links */
+        }
+
+        .back-button:hover {
+            background-color: var(--theme-border-light); /* Lighter on hover */
+            border-color: var(--theme-border-accent);
+            transform: translateY(-1px); /* Slight lift on hover */
+        }
+
+        .back-button svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            /* Arrow points left in RTL */
+            transform: rotate(0deg);
+        }
+        html[dir="ltr"] .back-button svg {
+             transform: rotate(180deg); /* Arrow points left in LTR */
+        }
+        
+        /* Download button style (Added to index page) */
+        .download-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center; /* Center the icon */
+            position: absolute;
+            top: 1rem;
+            right: 1rem; /* Position on the right visually in RTL */
+            left: auto;
+            background-color: var(--theme-button-primary-bg);
+            color: var(--theme-button-primary-text);
+            border: 1px solid transparent;
+            border-radius: 0.5rem;
+            padding: 0.5rem; /* Padding for icon only */
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 10; /* Stay on top */
+            text-decoration: none;
+            /* Added box-shadow for consistency */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .download-button:hover {
+            background-color: var(--theme-button-primary-hover-bg);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .download-button svg {
+            width: 1.5rem; /* Slightly larger icon */
+            height: 1.5rem; /* Slightly larger icon */
+            flex-shrink: 0; /* Prevent icon from shrinking */
+        }
+        /* Hide the span text inside download button */
+        .download-button span {
+            display: none;
+        }
+
+
+        /* Subject Button Styles (for index.html) */
+        .subject-button {
+            display: block; /* Changed to block to simplify layout */
+            background-color: var(--theme-card-bg); /* Default background behind the image */
+            border: 2px solid var(--theme-card-border);
+            border-radius: 1rem;
+            padding: 0; /* Remove padding so image goes to the edge */
+            text-decoration: none;
+            color: transparent; /* Text is hidden */
+            font-size: 0; /* Hide text visually */
+            line-height: 0; /* Hide text visually */
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            height: 250px; /* Fixed height for consistent size, adjust as needed */
+            position: relative;
+            overflow: hidden; /* Hide parts of the image or overlay that exceed the border radius */
+        }
+
+        .subject-button:hover {
+            border-color: var(--theme-card-hover-border);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        /* Style for the image inside the subject button */
+        .subject-button img {
+            position: absolute; /* Position the image absolutely */
+            top: 0; /* Image goes to the top edge */
+            left: 0; /* Image goes to the left edge */
+            width: 100%; /* Make the image fill the width of the button */
+            height: 100%; /* Make the image fill the height of the button */
+            object-fit: cover; /* Fill the area, cropping if necessary, centering the image */
+            z-index: 1; /* Place image behind the overlay */
+            margin-bottom: 0;
+            transition: transform 0.3s ease;
+            background-color: var(--theme-card-bg); /* Background for image if it doesn't fill (less likely with cover) */
+        }
+
+         .subject-button:hover img {
+            transform: scale(1.02); /* Slight zoom effect on image on hover */
+         }
+
+         /* Overlay (optional, can be removed if not desired) */
+         .subject-button::before {
+             content: "";
+             position: absolute;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             /* Very subtle gradient or color */
+             background: linear-gradient(to bottom, rgba(255,255,255,0.05) 0%, var(--theme-overlay-color) 100%);
+             z-index: 1.5; /* Place overlay above image */
+             border-radius: 1rem; /* Match button border-radius */
+         }
+
+         /* Hide the span if it somehow remains or is added back */
+         .subject-button span {
+             display: none;
+         }
+
+
+        /* --- Letter/Number Grid Styles (Used in other pages) --- */
+        .grid-container {
+            display: grid;
+            gap: 1rem; /* Space between items */
+            padding-top: 1rem;
+            text-align: center;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+        }
+
+        .grid-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--theme-card-bg);
+            border: 1px solid var(--theme-card-border);
+            border-radius: 0.75rem;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--theme-text-accent);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+            min-height: 80px;
+             transition: all 0.3s ease, transform 0.3s ease;
+        }
+
+        .grid-item:hover {
+            background-color: var(--theme-bg-accent);
+            border-color: var(--theme-card-hover-border);
+            transform: scale(1.05);
+        }
+
+         @keyframes gentle-pulse {
+             0%, 100% { transform: scale(1); }
+             50% { transform: scale(1.02); }
+         }
+
+         .grid-item span {
+             display: block;
+             transform-origin: center;
+        }
+         .grid-item:hover span {
+             animation: gentle-pulse 1.5s infinite ease-in-out;
+        }
+
+
+        /* --- Modal Styles (Used in other pages) --- */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background-color: var(--theme-bg-content);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--theme-text-accent);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+         /* Back button inside modal (positioning relative to modal-content) */
+        .modal-content .back-button {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            right: auto;
+            padding: 0.35rem;
+            background-color: var(--theme-bg-accent);
+            color: var(--theme-text-accent);
+            border: 1px solid var(--theme-border-medium);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            z-index: 20;
+             transform: none;
+        }
+         .modal-content .back-button:hover {
+             background-color: var(--theme-border-light);
+             border-color: var(--theme-border-accent);
+         }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .example-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            padding: 0.75rem;
+            border: 1px solid var(--theme-card-border);
+            border-radius: 0.75rem;
+            background-color: var(--theme-card-bg);
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .example-item:hover {
+            background-color: var(--theme-bg-accent);
+            border-color: var(--theme-card-hover-border);
+            transform: scale(1.03);
+        }
+
+        .example-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 0.5rem;
+        }
+
+        .example-item span {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--theme-text-primary);
+            text-align: center;
+        }
+
+         /* --- Special Button Style inside Modal (Wanakan Button) --- */
+         .modal-footer-button {
+             display: block;
+             width: fit-content;
+             margin: 1.5rem auto 0 auto;
+             padding: 0.75rem 1.5rem;
+             font-size: 1.1rem;
+             font-weight: 600;
+             text-align: center;
+             text-decoration: none;
+             color: var(--theme-button-primary-text);
+             background-color: var(--theme-button-primary-bg);
+             border: 1px solid var(--theme-button-primary-bg);
+             border-radius: 0.5rem;
+             transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+             cursor: pointer;
+         }
+         .modal-footer-button:hover {
+             background-color: var(--theme-button-primary-hover-bg);
+             border-color: var(--theme-button-primary-hover-bg);
+             transform: translateY(-2px);
+         }
+
+
+         /* --- Math Icons Section Styles (Used in math.html for icon display modal) --- */
+         .icon-display-area {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border: 1px solid var(--theme-card-border);
+            border-radius: 1rem;
+            background-color: var(--theme-card-bg);
+            overflow-y: auto;
+            max-height: 400px;
+            display: grid;
+            gap: 0.5rem;
+             justify-items: center;
+             align-items: center;
+        }
+
+         /* Specific styles for math icons scaling and grid density based on number size */
+        .icon-display-area.grid-icons {
+            grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
+            gap: 0.2rem;
+        }
+         .icon-display-area.large-icons {
+             grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
+             gap: 0.5rem;
+         }
+         .icon-display-area.medium-icons {
+             grid-template-columns: repeat(auto-fit, minmax(25px, 1fr));
+             gap: 0.3rem;
+         }
+         .icon-display-area.xlarge-icons {
+             grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+             gap: 1rem;
+         }
+
+
+         .math-icon { object-fit: contain; flex-shrink: 0;}
+
+         /* Define icon sizes */
+        .math-icon.small { width: 20px; height: 20px; }
+        .math-icon.medium { width: 30px; height: 30px; }
+        .math-icon.large { width: 40px; height: 40px; }
+        .math-icon.xlarge { width: 50px; height: 50px; }
+
+
+         /* --- Math Arithmetic Section Styles (Used in math.html) --- */
+         .arithmetic-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid var(--theme-card-border);
+            border-radius: 1rem;
+            background-color: var(--theme-card-bg);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .problem-display {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--theme-text-accent);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            direction: ltr;
+            unicode-bidi: plaintext;
+        }
+
+        .problem-display input {
+            width: 80px;
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 0.5rem;
+            border: 1px solid var(--theme-card-border);
+            border-radius: 0.5rem;
+            background-color: var(--theme-bg-main);
+            color: var(--theme-text-primary);
+            direction: ltr;
+            unicode-bidi: plaintext;
+        }
+
+        .arithmetic-buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.5rem;
+            width: 100%;
+        }
+
+        .arithmetic-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 0.5rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background-color: var(--theme-bg-accent);
+            border: 1px solid var(--theme-card-border);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .arithmetic-button:hover {
+            background-color: var(--theme-border-light);
+            border-color: var(--theme-card-hover-border);
+            transform: scale(1.05);
+        }
+
+        .arithmetic-button.action {
+            grid-column: span 2;
+            font-size: 1rem;
+            color: var(--theme-button-primary-text);
+            background-color: var(--theme-button-primary-bg);
+            border-color: var(--theme-button-primary-bg);
+        }
+
+        .arithmetic-button.clear {
+            grid-column: span 1;
+            font-size: 1rem;
+            background-color: var(--theme-text-secondary);
+            border-color: var(--theme-text-secondary);
+        }
+
+        .arithmetic-button.action:hover {
+            background-color: var(--theme-button-primary-hover-bg);
+            border-color: var(--theme-button-primary-hover-bg);
+        }
+
+        .arithmetic-button.clear:hover {
+            background-color: #6b5f54;
+            border-color: #6b5f54;
+        }
+
+        .feedback-message {
+            font-size: 1.2rem;
+            font-weight: bold;
+            min-height: 1.5rem;
+        }
+
+        .feedback-message.correct {
+            color: green;
+        }
+
+        .feedback-message.incorrect {
+            color: red;
+        }
+
+        /* Arithmetic Level Selection Styles */
+         .level-selection-grid {
+             display: grid;
+             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+             gap: 1rem;
+             margin-bottom: 2rem;
+             justify-content: center;
+             text-align: center;
+         }
+         .level-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+             padding: 1rem;
+             border: 2px solid var(--theme-card-border);
+             border-radius: 0.75rem;
+             background-color: var(--theme-card-bg);
+             color: var(--theme-text-primary);
+             font-size: 1.1rem;
+             font-weight: bold;
+             cursor: pointer;
+             transition: all 0.3s ease;
+             user-select: none;
+             min-height: 120px;
+         }
+         .level-button:hover {
+             border-color: var(--theme-card-hover-border);
+             background-color: var(--theme-bg-accent);
+             transform: translateY(-3px);
+             box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+         }
+         .level-button.selected {
+             border-color: var(--theme-text-accent);
+             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+         }
+         .level-button img {
+             width: 50px;
+             height: 50px;
+             object-fit: contain;
+             margin-bottom: 0.5rem;
+         }
+
+         /* Results Display Styles */
+         .results-container {
+             text-align: center;
+             padding: 1.5rem;
+             border: 1px solid var(--theme-card-border);
+             border-radius: 1rem;
+             background-color: var(--theme-card-bg);
+             max-width: 400px;
+             margin: 2rem auto;
+         }
+         .results-container h3 {
+             font-size: 1.5rem;
+             color: var(--theme-text-accent);
+             margin-bottom: 1rem;
+         }
+         .results-container p {
+             font-size: 1.1rem;
+             margin-bottom: 0.75rem;
+             color: var(--theme-text-secondary);
+         }
+         .results-container .correct {
+             color: green;
+             font-weight: bold;
+         }
+         .results-container .incorrect {
+             color: red;
+             font-weight: bold;
+         }
+         .results-container button {
+             display: inline-block;
+             margin-top: 1.5rem;
+             padding: 0.75rem 1.5rem;
+             font-size: 1.1rem;
+             font-weight: 600;
+             text-align: center;
+             text-decoration: none;
+             color: var(--theme-button-primary-text);
+             background-color: var(--theme-button-primary-bg);
+             border: 1px solid var(--theme-button-primary-bg);
+             border-radius: 0.5rem;
+             transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+             cursor: pointer;
+         }
+          .results-container button:hover {
+             background-color: var(--theme-button-primary-hover-bg);
+             border-color: var(--theme-button-primary-hover-bg);
+             transform: translateY(-2px);
+         }
+
+
+        /* --- Responsive Adjustments --- */
+        /* Home page buttons grid layout - Fixed to always show 3 columns where possible */
+        .home-buttons-grid {
+            display: grid;
+            gap: 1.5rem; /* Space between buttons */
+            /* Force 3 columns */
+            grid-template-columns: repeat(3, 1fr);
+            justify-content: center; /* Center the grid if container is wider than needed */
+        }
+
+        /* Adjust gap on larger screens */
+        @media (min-width: 768px) { /* md breakpoint */
+            .container {
+                padding: 2rem;
+            }
+             .home-buttons-grid {
+                 gap: 2rem; /* Slightly larger gap */
+             }
+             .subject-button {
+                 height: 280px; /* Slightly taller on larger screens */
+             }
+
+             /* Math main buttons grid layout (Keep as is) */
+             .math-main-buttons-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 2rem;
+                 justify-content: center;
+             }
+
+             /* Grid container for numbers/letters becomes denser (Keep as is) */
+            .grid-container {
+                grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            }
+            .example-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .modal-content {
+                max-width: 700px;
+            }
+            .modal-content .back-button {
+                left: 2rem;
+            }
+             html[dir="rtl"] .modal-content .back-button {
+                 left: 2rem;
+            }
+            html[dir="ltr"] .modal-content .back-button {
+                left: 2rem;
+            }
+        }
+
+        @media (min-width: 1024px) { /* lg breakpoint */
+             /* Grid container for numbers/letters even denser (Keep as is) */
+            .grid-container {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+             /* Adjust height if desired for even larger screens */
+             .subject-button {
+                 height: 300px; /* Even taller on larger screens */
+             }
+        }
+
+         /* Handle very small screens - allow wrapping if needed */
+         @media (max-width: 480px) {
+              .home-buttons-grid {
+                 /* Allow wrapping if 3 columns become too narrow */
+                 grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                 gap: 1rem;
+              }
+              .subject-button {
+                  height: 180px; /* Reduce height on very small screens */
+              }
+         }
+
+
+        /* Hide element when AlpineJS x-cloak is used */
+        [x-cloak] { display: none !important; }
+
+         .math-section-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--theme-text-secondary);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--theme-border-light);
+            padding-bottom: 0.5rem;
+            text-align: center;
+        }
+    </style>
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body>
+
+    <!-- NEW: Download button (Icon only) -->
+    <!-- TODO: Replace "path/to/your/pdf.pdf" with the actual link to your PDF file -->
+    <a href="https://drive.google.com/drive/folders/1mzZxyoJC_CIWbS_5V71kbLbgK9x41J62?usp=sharing" class="download-button" target="_blank" download aria-label="دابەزاندن">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+        </svg>
+    </a>
+
+
+    <div class="container">
+        <!-- Reduced font-size for the main title -->
+        <h1 style="text-align: center; margin-bottom: 2rem; color: var(--theme-text-accent); font-size: 2.2rem; font-weight: bold;">وانەکانی پۆلی یەکەم</h1>
+
+        <!-- Use grid for buttons -->
+        <div class="home-buttons-grid">
+             <!-- Kurdish Button -->
+            <a href="kurdish.html" class="subject-button">
+                <img src="images/kurdi.jpg" alt="وێنەی کتێبی کوردی">
+            </a>
+
+            <!-- English Button -->
+            <a href="english.html" class="subject-button">
+                 <img src="images/english_book.jpeg" alt="English Book Image">
+            </a>
+
+            <!-- Math Button -->
+            <a href="math.html" class="subject-button">
+                <img src="images/math.jpeg" alt="وێنەی کتێبی بیرکاری">
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
