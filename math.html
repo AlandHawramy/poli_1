@@ -363,19 +363,30 @@
             margin: 0 auto; /* This centers the container itself */
         }
 
-        .problem-display {
+        /* New style for the flex container holding the problem text and answer box */
+         /* This container flows right-to-left by default because its parent (body) is RTL */
+        .problem-line {
+            display: flex; /* Arrange items in a row */
+            align-items: center; /* Vertically align items (text, box) */
+            gap: 1rem; /* Space between problem text and answer box */
+            width: 100%; /* Allow the line to take available width */
+            justify-content: center; /* Center the entire problem-line block */
+             /* Items within this flex container will flow right-to-left by default (parent dir="rtl") */
+        }
+
+        /* Style for the part showing num1 operator num2 = */
+        .problem-text {
             font-size: 2rem;
             font-weight: bold;
             color: var(--theme-text-accent);
-            display: flex;
+            display: flex; /* Arrange numbers and operator in a row */
             align-items: center;
-            gap: 1rem;
-             /* Ensure LTR layout for numbers and operators within this flex item */
+            gap: 1rem; /* Space between num1, operator, num2, = */
+             /* Force LTR layout for the math expression itself */
             direction: ltr;
-            unicode-bidi: plaintext; /* Ensures digits and symbols are not affected by RTL */
-             /* Align this specific flex item to the start (left in LTR, which appears visually left in RTL parent) */
-            align-self: flex-start; /* ADDED: Aligns the problem row to the left within the centered parent */
-             width: 100%; /* ADDED: Allow problem display to take full width */
+            unicode-bidi: plaintext;
+             /* Prevent shrinking so the math expression stays together */
+             flex-shrink: 0;
         }
 
         /* Style for the div that acts as the answer input field */
@@ -398,8 +409,9 @@
              /* Ensure LTR display for the number itself */
             direction: ltr;
             unicode-bidi: plaintext;
-             /* Prevent it from shrinking or wrapping incorrectly */
+             /* Prevent it from growing or shrinking unexpectedly */
             flex-shrink: 0;
+             flex-grow: 0;
         }
 
 
@@ -811,7 +823,7 @@
             </h2>
 
             <!-- Level Selection -->
-            <div x-show="currentArithmeticView === 'levels'" class="level-selection-grid">
+            <div x-show="currentArithmeticView === 'levels'" class="level-selection-grid" x-cloak>
                  <button @click="selectLevel('easy')" class="level-button" :class="{'selected': selectedLevel === 'easy'}">
                      <!-- TODO: Replace with actual easy icon -->
                      <img src="images/math/easy.png" alt="ئاستی ئاسان">
@@ -830,22 +842,47 @@
              </div>
 
             <!-- Problem Area -->
-            <div x-show="currentArithmeticView === 'problem'" class="arithmetic-container">
-                <!-- problem-display needs dir="ltr" so 4 + 3 = is displayed LTR -->
-                <!-- align-self: flex-start ensures this block is aligned to the left in the RTL parent -->
-                <div class="problem-display" dir="ltr">
-                     <span x-text="toKurdishDigits(problem.num1)"></span> <!-- Convert to Kurdish digits for display -->
-                     <span x-text="problem.operator"></span>
-                     <span x-text="toKurdishDigits(problem.num2)"></span> <!-- Convert to Kurdish digits for display -->
-                     <span>=</span>
-                     <!-- Replaced input with a styled div to avoid rendering issues -->
-                     <!-- This div will show the userAnswer converted to Kurdish digits -->
-                     <div class="answer-display"
-                          dir="ltr"
-                          x-text="toKurdishDigits(userAnswer)"
-                          @click="clearAnswer()">
+            <div x-show="currentArithmeticView === 'problem'" class="arithmetic-container" x-cloak>
+                 <!-- Container for the problem line (answer box + problem text) -->
+                 <!-- This flex container flows right-to-left by default -->
+                <div class="problem-line">
+                     <!-- Answer Box - This comes *first* in HTML so it appears on the *right* -->
+                     <!-- But the user wants it on the *left*? -->
+                     <!-- Let's re-read: "١٤ + ٤ = ٥ بکەوێتە دەستە ڕاست (چوارگۆشەکەی بکەوێتە دەستە چەپ)" -->
+                     <!-- This means the ANSWER should be on the RIGHT of the "=" -->
+                     <!-- Okay, my previous interpretation "١٤ + ٤ = [Answer Box]" was correct. -->
+                     <!-- The user means the *square box* (answer) should be on the left *of the whole line* -->
+                     <!-- which means the equation part should be on the right of the box. -->
+                     <!-- The visual order required in RTL is: [Answer Box] 14 + 4 = -->
+                     <!-- So the answer box should be the FIRST item in the RTL flex container -->
+
+                     <!-- Answer Box - Appears on the visual RIGHT in an RTL flex row -->
+                     <!-- We want it on the visual LEFT. So it should be the *LAST* item in HTML order. -->
+
+                     <!-- Let's restructure again based on the clarified goal: [Answer Box] 14 + 4 = -->
+                     <!-- In an RTL flex container (problem-line), the LAST item in HTML appears on the LEFT -->
+                     <!-- and the FIRST item in HTML appears on the RIGHT. -->
+                     <!-- So, problem text first, answer box last in HTML. -->
+
+                     <!-- This flex container flows right-to-left by default. -->
+                     <!-- Item 1 (problem text) goes right, Item 2 (answer box) goes left. PERFECT. -->
+
+                     <!-- Problem Text - Appears on the visual RIGHT in an RTL flex row -->
+                     <div class="problem-text" dir="ltr"> <!-- Force LTR for the equation content -->
+                          <span x-text="toKurdishDigits(problem.num1)"></span>
+                          <span x-text="problem.operator"></span>
+                          <span x-text="toKurdishDigits(problem.num2)"></span>
+                          <span>=</span>
                      </div>
-                </div>
+
+                     <!-- Answer Box - Appears on the visual LEFT in an RTL flex row -->
+                      <div class="answer-display"
+                           dir="ltr"
+                           x-text="toKurdishDigits(userAnswer)"
+                           @click="clearAnswer()">
+                      </div>
+                 </div>
+
 
                 <!-- Number Buttons Grid -->
                 <div class="arithmetic-buttons">
@@ -990,6 +1027,7 @@
      <audio id="sound-100" src="audio/math/100.mp3" preload="auto"></audio>
 
     <!-- Add audio tags for arithmetic operators and feedback sounds if you want them -->
+     <!-- Need audio files named exactly 'plus.mp3', 'minus.mp3', 'equals.mp3' in your audio/math folder -->
      <audio id="sound-plus" src="audio/math/plus.mp3" preload="auto"></audio>
      <audio id="sound-minus" src="audio/math/minus.mp3" preload="auto"></audio>
      <!-- audio id="sound-equals" src="audio/math/equals.mp3" preload="auto"></audio -->
