@@ -8,7 +8,7 @@
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <!-- Your Custom CSS Styles -->
     <style>
-        /* style.css - Updated Styles (Copy the whole block again) */
+        /* style.css - Updated Styles */
 
         /* Define theme colors using CSS variables */
         :root {
@@ -157,7 +157,7 @@
             transform: scale(1.05); /* Slightly enlarge on hover */
         }
 
-        /* Subtle animation for letters (Applied to the span inside) */
+         /* Subtle animation for letters (Applied to the span inside) */
          @keyframes gentle-pulse {
              0%, 100% { transform: scale(1); }
              50% { transform: scale(1.02); }
@@ -353,14 +353,14 @@
          .arithmetic-container {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: center; /* This centers the blocks inside the container */
             gap: 1.5rem;
             padding: 1.5rem;
             border: 1px solid var(--theme-card-border);
             border-radius: 1rem;
             background-color: var(--theme-card-bg);
             max-width: 400px;
-            margin: 0 auto;
+            margin: 0 auto; /* This centers the container itself */
         }
 
         .problem-display {
@@ -370,25 +370,38 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-             /* Ensure LTR layout for numbers */
+             /* Ensure LTR layout for numbers and operators within this flex item */
             direction: ltr;
-            unicode-bidi: plaintext; /* Ensures digits are not affected by RTL */
+            unicode-bidi: plaintext; /* Ensures digits and symbols are not affected by RTL */
+             /* Align this specific flex item to the start (left in LTR, which appears visually left in RTL parent) */
+            align-self: flex-start; /* ADDED: Aligns the problem row to the left within the centered parent */
+             width: 100%; /* ADDED: Allow problem display to take full width */
         }
 
-        .problem-display input {
-            width: 80px; /* Fixed width for input */
+        /* Style for the div that acts as the answer input field */
+        .answer-display {
+            width: 80px; /* Fixed width */
+            min-height: 2.5rem; /* Ensure height matches font size and padding */
+            display: flex; /* Use flexbox to center content */
+            align-items: center; /* Center vertically */
+            justify-content: center; /* Center horizontally */
             font-size: 2rem;
             font-weight: bold;
-            text-align: center;
+            text-align: center; /* Ensure text is centered within the div */
             padding: 0.5rem;
             border: 1px solid var(--theme-card-border);
             border-radius: 0.5rem;
             background-color: var(--theme-bg-main);
             color: var(--theme-text-primary);
-             /* Ensure LTR input for numbers */
+            cursor: pointer; /* Indicate it's clickable to clear */
+            user-select: none; /* Prevent selecting the number */
+             /* Ensure LTR display for the number itself */
             direction: ltr;
             unicode-bidi: plaintext;
+             /* Prevent it from shrinking or wrapping incorrectly */
+            flex-shrink: 0;
         }
+
 
         .arithmetic-buttons {
             display: grid;
@@ -410,6 +423,9 @@
             cursor: pointer;
             transition: all 0.2s ease;
             user-select: none;
+             min-height: 50px; /* Ensure minimum size */
+             width: 100%; /* Allow grid items to fill their cell width */
+             box-sizing: border-box; /* Include padding and border in the element's total width and height */
         }
 
         .arithmetic-button:hover {
@@ -418,35 +434,53 @@
             transform: scale(1.05);
         }
 
-        .arithmetic-button.action { /* For Check button */
-            grid-column: span 2; /* Make action button wider */
-            font-size: 1rem;
+         /* --- Action Buttons (Pakrdnawa & Pishknin) Container --- */
+        .arithmetic-actions {
+            display: flex; /* Use flexbox for side-by-side layout */
+            gap: 0.75rem; /* Space between the two buttons */
+            justify-content: center; /* Center the group of buttons */
+            margin-top: 1rem; /* Space above these buttons */
+            width: 100%;
+             max-width: 300px; /* Optional: Limit width to align roughly with the number grid above */
+             margin-left: auto; /* Center the flex container itself */
+             margin-right: auto;
+        }
+
+         /* Styles for the action buttons moved into the flex container */
+         .arithmetic-actions .arithmetic-button {
+            /* Inherit general arithmetic-button styles */
+            flex-grow: 1; /* Make buttons grow to fill the flex container */
+            padding: 0.75rem 1.5rem; /* Adjust padding for these larger buttons */
+            font-size: 1rem; /* Keep smaller font size as in the image */
+         }
+
+        .arithmetic-actions .arithmetic-button.action { /* For Check button */
             color: var(--theme-button-primary-text);
             background-color: var(--theme-button-primary-bg);
             border-color: var(--theme-button-primary-bg);
         }
 
-        .arithmetic-button.clear {
-            grid-column: span 1; /* Make clear button smaller */
-            font-size: 1rem;
+        .arithmetic-actions .arithmetic-button.clear {
             background-color: var(--theme-text-secondary); /* Different color */
             border-color: var(--theme-text-secondary);
         }
 
-        .arithmetic-button.action:hover {
+        .arithmetic-actions .arithmetic-button.action:hover {
             background-color: var(--theme-button-primary-hover-bg);
             border-color: var(--theme-button-primary-hover-bg);
         }
 
-        .arithmetic-button.clear:hover {
+        .arithmetic-actions .arithmetic-button.clear:hover {
             background-color: #6b5f54; /* Darker shade */
             border-color: #6b5f54;
         }
+
 
         .feedback-message {
             font-size: 1.2rem;
             font-weight: bold;
             min-height: 1.5rem; /* Reserve space */
+             text-align: center; /* Ensure feedback is centered */
         }
 
         .feedback-message.correct {
@@ -604,6 +638,16 @@
             html[dir="ltr"] .modal-content .back-button {
                 left: 2rem;
             }
+             /* Adjust arithmetic buttons grid on larger screens */
+             .arithmetic-buttons {
+                 grid-template-columns: repeat(5, minmax(60px, 1fr)); /* Give columns a min size */
+                 gap: 0.75rem; /* Slightly larger gap */
+             }
+              .arithmetic-actions {
+                 max-width: 350px; /* Slightly wider action button container on larger screens */
+                 gap: 1rem;
+              }
+
         }
         @media (max-width: 767px) { /* Styles specific to screens smaller than md */
              /* Math main buttons grid responsive on small screens */
@@ -613,6 +657,16 @@
                  gap: 1.5rem;
                  justify-content: center;
             }
+             /* Adjust arithmetic buttons grid on small screens */
+             .arithmetic-buttons {
+                 grid-template-columns: repeat(5, 1fr); /* Keep 5 columns */
+                 gap: 0.5rem;
+             }
+              .arithmetic-actions {
+                 max-width: 100%; /* Allow full width on small screens if needed */
+                 gap: 0.5rem;
+              }
+
          }
 
 
@@ -664,12 +718,13 @@
          </a>
 
 
-        <h1 class="text-3xl md:text-4xl font-bold text-center mb-6" style="color: var(--theme-text-accent);">
+        <!-- Main Title: Centered as requested -->
+        <h1 class="text-3xl md:text-4xl font-bold text-center mb-6" style="color: var(--theme-text-accent); text-align: center;">
             بیرکاری
         </h1>
 
         <!-- Main Math Menu -->
-        <div class="math-main-buttons-grid" x-show="currentView === 'main'">
+        <div class="math-main-buttons-grid" x-show="currentView === 'main'" x-cloak>
             <button @click="setView('numbers-read')" class="subject-button">
                  <!-- TODO: Replace with actual image for reading numbers -->
                  <img src="images/math/numbers_read.png" alt="خوێندنەوەی ژمارەکان">
@@ -698,7 +753,8 @@
              <div class="grid-container">
                  <template x-for="number in numbers" :key="'read-num-' + number">
                      <div class="grid-item" @click="playNumberSound(number)">
-                         <span x-text="toKurdishDigits(number)" dir="ltr"></span> <!-- Convert to Kurdish digits -->
+                         <!-- Numbers are displayed LTR even in RTL context -->
+                         <span x-text="toKurdishDigits(number)" dir="ltr"></span>
                      </div>
                  </template>
              </div>
@@ -713,7 +769,8 @@
             <div class="grid-container">
                 <template x-for="number in numbers" :key="'icon-num-' + number">
                     <div class="grid-item" @click="openIconModal(number)">
-                        <span x-text="toKurdishDigits(number)" dir="ltr"></span> <!-- Convert to Kurdish digits -->
+                         <!-- Numbers are displayed LTR even in RTL context -->
+                        <span x-text="toKurdishDigits(number)" dir="ltr"></span>
                     </div>
                 </template>
             </div>
@@ -730,7 +787,7 @@
                            </button>
 
                          <h3 class="modal-title">
-                             ژمارەی <span x-text="toKurdishDigits(selectedNumberForIcons)" dir="ltr"></span> <!-- Convert to Kurdish digits -->
+                             ژمارەی <span x-text="toKurdishDigits(selectedNumberForIcons)" dir="ltr"></span> <!-- Convert to Kurdish digits for display -->
                          </h3>
 
                          <!-- Area to display Icons -->
@@ -774,27 +831,40 @@
 
             <!-- Problem Area -->
             <div x-show="currentArithmeticView === 'problem'" class="arithmetic-container">
-                <div class="problem-display" dir="ltr"> <!-- Force LTR for problem display -->
-                     <span x-text="toKurdishDigits(problem.num1)"></span> <!-- Convert to Kurdish digits -->
+                <!-- problem-display needs dir="ltr" so 4 + 3 = is displayed LTR -->
+                <!-- align-self: flex-start ensures this block is aligned to the left in the RTL parent -->
+                <div class="problem-display" dir="ltr">
+                     <span x-text="toKurdishDigits(problem.num1)"></span> <!-- Convert to Kurdish digits for display -->
                      <span x-text="problem.operator"></span>
-                     <span x-text="toKurdishDigits(problem.num2)"></span> <!-- Convert to Kurdish digits -->
+                     <span x-text="toKurdishDigits(problem.num2)"></span> <!-- Convert to Kurdish digits for display -->
                      <span>=</span>
-                     <input type="text" inputmode="numeric" pattern="[0-9]*" x-model="userAnswer" readonly @click="clearAnswer()" style="text-align: center;" dir="ltr"> <!-- Force LTR input -->
+                     <!-- Replaced input with a styled div to avoid rendering issues -->
+                     <!-- This div will show the userAnswer converted to Kurdish digits -->
+                     <div class="answer-display"
+                          dir="ltr"
+                          x-text="toKurdishDigits(userAnswer)"
+                          @click="clearAnswer()">
+                     </div>
                 </div>
 
+                <!-- Number Buttons Grid -->
                 <div class="arithmetic-buttons">
                      <!-- Numbers 1-9 -->
                      <template x-for="i in 9" :key="'btn-' + i">
-                         <button class="arithmetic-button" @click="appendAnswer(i)" x-text="toKurdishDigits(i)"></button> <!-- Convert to Kurdish digits -->
+                         <!-- Display Kurdish digits on buttons -->
+                         <button class="arithmetic-button" @click="appendAnswer(i)" x-text="toKurdishDigits(i)"></button>
                      </template>
                       <!-- Number 0 -->
-                     <button class="arithmetic-button" @click="appendAnswer(0)" x-text="toKurdishDigits(0)"></button> <!-- Convert to Kurdish digits -->
-
-                      <button class="arithmetic-button clear" @click="clearAnswer()">پاککردنەوە</button>
-                     <button class="arithmetic-button action" @click="checkAnswer()">پشکنین</button>
-                     <!-- No "New Problem" button here, it's handled after check or attempts run out -->
+                     <button class="arithmetic-button" @click="appendAnswer(0)" x-text="toKurdishDigits(0)"></button> <!-- Display Kurdish digits -->
                 </div>
 
+                <!-- Action Buttons (Pakrdnawa & Pishknin) - Side-by-side -->
+                 <div class="arithmetic-actions">
+                     <button class="arithmetic-button clear" @click="clearAnswer()">پاککردنەوە</button>
+                     <button class="arithmetic-button action" @click="checkAnswer()">پشکنین</button>
+                 </div>
+
+                 <!-- Feedback message -->
                  <div class="feedback-message text-center" :class="feedbackClass" x-text="feedbackMessage"></div>
 
                  <!-- Display attempts remaining -->
@@ -803,10 +873,10 @@
             </div>
 
              <!-- Results Area -->
-            <div x-show="currentArithmeticView === 'results'" class="results-container">
+            <div x-show="currentArithmeticView === 'results'" class="results-container" x-cloak>
                  <h3>ئەنجامەکانی تاقیکردنەوە</h3>
-                 <p class="correct">ڕاستەکان: <span x-text="toKurdishDigits(correctAnswers)"></span></p> <!-- Convert to Kurdish digits -->
-                 <p class="incorrect">هەڵەکان: <span x-text="toKurdishDigits(incorrectAnswers)"></span></p> <!-- Convert to Kurdish digits -->
+                 <p class="correct">ڕاستەکان: <span x-text="toKurdishDigits(correctAnswers)"></span></p> <!-- Convert to Kurdish digits for display -->
+                 <p class="incorrect">هەڵەکان: <span x-text="toKurdishDigits(incorrectAnswers)"></span></p> <!-- Convert to Kurdish digits for display -->
                  <button @click="resetArithmetic()">دووبارە دەستپێکردنەوە</button>
             </div>
         </div>
@@ -919,6 +989,14 @@
      <audio id="sound-99" src="audio/math/99.mp3" preload="auto"></audio>
      <audio id="sound-100" src="audio/math/100.mp3" preload="auto"></audio>
 
+    <!-- Add audio tags for arithmetic operators and feedback sounds if you want them -->
+     <audio id="sound-plus" src="audio/math/plus.mp3" preload="auto"></audio>
+     <audio id="sound-minus" src="audio/math/minus.mp3" preload="auto"></audio>
+     <!-- audio id="sound-equals" src="audio/math/equals.mp3" preload="auto"></audio -->
+     <audio id="sound-success" src="audio/math/success.mp3" preload="auto"></audio>
+     <audio id="sound-failure" src="audio/math/failure.mp3" preload="auto"></audio>
+     <audio id="sound-tryagain" src="audio/math/tryagain.mp3" preload="auto"></audio>
+
 
     <!-- Alpine.js data object -->
     <script>
@@ -935,7 +1013,7 @@
                  // Arithmetic Section State
                 selectedLevel: null, // 'easy', 'medium', 'hard'
                 problem: { num1: null, num2: null, operator: null, answer: null },
-                userAnswer: '',
+                userAnswer: '', // Stores the answer as a Western digit string (e.g., "12")
                 feedbackMessage: '',
                 feedbackClass: '',
                 questionCount: 0,
@@ -944,8 +1022,9 @@
                 incorrectAnswers: 0,
                 attemptsLeft: 3, // Attempts per question per problem
 
-                 // Audio player elements
+                 // Audio player elements references
                  numberSoundElements: {}, // To store references to individual number audio elements
+                 arithmeticSoundElements: {}, // To store references to arithmetic operator/feedback audio elements
                  synth: window.speechSynthesis, // For potential TTS fallback
 
                  // List of animal icon paths (TODO: Replace with your actual paths)
@@ -976,6 +1055,7 @@
 
                 init() {
                      console.log("Math App Initializing"); // Debugging log
+
                      // Initialize number sound elements (find them by ID)
                      this.$nextTick(() => { // Ensure DOM is ready and audio tags exist
                           for(let i = 0; i <= 100; i++) {
@@ -986,23 +1066,33 @@
                                     soundElement.onerror = (e) => console.error(`Error loading audio for number ${i}:`, soundElement.src, e);
                                } else {
                                     // Create a dummy object if element not found, so calls don't error
-                                   this.numberSoundElements[i] = { play: () => { console.warn(`Audio tag not found for number ${i}. Expected ID: sound-${i}.`); }, pause: () => {}, currentTime: 0 };
+                                   this.numberSoundElements[i] = { play: () => { /* console.warn(`Audio tag not found for number ${i}. Expected ID: sound-${i}.`); */ }, pause: () => {}, currentTime: 0 };
                                }
                           }
-                         console.log('Math sound elements count:', Object.keys(this.numberSoundElements).length); // Debugging
+                          // Initialize arithmetic sound elements
+                         const arithSounds = ['plus', 'minus', 'equals', 'success', 'failure', 'tryagain']; // Add IDs for other sounds you might add
+                          arithSounds.forEach(id => {
+                              const soundElement = document.getElementById(`sound-${id}`);
+                              if(soundElement) {
+                                  this.arithmeticSoundElements[id] = soundElement;
+                                  soundElement.onerror = (e) => console.error(`Error loading audio for sound ${id}:`, soundElement.src, e);
+                              } else {
+                                   this.arithmeticSoundElements[id] = { play: () => { /* console.warn(`Audio tag not found for sound: sound-${id}`); */ }, pause: () => {}, currentTime: 0 };
+                              }
+                          });
+
+                         console.log('Math sound elements initialized. Numbers:', Object.keys(this.numberSoundElements).length, 'Arithmetic:', Object.keys(this.arithmeticSoundElements).length); // Debugging
                      });
 
                     // Watch for view changes
                      this.$watch('currentView', (newView, oldView) => {
                         if (newView === 'arithmetic') {
                              // Reset arithmetic state when entering the main arithmetic view
-                             this.resetArithmetic();
-                             this.currentArithmeticView = 'levels'; // Go to level selection
+                             this.resetArithmetic(); // This sets currentArithmeticView to 'levels'
                          } else {
                              // Clear arithmetic state if leaving the arithmetic section entirely
-                             // This happens if you go from arithmetic back to main math menu
                              this.problem = { num1: null, num2: null, operator: null, answer: null };
-                             this.userAnswer = '';
+                             this.userAnswer = ''; // Ensure userAnswer is reset
                              this.feedbackMessage = '';
                              this.feedbackClass = '';
                               this.selectedLevel = null;
@@ -1010,8 +1100,7 @@
                               this.correctAnswers = 0;
                               this.incorrectAnswers = 0;
                               this.attemptsLeft = 3;
-                             this.currentArithmeticView = 'levels'; // Reset arithmetic view state
-
+                             this.currentArithmeticView = 'levels'; // Ensure arithmetic view state is reset
 
                             if (oldView === 'numbers-icons') {
                                 this.closeModal(); // Close modal if leaving icon view
@@ -1019,48 +1108,48 @@
                          }
                          // Stop sounds when changing views
                          this.stopAllMathSounds();
-                          if (this.synth && this.synth.speaking) { // Also stop TTS fallback if it was used
-                              this.synth.cancel();
-                         }
+
+                         // Scroll to top
+                         this.$nextTick(() => {
+                              document.documentElement.scrollTo({top: 0, behavior: 'smooth'});
+                         });
                      });
 
-                     // Stop sounds if the window/tab becomes inactive (optional but good practice)
+                    // Stop sounds if the window/tab becomes inactive (optional but good practice)
                       document.addEventListener('visibilitychange', () => {
                          if (document.hidden) {
                             this.stopAllMathSounds();
-                             if (this.synth && this.synth.speaking) {
-                                 this.synth.cancel();
-                            }
                          }
                      });
 
                 },
 
-                 // Convert Western number to Kurdish digits string
+                 // Convert Western number or number string to Kurdish digits string
                  toKurdishDigits(number) {
-                     return String(number).split('').map(digit => {
-                         if (digit === '.') return '.'; // Handle decimals if needed (though not used here)
+                     if (number === null || number === undefined) return ''; // Handle null/undefined
+                     // If it's already a string and possibly contains a mix (e.g., during typing), handle that
+                     const numberString = String(number);
+                     if (numberString === '') return ''; // Handle empty string
+
+                     return numberString.split('').map(digit => {
+                         // Handle characters that are not Western digits (e.g., '.', operator symbols if ever passed)
                          const westernDigit = parseInt(digit, 10);
-                         return isNaN(westernDigit) ? digit : this.kurdishDigits[westernDigit];
+                         // Check if the parsed digit is a valid number 0-9
+                         return isNaN(westernDigit) || westernDigit < 0 || westernDigit > 9 ? digit : this.kurdishDigits[westernDigit];
                      }).join('');
                  },
 
 
                 setView(view) {
                     this.currentView = view;
-                    // Optional: scroll to top of the container when changing view
-                    this.$nextTick(() => {
-                         // Find the main container or body and scroll
-                         document.documentElement.scrollTo({top: 0, behavior: 'smooth'}); // Scroll window
-                         // Or if scrolling specific container: document.querySelector('.container').scrollTo({top: 0, behavior: 'smooth'});
-                    });
+                    // Scroll to top handled by the $watch on currentView
                 },
 
                 goBackToMain() {
                     this.setView('main');
                 },
 
-                 // --- Numbers Read Section ---
+                 // --- Sound Management ---
                  stopAllMathSounds() {
                       // Stop all currently playing number sounds
                       Object.values(this.numberSoundElements).forEach(audio => {
@@ -1069,12 +1158,24 @@
                               audio.currentTime = 0;
                            }
                       });
+                       // Stop all currently playing arithmetic sounds
+                       Object.values(this.arithmeticSoundElements).forEach(audio => {
+                           if (audio && typeof audio.pause === 'function' && !audio.paused) {
+                              audio.pause();
+                              audio.currentTime = 0;
+                           }
+                      });
+                      // Stop any active TTS speech
+                       if (this.synth && this.synth.speaking) {
+                           this.synth.cancel();
+                       }
                  },
+
                 playNumberSound(number) {
-                    console.log("Attempting to play sound for number:", number); // Debugging log
+                    // console.log("Attempting to play sound for number:", number); // Debugging log
                     const soundElement = this.numberSoundElements[number];
                     if (soundElement && typeof soundElement.play === 'function') {
-                        this.stopAllMathSounds(); // Stop any other number sound
+                        this.stopAllMathSounds(); // Stop any other sound
                         soundElement.currentTime = 0; // Reset to start
                         soundElement.play().catch(error => console.error(`Error playing sound for number ${number}:`, error));
                     } else {
@@ -1084,10 +1185,21 @@
                         if (window.speechSynthesis && this.synth) {
                              this.synth.cancel(); // Stop any other TTS
                              const utterance = new SpeechSynthesisUtterance(number.toString()); // Speak the actual number string (e.g., "25")
-                             utterance.lang = 'en-US'; // Use English TTS for numbers, which is more likely to pronounce digits correctly
-                             // Optional: Try to find a male/child voice if available
-                             const voice = this.synth.getVoices().find(v => v.lang === 'en-US' && (v.name.toLowerCase().includes('child') || v.name.toLowerCase().includes('male')));
-                             if (voice) utterance.voice = voice;
+                              // Attempt to find a suitable voice (Kurdish or generic/English is better than default often)
+                             const voices = this.synth.getVoices();
+                             const kurdishVoice = voices.find(v => v.lang === 'ckb' || v.lang.startsWith('ku'));
+                             const englishVoice = voices.find(v => v.lang.startsWith('en'));
+
+                             if (kurdishVoice) {
+                                 utterance.lang = kurdishVoice.lang;
+                                 utterance.voice = kurdishVoice;
+                             } else if (englishVoice) {
+                                 utterance.lang = englishVoice.lang;
+                                  utterance.voice = englishVoice;
+                             } else {
+                                 utterance.lang = 'en-US'; // Default to a common language
+                             }
+
 
                              this.synth.speak(utterance);
                              utterance.onerror = (event) => {
@@ -1097,8 +1209,72 @@
                     }
                 },
 
+                 playArithmeticAudioSequence(num1, operator, num2) {
+                     this.stopAllMathSounds(); // Stop existing sounds
+
+                     const audioQueue = [];
+                     audioQueue.push(`sound-${num1}`); // First number sound ID
+
+                     // Add operator sound ID if element exists
+                     let operatorSoundId = null;
+                      if (operator === '+') operatorSoundId = 'sound-plus';
+                      if (operator === '-') operatorSoundId = 'sound-minus';
+
+                      if (operatorSoundId && this.arithmeticSoundElements[operatorSoundId]) {
+                           audioQueue.push(operatorSoundId);
+                      } else if (operator) {
+                          console.warn(`Audio element not found for operator ID: ${operatorSoundId}. Skipping operator audio.`);
+                      }
+
+
+                     audioQueue.push(`sound-${num2}`); // Second number sound ID
+
+                      // Optional: Add equals and the answer sound (Need audio files and IDs)
+                      // const equalsSoundId = 'sound-equals';
+                      // if(this.arithmeticSoundElements[equalsSoundId]) audioQueue.push(equalsSoundId);
+                      // const answerSoundId = `sound-${this.problem.answer}`;
+                      // if(this.numberSoundElements[answerSoundId]) audioQueue.push(answerSoundId);
+
+
+                     let currentAudioIndex = 0;
+
+                     const playNext = () => {
+                         if (currentAudioIndex < audioQueue.length) {
+                             const soundId = audioQueue[currentAudioIndex];
+                             const soundElement = document.getElementById(soundId); // Get element reference directly if using IDs
+
+                             if (soundElement) {
+                                 soundElement.currentTime = 0; // Reset
+                                 soundElement.onended = playNext; // Play next when this one ends
+                                 soundElement.play().catch(e => console.error(`Error playing audio sequence part ${soundId}:`, e));
+                                 currentAudioIndex++;
+                             } else {
+                                 console.warn(`Audio element not found for ID: ${soundId}. Skipping.`);
+                                 currentAudioIndex++;
+                                 playNext(); // Try the next one immediately
+                             }
+                         }
+                         // Sequence finished when currentAudioIndex reaches queue length
+                     };
+
+                     playNext(); // Start the sequence
+                 },
+
+                 playFeedbackSound(type) {
+                     const soundElement = this.arithmeticSoundElements[`sound-${type}`];
+                      if (soundElement && typeof soundElement.play === 'function') {
+                          this.stopAllMathSounds(); // Stop other sounds first
+                           soundElement.currentTime = 0;
+                           soundElement.play().catch(e => console.error(`Error playing feedback sound ${type}:`, e));
+                      } else {
+                           console.warn(`Feedback sound element not found for type: sound-${type}`);
+                      }
+                 },
+
+
                 // --- Numbers with Icons Section ---
                 generateAnimalIcons(count) {
+                     if (count < 0) count = 0; // Ensure count is non-negative
                      if (count === 0) {
                          this.displayedIcons = [];
                          this.selectedAnimalIcon = '';
@@ -1144,9 +1320,6 @@
                     this.displayedIcons = []; // Clear icons array
                     this.selectedAnimalIcon = ''; // Clear selected animal icon
                     this.stopAllMathSounds(); // Stop sounds when modal closes
-                     if (this.synth && this.synth.speaking) { // Also stop TTS fallback if it was used
-                         this.synth.cancel();
-                     }
                 },
 
                  // Computed property/function to dynamically calculate icon size class based on number
@@ -1187,11 +1360,14 @@
                      this.questionCount = 0;
                      this.correctAnswers = 0;
                      this.incorrectAnswers = 0;
-                     this.attemptsLeft = 3; // Reset attempts for the first question
+                     // Attempts are reset per problem, but we set the initial attempts here
+                     // They are reset again within generateProblem for the *first* question
+                     this.attemptsLeft = 3;
                      this.problem = { num1: null, num2: null, operator: null, answer: null };
-                     this.userAnswer = '';
-                     this.feedbackMessage = '';
+                     this.userAnswer = ''; // Reset user answer string (Western digits)
+                     this.feedbackMessage = ''; // Clear feedback
                      this.feedbackClass = '';
+                     this.stopAllMathSounds(); // Stop any leftover sounds
                  },
 
                 generateProblem() {
@@ -1199,7 +1375,6 @@
                     if (this.questionCount >= this.totalQuestions) {
                          this.currentArithmeticView = 'results'; // Go to results screen
                          this.stopAllMathSounds(); // Stop any sounds
-                          if (this.synth && this.synth.speaking) { this.synth.cancel(); }
                          return; // Stop generating problems
                      }
 
@@ -1210,15 +1385,15 @@
                      switch (this.selectedLevel) {
                          case 'easy':
                              maxNumOperand = 5;
-                             maxResult = 10; // Max sum or min difference
+                             maxResult = 10; // Max sum
                              break;
                          case 'medium':
                              maxNumOperand = 10;
-                             maxResult = 15;
+                             maxResult = 20; // Increased max result slightly for variety
                              break;
                          case 'hard':
                              maxNumOperand = 15;
-                             maxResult = 20; // Max sum or min difference
+                             maxResult = 30; // Max sum (e.g., 15 + 15)
                              break;
                          default: // Should not happen if level is selected
                              maxNumOperand = 5;
@@ -1228,98 +1403,53 @@
 
                     let num1, num2, operator, answer;
 
-                    // Randomly choose addition or subtraction (maybe adjust probability by level)
-                    if (Math.random() < (this.selectedLevel === 'hard' ? 0.4 : 0.6)) { // Slightly less chance for addition in hard level
+                    // Randomly choose addition or subtraction (can adjust probability)
+                    if (Math.random() < 0.6) { // e.g., 60% chance for addition
                         operator = '+';
                         do {
                              num1 = Math.floor(Math.random() * (maxNumOperand + 1));
                              num2 = Math.floor(Math.random() * (maxNumOperand + 1));
                              answer = num1 + num2;
-                             // Ensure addition result does not exceed maxResult for the level
+                             // Ensure addition result does not exceed maxResult
                         } while (answer > maxResult);
                     } else { // Subtraction
                          operator = '-';
-                         // Ensure num1 is greater than or equal to num2 AND the result is within a reasonable range if needed
+                         // Ensure num1 is greater than or equal to num2 and result is non-negative
                          do {
-                              num1 = Math.floor(Math.random() * (maxNumOperand + 1));
-                             num2 = Math.floor(Math.random() * (maxNumOperand + 1)); // Allow num2 to be up to maxOperand
+                              num1 = Math.floor(Math.random() * (maxResult + 1)); // Subtraction might need a larger starting number
+                              num2 = Math.floor(Math.random() * (maxNumOperand + 1));
                               // Ensure num1 >= num2 for subtraction
                               if (num2 > num1) [num1, num2] = [num2, num1]; // Swap if num2 is larger
                              answer = num1 - num2;
-                             // Ensure subtraction result is non-negative (already guaranteed by swap) and within range?
-                             // For first grade, maybe results should be <= maxNumOperand or slightly more?
-                             // Let's keep it simple: result is >= 0 and num1, num2 <= maxOperand
-                         } while (false); // No extra condition needed as num1 >= num2 and numbers are within maxOperand range
+                              // Add condition if you want results to be above a certain number, e.g., answer > 0
+                         } while (false); // No extra condition needed based on current logic
                     }
 
                     this.problem = { num1, num2, operator, answer };
-                    this.userAnswer = ''; // Clear previous answer
+                    this.userAnswer = ''; // Clear previous answer string (Western digits)
                     this.feedbackMessage = ''; // Clear feedback
                     this.feedbackClass = '';
                     this.attemptsLeft = 3; // Reset attempts for the new question
 
                      console.log(`Generated problem (Level: ${this.selectedLevel}, Q: ${this.questionCount}/${this.totalQuestions}): ${this.problem.num1} ${this.problem.operator} ${this.problem.num2} = ${this.problem.answer}`); // For debugging
 
-                     // Play the problem audio (e.g., "2 plus 3 equals") - requires audio files for numbers, plus, minus, equals
-                     // This is complex to implement perfectly in multiple languages via simple audio tags.
-                     // A simple approach is to just say the numbers and the operator.
-                     // Requires audio files like "plus.mp3", "minus.mp3", "equals.mp3"
+                     // Play the problem audio (requires audio files for numbers, plus, minus, equals)
                      this.$nextTick(() => {
-                         this.playArithmeticAudioSequence(this.problem.num1, this.problem.operator, this.problem.num2);
+                          this.playArithmeticAudioSequence(this.problem.num1, this.problem.operator, this.problem.num2);
                      });
 
                 },
-
-                 playArithmeticAudioSequence(num1, operator, num2) {
-                     this.stopAllMathSounds(); // Stop existing number sounds
-
-                     const audioQueue = [];
-                     audioQueue.push(`sound-${num1}`); // First number
-
-                     // Determine operator audio file ID
-                     let operatorSoundId = null;
-                     if (operator === '+') operatorSoundId = 'sound-plus'; // Need sound-plus.mp3
-                     if (operator === '-') operatorSoundId = 'sound-minus'; // Need sound-minus.mp3
-                     if (operatorSoundId) audioQueue.push(operatorSoundId);
-
-                     audioQueue.push(`sound-${num2}`); // Second number
-
-                      // Add equals and the answer sound (optional but helpful)
-                      // audioQueue.push('sound-equals'); // Need sound-equals.mp3
-                      // audioQueue.push(`sound-${this.problem.answer}`);
-
-
-                     let currentAudioIndex = 0;
-
-                     const playNext = () => {
-                         if (currentAudioIndex < audioQueue.length) {
-                             const soundId = audioQueue[currentAudioIndex];
-                             const soundElement = document.getElementById(soundId);
-
-                             if (soundElement) {
-                                 soundElement.currentTime = 0; // Reset
-                                 soundElement.onended = playNext; // Play next when this one ends
-                                 soundElement.play().catch(e => console.error(`Error playing audio sequence part ${soundId}:`, e));
-                                 currentAudioIndex++;
-                             } else {
-                                 console.warn(`Audio element not found for ID: ${soundId}. Skipping.`);
-                                 currentAudioIndex++;
-                                 playNext(); // Try the next one immediately
-                             }
-                         }
-                         // Sequence finished when currentAudioIndex reaches queue length
-                     };
-
-                     playNext(); // Start the sequence
-                 },
-
 
                  appendAnswer(number) {
                      // Determine max digits allowed based on the maximum possible result for the level
                      const maxAnswerDigits = String(this.getArithmeticMaxResult()).length;
 
+                     // Append the number (as string) to the Western digit userAnswer
+                     // Limit input length
                      if (this.userAnswer.length < maxAnswerDigits) {
                          this.userAnswer += number.toString();
+                         // The x-text on the answer-display div updates automatically
+                         // console.log("userAnswer (internal):", this.userAnswer); // Debugging: show raw value
                          // Optional: Play a click sound or number sound
                          // const clickSound = document.getElementById('sound-click'); // Need sound-click.mp3
                          // if(clickSound) { clickSound.currentTime = 0; clickSound.play().catch(e => console.warn('Click sound failed', e)); }
@@ -1327,19 +1457,22 @@
                  },
 
                 clearAnswer() {
-                    this.userAnswer = '';
+                    this.userAnswer = ''; // Clear the Western digit string
                     this.feedbackMessage = ''; // Clear feedback on clear
                     this.feedbackClass = '';
+                     // The x-text on the answer-display div will clear the display
                      // Optional: Play a clear sound
                 },
 
                 checkAnswer() {
                     this.stopAllMathSounds(); // Stop any speaking problems
 
-                    // Convert userAnswer to a number. Use Number() which handles empty string as 0, parseInt is safer if we want to check for valid digits first
-                    const userAnswerNum = parseInt(this.userAnswer, 10); // Use parseInt to check if it's a valid integer
+                    // Convert userAnswer (Western digit string) to a number for comparison
+                    const userAnswerNum = parseInt(this.userAnswer, 10);
 
-                    // Check if the input is a valid number (not empty, not NaN)
+                    // Check if the input is a valid number (not empty string, not NaN)
+                    // NOTE: Because we are using a div + number buttons, userAnswer will only contain digits,
+                    // so checking isNaN(userAnswerNum) is sufficient. Empty string check is also valid.
                     if (this.userAnswer === '' || isNaN(userAnswerNum)) {
                         this.feedbackMessage = 'تکایە ژمارەیەک بنووسە.';
                         this.feedbackClass = 'incorrect';
@@ -1351,43 +1484,40 @@
                         this.feedbackMessage = 'ڕاستە! زۆر باشە!';
                         this.feedbackClass = 'correct';
                         this.correctAnswers++; // Increment correct count
-                         // Optional: Play a success sound (Need sound-success.mp3)
-                         // const successSound = document.getElementById('sound-success');
-                         // if(successSound) { successSound.currentTime = 0; successSound.play().catch(e => console.warn('Success sound failed', e)); }
+                         this.playFeedbackSound('success');
 
                          // Generate next problem after a short delay
                          setTimeout(() => this.generateProblem(), 1500); // Short delay after correct answer
                     } else {
-                        this.feedbackMessage = 'هەڵەیە. دووبارە هەوڵ بدەوە.';
-                        this.feedbackClass = 'incorrect';
                         this.attemptsLeft--; // Decrease attempts
 
                          if (this.attemptsLeft <= 0) {
                               // Attempts run out, show correct answer and move on
-                              this.feedbackMessage = `هەڵە بوو! وەڵامی ڕاست: ${this.toKurdishDigits(this.problem.answer)}`; // Show correct answer
+                              // Display the correct answer using Kurdish digits
+                              this.feedbackMessage = `هەڵە بوو! وەڵامی ڕاست: ${this.toKurdishDigits(this.problem.answer)}`;
+                              this.feedbackClass = 'incorrect'; // Still mark as incorrect outcome
                               this.incorrectAnswers++; // Increment incorrect count (only when attempts run out for a question)
-                              // Optional: Play a failure sound (Need sound-failure.mp3)
-                              // const failureSound = document.getElementById('sound-failure');
-                              // if(failureSound) { failureSound.currentTime = 0; failureSound.play().catch(e => console.warn('Failure sound failed', e)); }
+                              this.playFeedbackSound('failure');
 
                               // Generate next problem after a short delay
                               setTimeout(() => this.generateProblem(), 3000); // Longer delay after failed attempts
                          } else {
                              // Attempts still remaining, clear answer field for retry
-                             this.userAnswer = '';
-                             // Optional: Play a try again sound (Need sound-tryagain.mp3)
-                             // const tryAgainSound = document.getElementById('sound-tryagain');
-                             // if(tryAgainSound) { tryAgainSound.currentTime = 0; tryAgainSound.play().catch(e => console.warn('Try Again sound failed', e)); }
+                             this.feedbackMessage = `هەڵەیە. دووبارە هەوڵ بدەوە. (${this.toKurdishDigits(this.attemptsLeft)} هەڵەی ماو)`;
+                             this.feedbackClass = 'incorrect';
+                              this.userAnswer = ''; // Clear the input for the next attempt
+                             this.playFeedbackSound('tryagain'); // Need sound-tryagain.mp3
                          }
                     }
                 },
 
                 getArithmeticMaxResult() {
                     // Returns the maximum possible result for the selected level
+                    // Used to determine max digits allowed in input (or the answer-display div)
                      switch (this.selectedLevel) {
                          case 'easy': return 10;
-                         case 'medium': return 15;
-                         case 'hard': return 30; // Max result for hard might be num1+num2 up to 15+15? Let's set it reasonably high.
+                         case 'medium': return 20; // Match generateProblem logic
+                         case 'hard': return 30; // Match generateProblem logic
                          default: return 10; // Default for safety
                      }
                  }
@@ -1395,13 +1525,15 @@
             }
         }
     </script>
-    <!-- Add audio tags for arithmetic operators if you want them to be read -->
-    <!-- <audio id="sound-plus" src="audio/math/plus.mp3" preload="auto"></audio> -->
-    <!-- <audio id="sound-minus" src="audio/math/minus.mp3" preload="auto"></audio> -->
-    <!-- <audio id="sound-equals" src="audio/math/equals.mp3" preload="auto"></audio> -->
+    <!-- Add audio tags for arithmetic operators and feedback sounds if you want them -->
+     <!-- Need audio files named exactly 'plus.mp3', 'minus.mp3', 'equals.mp3' in your audio/math folder -->
+     <audio id="sound-plus" src="audio/math/plus.mp3" preload="auto"></audio>
+     <audio id="sound-minus" src="audio/math/minus.mp3" preload="auto"></audio>
+     <!-- audio id="sound-equals" src="audio/math/equals.mp3" preload="auto"></audio -->
      <!-- Add general feedback sounds if desired -->
-     <!-- <audio id="sound-success" src="audio/math/success.mp3" preload="auto"></audio> -->
-     <!-- <audio id="sound-failure" src="audio/math/failure.mp3" preload="auto"></audio> -->
-     <!-- <audio id="sound-tryagain" src="audio/math/tryagain.mp3" preload="auto"></audio> -->
+     <!-- Need audio files named exactly 'success.mp3', 'failure.mp3', 'tryagain.mp3' -->
+     <audio id="sound-success" src="audio/math/success.mp3" preload="auto"></audio>
+     <audio id="sound-failure" src="audio/math/failure.mp3" preload="auto"></audio>
+     <audio id="sound-tryagain" src="audio/math/tryagain.mp3" preload="auto"></audio>
 </body>
 </html>

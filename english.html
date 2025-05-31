@@ -6,7 +6,7 @@
     <title>English Language</title>
     <!-- CSS Styles -->
     <style>
-        /* style.css - Updated Styles (Copy the whole block again) */
+        /* style.css - Updated Styles */
 
         /* Define theme colors using CSS variables */
         :root {
@@ -220,7 +220,16 @@
             margin-bottom: 1.5rem;
             /* Apply continuous animation */
             animation: gentle-pulse-title 2.5s infinite ease-in-out;
+            /* Added styles for clickability */
+            cursor: pointer;
+            user-select: none; /* Prevent text selection */
         }
+
+        .modal-title:hover {
+             text-decoration: underline;
+             opacity: 0.9;
+        }
+
 
         /* Back button inside modal (positioning relative to modal-content) */
         .modal-content .back-button {
@@ -282,6 +291,8 @@
             height: 80px;
             object-fit: contain;
             margin-bottom: 0.5rem;
+            /* Added: Slightly rounded corners for images */
+            border-radius: 0.5rem; /* Increased roundedness slightly */
         }
 
         .example-item span {
@@ -472,7 +483,7 @@
              <!-- Loop through letters data -->
             <template x-for="letterData in letters" :key="letterData.letter">
                 <div class="grid-item"
-                     @click="openModal(letterData)">
+                     @click="speakText(letterData.letter); openModal(letterData);"> <!-- Speak letter, then open modal -->
                     <span x-text="letterData.letter"></span>
                 </div>
             </template>
@@ -487,7 +498,8 @@
                          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
                        </svg>
                     </button>
-                    <h2 class="modal-title" x-text="currentLetter"></h2>
+                    <!-- Make the modal title clickable to speak the letter again -->
+                    <h2 class="modal-title" x-text="currentLetter" @click="speakText(currentLetter)"></h2>
 
                     <div class="example-grid">
                         <!-- Loop through examples -->
@@ -566,51 +578,70 @@
                     { letter: 'Y', examples: [{ text: 'Yacht', image: 'images/en/yacht.png' }, { text: 'Yak', image: 'images/en/yak.png' }, { text: 'Yarn', image: 'images/en/yarn.png' }, { text: 'Yellow', image: 'images/en/yellow.png' }] },
                     { letter: 'Z', examples: [{ text: 'Zebra', image: 'images/en/zebra.png' }, { text: 'Zipper', image: 'images/en/zipper.png' }, { text: 'Zoo', image: 'images/en/zoo.png' }, { text: 'Zero', image: 'images/en/zero.png' }] }
                 ],
-                synth: window.speechSynthesis,
+                synth: null, // Initialize as null
                 voices: [], // To store available voices
                 selectedVoice: null, // To store the selected female voice
 
                 init() {
-                    console.log("English App Initializing"); // Debugging log
+                    console.log("English App Initializing");
+                    // Check if TTS is supported
+                    if (!('speechSynthesis' in window)) {
+                         console.error('Text-to-Speech not supported in this browser.');
+                         // Optionally show a message to the user
+                         // alert("Sorry, text-to-speech is not supported in your browser.");
+                         return; // Exit init if not supported
+                    }
+
+                    this.synth = window.speechSynthesis;
+
                     // Load voices and select one
                     if (this.synth) {
                          // Wait for voices to be loaded
                          this.synth.onvoiceschanged = () => {
-                             console.log("Voices changed event fired."); // Debugging log
+                             console.log("Voices changed event fired.");
                              this.loadAndSelectVoice();
                          };
 
                          // Check if voices are already available (might happen on subsequent loads)
                          if (this.synth.getVoices().length > 0) {
-                             console.log("Voices already available on init."); // Debugging log
+                             console.log("Voices already available on init.");
                              this.loadAndSelectVoice();
                          } else {
-                             console.log("Voices not immediately available, trying workarounds."); // Debugging log
+                             console.log("Voices not immediately available, trying workarounds.");
                              // Common workarounds to prompt voice loading in some browsers
-                             const dummyUtterance = new SpeechSynthesisUtterance('');
-                              dummyUtterance.lang = 'en-US'; // Use English language tag
-                              this.synth.speak(dummyUtterance);
-                              // Try loading again after a short delay in case the event didn't fire
-                              setTimeout(() => {
-                                   if (this.synth.getVoices().length === 0) {
-                                       console.warn("Voices still not loaded after short delay.");
-                                   } else {
-                                        console.log("Voices loaded after delay workaround.");
-                                        this.loadAndSelectVoice(); // Load if successful now
-                                   }
-                              }, 500); // Adjust delay if needed
+                             // Speak a dummy utterance with the target language to prompt voice loading
+                             const dummyUtterance = new SpeechSynthesisUtterance(' '); // Use a space or empty string
+                             dummyUtterance.lang = 'en-US';
+                             try {
+                                 this.synth.speak(dummyUtterance);
+                                  console.log("Spoke dummy utterance to prompt voice loading.");
+                                   // Cancel the dummy utterance immediately
+                                   this.synth.cancel();
+                             } catch (e) {
+                                 console.warn("Failed to speak dummy utterance:", e);
+                             }
+
+                             // Try loading again after a short delay in case the event didn't fire
+                             setTimeout(() => {
+                                  if (this.synth.getVoices().length === 0) {
+                                      console.warn("Voices still not loaded after short delay.");
+                                  } else {
+                                       console.log("Voices loaded after delay workaround.");
+                                       this.loadAndSelectVoice(); // Load if successful now
+                                       // Note: We no longer auto-speak the letter here, it's handled by the initial click
+                                  }
+                             }, 500); // Adjust delay if needed
                          }
 
                     } else {
-                         console.error('Text-to-Speech not supported in this browser.');
-                         // alert("Sorry, text-to-speech is not supported in your browser."); // Avoid alerting on every load
+                         console.error('SpeechSynthesis object not available after check.');
                     }
                 },
 
                 loadAndSelectVoice() {
                     this.voices = this.synth.getVoices();
-                    console.log(`Found ${this.voices.length} voices after load.`); // Debugging log
-                    console.log("Available voices:", this.voices.map(v => `${v.name} (${v.lang})`)); // List voices
+                    console.log(`Found ${this.voices.length} voices after load.`);
+                    console.log("Available voices:", this.voices.map(v => `${v.name} (${v.lang})`).join(', ')); // List voices
 
                      // Try to find a female English voice, prioritizing Google voices if available
                     this.selectedVoice = this.voices.find(voice =>
@@ -623,92 +654,82 @@
                         voice.lang === 'en-US' // Fallback to any US English voice
                     ) || this.voices.find(voice =>
                          voice.lang.startsWith('en') // Fallback to any English voice
-                    ) || this.voices[0]; // Fallback to first available voice
+                    ) || this.voices[0] || null; // Fallback to first available voice or null
 
                     if (this.selectedVoice) {
-                         console.log('Selected voice:', this.selectedVoice.name); // Debugging log
+                         console.log('Selected voice:', this.selectedVoice.name);
+                         // Now that a voice is selected, if the user has already clicked a letter
+                         // before voices were ready, the next click should work.
                     } else {
-                        console.warn('No suitable English voice found, using default if any.');
-                         this.selectedVoice = this.voices.find(voice => voice.lang.startsWith('en')) || this.voices[0] || null;
-                         if (this.selectedVoice) {
-                             console.warn('Falling back to voice:', this.selectedVoice.name);
-                         } else {
-                             console.error('No English voices available at all.');
-                             // alert("No English voices found on your system. Text-to-Speech will not work for English."); // Avoid alerting on every load
-                         }
+                        console.warn('No suitable English voice found, speaking will use browser default or may fail.');
+                         // The browser might use a default if no voice is explicitly set, but it's not guaranteed.
                     }
-                     // If voices were loaded late, and a modal is open, speak the current letter/example
-                     if (this.showModal && !this.synth.speaking && this.selectedVoice) {
-                          // Re-speak the current content if voices just became available and modal is open
-                           // A small delay might be needed after voice loading
-                          setTimeout(() => {
-                             if (this.currentLetter) this.speakText(this.currentLetter);
-                          }, 200); // Small delay
-                     }
                 },
 
                 stopSpeaking() {
                     if (this.synth && this.synth.speaking) {
-                         console.log("Stopping speech."); // Debugging log
+                         console.log("Stopping speech.");
                         this.synth.cancel();
                     }
                 },
 
                 speakText(text) {
-                     if (!this.synth) {
-                         console.error('Text-to-Speech not supported.');
-                         // alert("Text-to-Speech is not supported by your browser."); // Avoid alerting on every click
+                     if (!this.synth || !('speechSynthesis' in window)) {
+                         console.error('Text-to-Speech not supported or not initialized.');
+                         // alert("Text-to-Speech is not supported."); // Avoid repeated alerts
                          return;
                      }
-                      if (!this.selectedVoice) {
-                           console.warn('Speech voice not ready yet or not found. Trying to speak with default...');
-                           // Attempt to load voices again just in case, but don't wait for it
-                           this.loadAndSelectVoice();
-                           // Continue trying to speak, browser might use default or it might fail
-                           if (this.synth.getVoices().length === 0) {
-                               console.error('No voices available to speak.');
-                               // alert("No voices available to speak. Please check your browser settings."); // Avoid alerting on every click
-                               return;
-                           }
-                       }
 
-
-                      this.stopSpeaking(); // Stop previous speech
+                     // Stop any current speech before starting a new one
+                      this.stopSpeaking();
 
                      const utterance = new SpeechSynthesisUtterance(text);
                      utterance.lang = 'en-US'; // Specify language
+
+                     // Use the selected voice if available, otherwise browser might use default
                      if (this.selectedVoice) {
-                          utterance.voice = this.selectedVoice; // Use the selected voice if found
+                          utterance.voice = this.selectedVoice;
+                          console.log(`Attempting to speak "${text}" with voice "${this.selectedVoice.name}"`);
+                     } else {
+                          console.warn(`No specific voice selected. Attempting to speak "${text}" with browser default.`);
+                          // If selectedVoice is null, the browser *might* use its default voice for the specified lang ('en-US')
+                           // If getVoices() was empty, speaking might still fail here.
+                           if (this.synth.getVoices().length === 0) {
+                               console.error('No voices available in the browser to speak.');
+                               // alert("No voices available to speak. Please check your browser settings."); // Avoid repeated alerts
+                               return; // Cannot speak if no voices exist at all
+                           }
                      }
-                     utterance.rate = 0.9; // Adjust speech rate (slightly slower) - was 0.9
+
+                     utterance.rate = 0.9; // Adjust speech rate (slightly slower)
                      utterance.pitch = 1; // Default pitch
 
-                     console.log(`Speaking: "${text}" with voice "${this.selectedVoice ? this.selectedVoice.name : 'Default/None'}"`); // Debugging log
-                     this.synth.speak(utterance);
-
-                      // Optional: Add error handling for speaking itself
-                      utterance.onerror = (event) => {
-                         console.error('Speech synthesis error:', event);
-                         // alert("Sorry, text-to-speech failed."); // Avoid too many alerts
+                     utterance.onstart = () => { console.log(`Speech started: "${text}"`); };
+                     utterance.onend = () => { console.log(`Speech finished: "${text}"`); };
+                     utterance.onerror = (event) => {
+                         console.error('Speech synthesis error:', event.error, event);
+                         // Depending on the error, you might want to inform the user
+                         // e.g., if event.error === 'not-allowed' (user interaction required)
+                         // alert("Speech failed. Please try clicking again."); // Can be annoying, use sparingly
                      };
+
+                     try {
+                        this.synth.speak(utterance);
+                     } catch (e) {
+                         console.error("Error calling speak:", e);
+                         // This catch helps debug issues like trying to speak before init is complete
+                     }
                 },
                 openModal(letterData) {
-                    console.log("Opening modal for:", letterData.letter); // Debugging log
+                    console.log("Opening modal for:", letterData.letter);
                     this.currentLetter = letterData.letter;
                     this.examples = letterData.examples;
                     this.showModal = true;
-                    // Use $nextTick to ensure modal is rendered before speaking (sometimes helps)
-                    this.$nextTick(() => {
-                         // Speak the letter first
-                         this.speakText(letterData.letter);
-                         // Optional: Speak the first example after a delay
-                         // if (this.examples.length > 0) {
-                         //     setTimeout(() => this.speakText(this.examples[0].text), 1000); // Speak after 1 second
-                         // }
-                    });
+                    // Note: Speaking the letter on modal open is removed.
+                    // It's now handled by the initial click on the grid item.
                 },
                 closeModal() {
-                    console.log("Closing modal"); // Debugging log
+                    console.log("Closing modal");
                     this.showModal = false;
                     this.stopSpeaking(); // Stop speaking when closing modal
                 }
