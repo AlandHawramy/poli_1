@@ -103,12 +103,12 @@
             color: var(--theme-button-primary-text);
             border: 1px solid transparent;
             border-radius: 0.5rem;
-            padding: 0.5rem; /* Padding for icon only */
+            /* Reduced padding */
+            padding: 0.4rem; 
             cursor: pointer;
             transition: all 0.2s ease;
             z-index: 10; /* Stay on top */
             text-decoration: none;
-            /* Added box-shadow for consistency */
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
@@ -119,8 +119,9 @@
         }
         
         .download-button svg {
-            width: 1.5rem; /* Slightly larger icon */
-            height: 1.5rem; /* Slightly larger icon */
+            /* Reduced icon size */
+            width: 1.2rem; 
+            height: 1.2rem;
             flex-shrink: 0; /* Prevent icon from shrinking */
         }
         /* Hide the span text inside download button */
@@ -692,7 +693,7 @@
 </head>
 <body>
 
-    <!-- NEW: Download button (Icon only) -->
+    <!-- NEW: Download button (Icon only) - Size reduced -->
     <!-- TODO: Replace "path/to/your/pdf.pdf" with the actual link to your PDF file -->
     <a href="https://drive.google.com/drive/folders/1mzZxyoJC_CIWbS_5V71kbLbgK9x41J62?usp=sharing" class="download-button" target="_blank" download aria-label="دابەزاندن">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
@@ -702,7 +703,7 @@
 
 
     <div class="container">
-        <!-- Reduced font-size for the main title -->
+        <!-- Main title -->
         <h1 style="text-align: center; margin-bottom: 2rem; color: var(--theme-text-accent); font-size: 2.2rem; font-weight: bold;">وانەکانی پۆلی یەکەم</h1>
 
         <!-- Use grid for buttons -->
