@@ -4,40 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>وانەکانی پۆلی یەکەم</title>
+    <!-- Google Fonts for Vazirmatn (friendly, modern Kurdish support) -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- CSS Styles -->
     <style>
-        /* style.css - Updated Styles */
-
-        /* Define theme colors using CSS variables */
+        /* Define theme colors using CSS variables (Purple theme from Kurdish letters app) */
         :root {
-            --theme-bg-main: #fbfaf7; /* Light background */
-            --theme-bg-content: #fffefc; /* Slightly lighter content background */
-            --theme-bg-accent: #f5f0e8; /* Accent background, similar to sidebar in previous code */
+            /* Purple Theme - ڕەنگە مۆرەکان */
+            --theme-bg-main: #F3EBFF; /* زۆر کاڵ، وەک لاڤەندەر بۆ پاشبنەما */
+            --theme-bg-content: #FFFFFF; /* سپی پاک بۆ ناوەڕۆک */
+            --theme-bg-accent: #E6D8FF; /* لاڤەندەرێکی تۆختر بۆ بەشە جیاوازەکان */
 
-            --theme-border-light: #e8e0d4;
-            --theme-border-medium: #d8c8b8;
-            --theme-border-strong: #c8a97e;
-            --theme-border-accent: #d2b48c;
+            --theme-border-light: #D1BBE6; /* سنوورێکی مۆر کاڵ */
+            --theme-border-medium: #BBAACC; /* سنوورێکی مۆر مامناوەند */
+            --theme-border-strong: #A38CBF; /* سنوورێکی مۆری تۆختر */
+            --theme-border-accent: #8A7BB2; /* سنوورێکی دیارتر بۆ گشتگیر */
 
-            --theme-text-primary: #5a4d41; /* Dark brown */
-            --theme-text-secondary: #7a6d61; /* Medium brown */
-            --theme-text-accent: #8b5a2b; /* Accent brown/orange */
+            --theme-text-primary: #4B0082; /* ئیندگۆ - مۆرێکی قووڵ و تۆخ بۆ دەقی سەرەکی */
+            --theme-text-secondary: #6A1B9A; /* مۆرێکی مامناوەند بۆ دەقی لاوەکی */
+            --theme-text-accent: #9932CC; /* ئۆرکیدی تۆخ - مۆرێکی زیندوو بۆ ناونیشان و هایلایتەکان */
 
-            --theme-button-primary-bg: #8b5a2b; /* Primary button background */
-            --theme-button-primary-text: white; /* Primary button text color */
-            --theme-button-primary-hover-bg: #a07d5b; /* Primary button hover background */
+            --theme-button-primary-bg: #9932CC; /* ئۆرکیدی تۆخ بۆ پاشبنەمای دوگمەی سەرەکی */
+            --theme-button-primary-text: white; /* ڕەنگی سپی بۆ دەقی دوگمەی سەرەکی */
+            --theme-button-primary-hover-bg: #B86ED1; /* ئۆرکیدی تۆخی کاڵتر بۆ کاتی جووڵاندنی ماوس بەسەر دوگمەدا */
 
-            --theme-card-bg: #fffefc; /* Background for cards/items */
-            --theme-card-border: #e8e0d4; /* Border for cards/items */
-            --theme-card-hover-border: #d2b48c; /* Hover border for cards */
+            --theme-card-bg: #FFFFFF; /* کارتە سپییەکان بۆ خوێندنەوەی ئاسان */
+            --theme-card-border: #D1BBE6; /* سنووری مۆر کاڵ بۆ کارتەکان */
+            --theme-card-hover-border: #9932CC; /* مۆری سەرەکی لەسەر سنووری کارتەکان کاتێک ماوس دەچێتە سەریان */
 
-            /* Overlay color (can be very light or removed) */
-            --theme-overlay-color: rgba(0, 0, 0, 0.05); /* Very subtle dark overlay */
+            /* Overlay color for subject buttons */
+            --theme-overlay-color: rgba(255, 255, 255, 0.05); /* Very subtle light overlay */
         }
 
         /* Apply font and background to body */
         body {
-            font-family: "NRT Reg", "Rudaw", "Unikurd Web", "Vazirmatn", "Tahoma", sans-serif;
+            font-family: "Vazirmatn", "NRT Reg", "Rudaw", "Unikurd Web", "Tahoma", sans-serif;
             background-color: var(--theme-bg-main);
             color: var(--theme-text-primary);
             line-height: 1.6;
@@ -54,7 +55,7 @@
             padding: 1rem;
         }
 
-         /* Back button style (Not used on this page) */
+        /* Back button style (Not used on this page, but kept for consistency with other pages) */
         .back-button {
             display: inline-flex;
             align-items: center;
@@ -63,31 +64,30 @@
             top: 1rem;
             left: 1rem; /* Position on the left visually in RTL */
             right: auto; /* Ensure it's not affected by RTL right */
-            background-color: var(--theme-bg-accent); /* Use an accent background */
-            color: var(--theme-text-accent); /* Use accent text color */
+            background-color: var(--theme-bg-accent);
+            color: var(--theme-text-accent);
             border: 1px solid var(--theme-border-medium);
-            border-radius: 0.5rem; /* Rounded corners */
+            border-radius: 0.5rem;
             padding: 0.5rem;
             cursor: pointer;
             transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-            z-index: 10; /* Stay on top */
-            text-decoration: none; /* Remove underline for links */
+            z-index: 10;
+            text-decoration: none;
         }
 
         .back-button:hover {
-            background-color: var(--theme-border-light); /* Lighter on hover */
+            background-color: var(--theme-border-light);
             border-color: var(--theme-border-accent);
-            transform: translateY(-1px); /* Slight lift on hover */
+            transform: translateY(-1px);
         }
 
         .back-button svg {
             width: 1.5rem;
             height: 1.5rem;
-            /* Arrow points left in RTL */
-            transform: rotate(0deg);
+            transform: rotate(0deg); /* Arrow points left in RTL */
         }
         html[dir="ltr"] .back-button svg {
-             transform: rotate(180deg); /* Arrow points left in LTR */
+            transform: rotate(180deg); /* Arrow points left in LTR */
         }
         
         /* Download button style (Added to index page) */
@@ -103,12 +103,12 @@
             color: var(--theme-button-primary-text);
             border: 1px solid transparent;
             border-radius: 0.5rem;
-            /* Reduced padding */
-            padding: 0.4rem; 
+            padding: 0.5rem; /* Padding for icon only */
             cursor: pointer;
             transition: all 0.2s ease;
-            z-index: 10; /* Stay on top */
+            z-index: 10;
             text-decoration: none;
+            /* Added box-shadow for consistency */
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
@@ -119,9 +119,8 @@
         }
         
         .download-button svg {
-            /* Reduced icon size */
-            width: 1.2rem; 
-            height: 1.2rem;
+            width: 1.5rem; /* Slightly larger icon */
+            height: 1.5rem; /* Slightly larger icon */
             flex-shrink: 0; /* Prevent icon from shrinking */
         }
         /* Hide the span text inside download button */
@@ -195,7 +194,7 @@
         /* --- Letter/Number Grid Styles (Used in other pages) --- */
         .grid-container {
             display: grid;
-            gap: 1rem; /* Space between items */
+            gap: 1rem;
             padding-top: 1rem;
             text-align: center;
             grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
@@ -693,8 +692,8 @@
 </head>
 <body>
 
-    <!-- NEW: Download button (Icon only) - Size reduced -->
-    <!-- TODO: Replace "path/to/your/pdf.pdf" with the actual link to your PDF file -->
+    <!-- NEW: Download button (Icon only) -->
+    <!-- TODO: Replace "https://drive.google.com/drive/folders/1mzZxyoJC_CIWbS_5V71kbLbgK9x41J62?usp=sharing" with the actual link to your PDF file -->
     <a href="https://drive.google.com/drive/folders/1mzZxyoJC_CIWbS_5V71kbLbgK9x41J62?usp=sharing" class="download-button" target="_blank" download aria-label="دابەزاندن">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
@@ -703,7 +702,7 @@
 
 
     <div class="container">
-        <!-- Main title -->
+        <!-- Reduced font-size for the main title -->
         <h1 style="text-align: center; margin-bottom: 2rem; color: var(--theme-text-accent); font-size: 2.2rem; font-weight: bold;">وانەکانی پۆلی یەکەم</h1>
 
         <!-- Use grid for buttons -->

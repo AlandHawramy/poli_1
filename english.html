@@ -3,45 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English Language</title>
+    <title>Alphabet</title>
+    <!-- Google Fonts for Vazirmatn (friendly, modern Kurdish support) as fallback -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- CSS Styles -->
     <style>
-        /* style.css - Updated Styles */
-
-        /* Define theme colors using CSS variables */
+        /* Define theme colors using CSS variables (Purple theme from Kurdish letters app) */
         :root {
-            --theme-bg-main: #fbfaf7; /* Light background */
-            --theme-bg-content: #fffefc; /* Slightly lighter content background */
-            --theme-bg-accent: #f5f0e8; /* Accent background, similar to sidebar in previous code */
+            /* Purple Theme - ڕەنگە مۆرەکان */
+            --theme-bg-main: #F3EBFF; /* زۆر کاڵ، وەک لاڤەندەر بۆ پاشبنەما */
+            --theme-bg-content: #FFFFFF; /* سپی پاک بۆ ناوەڕۆک */
+            --theme-bg-accent: #E6D8FF; /* لاڤەندەرێکی تۆختر بۆ بەشە جیاوازەکان */
 
-            --theme-border-light: #e8e0d4;
-            --theme-border-medium: #d8c8b8;
-            --theme-border-strong: #c8a97e;
-            --theme-border-accent: #d2b48c;
+            --theme-border-light: #D1BBE6; /* سنوورێکی مۆر کاڵ */
+            --theme-border-medium: #BBAACC; /* سنوورێکی مۆر مامناوەند */
+            --theme-border-strong: #A38CBF; /* سنوورێکی مۆری تۆختر */
+            --theme-border-accent: #8A7BB2; /* سنوورێکی دیارتر بۆ گشتگیر */
 
-            --theme-text-primary: #5a4d41; /* Dark brown */
-            --theme-text-secondary: #7a6d61; /* Medium brown */
-            --theme-text-accent: #8b5a2b; /* Accent brown/orange */
+            --theme-text-primary: #4B0082; /* ئیندگۆ - مۆرێکی قووڵ و تۆخ بۆ دەقی سەرەکی */
+            --theme-text-secondary: #6A1B9A; /* مۆرێکی مامناوەند بۆ دەقی لاوەکی */
+            --theme-text-accent: #9932CC; /* ئۆرکیدی تۆخ - مۆرێکی زیندوو بۆ ناونیشان و هایلایتەکان */
 
-            --theme-button-primary-bg: #8b5a2b; /* Primary button background */
-            --theme-button-primary-text: white; /* Primary button text color */
-            --theme-button-primary-hover-bg: #a07d5b; /* Primary button hover background */
+            --theme-button-primary-bg: #9932CC; /* ئۆرکیدی تۆخ بۆ پاشبنەمای دوگمەی سەرەکی */
+            --theme-button-primary-text: white; /* ڕەنگی سپی بۆ دەقی دوگمەی سەرەکی */
+            --theme-button-primary-hover-bg: #B86ED1; /* ئۆرکیدی تۆخی کاڵتر بۆ کاتی جووڵاندنی ماوس بەسەر دوگمەدا */
 
-            --theme-card-bg: #fffefc; /* Background for cards/items */
-            --theme-card-border: #e8e0d4; /* Border for cards/items */
-            --theme-card-hover-border: #d2b48c; /* Hover border for cards */
+            --theme-card-bg: #FFFFFF; /* کارتە سپییەکان بۆ خوێندنەوەی ئاسان */
+            --theme-card-border: #D1BBE6; /* سنووری مۆر کاڵ بۆ کارتەکان */
+            --theme-card-hover-border: #9932CC; /* مۆری سەرەکی لەسەر سنووری کارتەکان کاتێک ماوس دەچێتە سەریان */
         }
 
         /* Apply font and background to body */
         body {
-            font-family: "NRT Reg", "Rudaw", "Unikurd Web", "Vazirmatn", "Tahoma", sans-serif;
+            /* Prioritize a common sans-serif for English, with Kurdish fonts as fallback */
+            font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif, "Vazirmatn", "NRT Reg", "Rudaw", "Unikurd Web", "Tahoma";
             background-color: var(--theme-bg-main);
             color: var(--theme-text-primary);
             line-height: 1.6;
             margin: 0;
             padding: 0;
             overflow-x: hidden; /* Prevent horizontal scroll */
-             text-align: left; /* Default text alignment for LTR */
+            text-align: left; /* Default text alignment for LTR */
         }
 
         /* Basic container styling */
@@ -51,7 +53,7 @@
             padding: 1rem;
         }
 
-         /* Back button style */
+        /* Back button style */
         .back-button {
             display: inline-flex;
             align-items: center;
@@ -60,77 +62,35 @@
             top: 1rem;
             left: 1rem; /* Position on the left visually in LTR */
             right: auto; /* Ensure it's not affected by RTL right */
-            background-color: var(--theme-bg-accent); /* Use an accent background */
-            color: var(--theme-text-accent); /* Use accent text color */
+            background-color: var(--theme-bg-accent);
+            color: var(--theme-text-accent);
             border: 1px solid var(--theme-border-medium);
-            border-radius: 0.5rem; /* Rounded corners */
+            border-radius: 0.5rem;
             padding: 0.5rem;
             cursor: pointer;
             transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-            z-index: 10; /* Stay on top */
-             text-decoration: none; /* Remove underline for links */
+            z-index: 10;
+            text-decoration: none;
         }
 
         .back-button:hover {
-            background-color: var(--theme-border-light); /* Lighter on hover */
+            background-color: var(--theme-border-light);
             border-color: var(--theme-border-accent);
-            transform: translateY(-1px); /* Slight lift on hover */
+            transform: translateY(-1px);
         }
 
         .back-button svg {
             width: 1.5rem;
             height: 1.5rem;
-             /* Changed: Default arrow is left-pointing, keep it that way */
-             transform: rotate(0deg);
-        }
-         /* Changed: For RTL, the button is on the visual left, should also point left */
-        html[dir="rtl"] .back-button svg {
-             transform: rotate(0deg); /* Points left */
-        }
-         /* Removed the html[dir="ltr"] rule as it's now redundant with the base rule */
-
-
-        /* Subject Button Styles (Not used here) */
-        .subject-button {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background-color: var(--theme-card-bg);
-            border: 2px solid var(--theme-card-border);
-            border-radius: 1rem; /* More rounded for a friendly look */
-            padding: 1.5rem;
-            text-decoration: none;
-            color: var(--theme-text-primary);
-            font-size: 1.2rem;
-            font-weight: 600;
-            text-align: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* Subtle shadow */
-            min-height: 180px; /* Minimum height for consistency */
-            width: 100%;
-        }
-
-        .subject-button:hover {
-            border-color: var(--theme-card-hover-border);
-            transform: translateY(-5px); /* More pronounced lift on hover */
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-        }
-
-        .subject-button img {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-            margin-bottom: 0.75rem;
+            transform: rotate(0deg); /* Arrow points left in LTR (standard for back) */
         }
 
         /* --- Letter/Number Grid Styles --- */
         .grid-container {
             display: grid;
-            gap: 1rem; /* Space between items */
+            gap: 1rem;
             padding-top: 1rem;
-             text-align: center; /* Center grid items text */
-             /* Default (Mobile): Aim for more items per row to reduce scroll */
+            text-align: center;
             grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
         }
 
@@ -140,15 +100,14 @@
             justify-content: center;
             background-color: var(--theme-card-bg);
             border: 1px solid var(--theme-card-border);
-            border-radius: 0.75rem; /* Slightly rounded */
-            font-size: 2rem; /* Large font size for letters/numbers */
+            border-radius: 0.75rem;
+            font-size: 2rem;
             font-weight: bold;
             color: var(--theme-text-accent);
             cursor: pointer;
-            user-select: none; /* Prevent text selection */
-            min-height: 80px; /* Minimum size for touch targets */
-             /* Added animation on hover as requested */
-             transition: all 0.3s ease, transform 0.1s ease;
+            user-select: none;
+            min-height: 80px;
+            transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease; /* Smooth transitions for active state */
         }
 
         .grid-item:hover {
@@ -159,21 +118,23 @@
 
         /* Animation on click/press */
         .grid-item:active {
-            transform: scale(0.95);
+            background-color: var(--theme-bg-accent);
+            border-color: var(--theme-button-primary-bg); /* Highlight on active */
+            box-shadow: 0 0 0 2px var(--theme-button-primary-bg); /* Add a subtle shadow */
+            transform: scale(1); /* No scale change on active to prevent lingering visual state */
         }
 
-        /* Subtle animation for letters (Applied to the span inside) */
-         @keyframes gentle-pulse {
-             0%, 100% { transform: scale(1); }
-             50% { transform: scale(1.02); }
-         }
-
-         .grid-item span {
-             display: block; /* Allow transform */
-             transform-origin: center; /* Center the transform */
+        @keyframes gentle-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
         }
-         .grid-item:hover span {
-             animation: gentle-pulse 1.5s infinite ease-in-out; /* Apply animation on hover */
+
+        .grid-item span {
+            display: block;
+            transform-origin: center;
+        }
+        .grid-item:hover span {
+            animation: gentle-pulse 1.5s infinite ease-in-out;
         }
 
 
@@ -184,92 +145,72 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.6); /* Dark semi-transparent overlay */
+            background-color: rgba(0, 0, 0, 0.6);
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 50; /* Above other content */
+            z-index: 50;
             padding: 1rem;
-             overflow-y: auto; /* Allow scrolling if modal is taller than screen */
+            overflow-y: auto;
         }
 
         .modal-content {
             background-color: var(--theme-bg-content);
-            border-radius: 1rem; /* Rounded corners */
-             /* Increased top padding to avoid clash with back button */
+            border-radius: 1rem;
             padding: 2.5rem 1.5rem 1.5rem;
-            max-width: 600px; /* Maximum width */
+            max-width: 600px;
             width: 100%;
-            position: relative; /* Needed for back button positioning */
+            position: relative;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-             text-align: left; /* Align modal content text to the left for English */
+            text-align: left;
         }
 
-        /* Keyframe animation for modal title */
         @keyframes gentle-pulse-title {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
         }
 
         .modal-title {
-            /* Reduced font size slightly */
             font-size: 1.3rem;
             font-weight: bold;
             color: var(--theme-text-accent);
             text-align: center;
             margin-bottom: 1.5rem;
-            /* Apply continuous animation */
             animation: gentle-pulse-title 2.5s infinite ease-in-out;
-            /* Added styles for clickability */
-            cursor: pointer;
-            user-select: none; /* Prevent text selection */
-             padding: 0.5rem; /* Add padding to make clicking easier */
-             border-radius: 0.5rem; /* Add rounded corners */
-             transition: background-color 0.2s ease;
         }
-         .modal-title:hover {
-              background-color: var(--theme-bg-accent); /* Slight background change on hover */
-         }
-         .modal-title:active {
-             transform: scale(0.98); /* Slight press effect */
-         }
 
-
-        /* Back button inside modal (positioning relative to modal-content) */
         .modal-content .back-button {
             position: absolute;
             top: 1rem;
-            left: 1rem; /* Position on the left visually in LTR */
+            left: 1rem;
             right: auto;
-            padding: 0.35rem; /* Smaller padding */
+            padding: 0.35rem;
             background-color: var(--theme-bg-accent);
-            color: var(--theme-text-accent); /* Match modal elements */
+            color: var(--theme-text-accent);
             border: 1px solid var(--theme-border-medium);
             border-radius: 0.5rem;
             cursor: pointer;
             transition: background-color 0.2s ease, border-color 0.2s ease;
-            z-index: 20; /* Ensure it's above modal content */
-             /* Arrow direction adjustment handled by global back-button rule */
-             transform: none; /* Reset potential rotation from grid-item */
+            z-index: 20;
+            transform: none;
         }
-         .modal-content .back-button:hover {
-             background-color: var(--theme-border-light);
-             border-color: var(--theme-border-accent);
-         }
+        .modal-content .back-button:hover {
+            background-color: var(--theme-border-light);
+            border-color: var(--theme-border-accent);
+        }
 
         .example-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Responsive grid for examples */
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 1rem;
             margin-top: 1rem;
         }
-        @media (max-width: 767px) { /* Specifically for mobile/smaller screens */
+        @media (max-width: 767px) {
             .example-grid {
-                 grid-template-columns: repeat(2, 1fr); /* Force 2 columns on small screens */
-                 gap: 0.75rem; /* Slightly smaller gap on mobile */
-             }
-         }
-
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+        }
 
         .example-item {
             display: flex;
@@ -295,8 +236,7 @@
             height: 80px;
             object-fit: contain;
             margin-bottom: 0.5rem;
-            /* Added: Slightly rounded corners for images */
-            border-radius: 0.5rem; /* Increased roundedness slightly */
+            border-radius: 0.5rem;
         }
 
         .example-item span {
@@ -306,150 +246,26 @@
             text-align: center;
         }
 
-         /* --- Special Button Style inside Modal (Wanakan Button) --- */
-         .modal-footer-button {
-             display: block; /* Make it a block element to take full width */
-             width: fit-content; /* Shrink to content width */
-             margin: 1.5rem auto 0 auto; /* Center horizontally, add space above */
-             padding: 0.75rem 1.5rem;
-             font-size: 1.1rem;
-             font-weight: 600;
-             text-align: center;
-             text-decoration: none; /* Remove underline */
-             color: var(--theme-button-primary-text);
-             background-color: var(--theme-button-primary-bg);
-             border: 1px solid var(--theme-button-primary-bg);
-             border-radius: 0.5rem;
-             transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-             cursor: pointer;
-         }
-         .modal-footer-button:hover {
-             background-color: var(--theme-button-primary-hover-bg);
-             border-color: var(--theme-button-primary-hover-bg);
-             transform: translateY(-2px); /* Lift on hover */
-         }
-
-
-         /* --- Math Icons Section Styles (Not used here) --- */
-         .icon-display-area {
-            margin-top: 1.5rem;
-            padding: 1rem;
-            border: 1px solid var(--theme-card-border);
-            border-radius: 1rem;
-            background-color: var(--theme-card-bg);
-            /* Default flexbox removed, using grid now */
-            /* display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.5rem; */
-            overflow-y: auto; /* Allow vertical scrolling if needed */
-            max-height: 400px; /* Limit height to prevent excessive scrolling */
-            display: grid; /* Use grid for controlled layout */
-            gap: 0.5rem; /* Default gap */
-             justify-items: center; /* Center items within their grid cells */
-             align-items: center;
-        }
-
-         /* Specific styles for math icons scaling and grid density based on number size */
-        .icon-display-area.grid-icons {
-            /* Base density for large numbers (e.g. > 50) */
-            grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
-            gap: 0.2rem; /* Small gap */
-        }
-         .icon-display-area.large-icons {
-             /* For numbers up to ~25 */
-             grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
-             gap: 0.5rem;
-         }
-         .icon-display-area.medium-icons {
-             /* For numbers up to ~50 */
-             grid-template-columns: repeat(auto-fit, minmax(25px, 1fr));
-             gap: 0.3rem;
-         }
-         .icon-display-area.xlarge-icons {
-              /* For numbers up to ~10 */
-             grid-template-columns: repeat(auto-fit, minmax(40px, 1fr)); /* Might fit 5-10 per row depending on screen */
-             gap: 1rem;
-         }
-
-
-         .math-icon { object-fit: contain; flex-shrink: 0;}
-
-         /* Define icon sizes */
-        .math-icon.small { width: 20px; height: 20px; }
-        .math-icon.medium { width: 30px; height: 30px; }
-        .math-icon.large { width: 40px; height: 40px; }
-        .math-icon.xlarge { width: 50px; height: 50px; }
-
-
-         /* --- Math Arithmetic Section Styles (Not used here) --- */
-         /* (Arithmetic styles kept in math.html) */
-
-
         /* --- Responsive Adjustments --- */
-         /* Home page buttons grid layout (Not used here) */
-        .home-buttons-grid {
-            display: grid;
-            gap: 1.5rem; /* Space between buttons */
-            /* Default: 1 column on very small screens */
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            justify-content: center; /* Center grid if items don't fill line */
-             /* Inherits padding-top from .container */
-        }
-         @media (min-width: 500px) { /* Custom breakpoint for 2 columns */
-             .home-buttons-grid {
-                 grid-template-columns: repeat(2, minmax(250px, 1fr)); /* Force 2 columns */
-             }
-         }
-
-
-        @media (min-width: 768px) { /* md */
+        @media (min-width: 768px) {
             .container {
                 padding: 2rem;
             }
-            /* Home page buttons side by side */
-             .home-buttons-grid {
-                 grid-template-columns: repeat(3, 1fr);
-                 gap: 2rem; /* Slightly larger gap */
-             }
-             /* Math main buttons grid layout */
-             .math-main-buttons-grid {
-                display: grid; /* Ensure display is grid */
-                grid-template-columns: repeat(3, 1fr); /* Force 3 columns on md+ */
-                gap: 2rem; /* Larger gap on md+ */
-                 justify-content: center;
-             }
-
-             /* Grid container for numbers/letters becomes denser on larger screens */
             .grid-container {
                 grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
             }
             .example-grid {
-                grid-template-columns: repeat(4, 1fr); /* 4 examples per row on medium screens */
+                grid-template-columns: repeat(4, 1fr);
             }
             .modal-content {
-                max-width: 700px; /* Wider modal */
+                max-width: 700px;
             }
             .modal-content .back-button {
-                left: 2rem; /* Position slightly further in on larger screens */
-            }
-             html[dir="rtl"] .modal-content .back-button {
-                 left: 2rem;
-            }
-            html[dir="ltr"] .modal-content .back-button {
                 left: 2rem;
             }
         }
-         @media (max-width: 767px) { /* Styles specific to screens smaller than md */
-             /* Math main buttons grid responsive on small screens */
-            .math-main-buttons-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive on small */
-                 gap: 1.5rem;
-                 justify-content: center;
-            }
-         }
 
-
-        @media (min-width: 1024px) { /* lg */
-             /* Grid container for numbers/letters even denser on large screens */
+        @media (min-width: 1024px) {
             .grid-container {
                 grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
             }
@@ -458,28 +274,6 @@
         /* Hide element when AlpineJS x-cloak is used */
         [x-cloak] { display: none !important; }
 
-         .math-section-title {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: var(--theme-text-secondary);
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            border-bottom: 2px solid var(--theme-border-light);
-            padding-bottom: 0.5rem;
-            text-align: center; /* Center titles */
-        }
-
-         /* Message for TTS status */
-         .tts-status-message {
-             text-align: center;
-             margin-top: 1.5rem;
-             padding: 1rem;
-             border: 1px dashed var(--theme-border-accent);
-             border-radius: 0.5rem;
-             color: var(--theme-text-secondary);
-             background-color: var(--theme-bg-accent);
-             font-size: 0.9rem;
-         }
     </style>
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -495,16 +289,11 @@
     <div class="container" x-data="englishApp()">
         <h1 style="text-align: center; margin-bottom: 2rem; color: var(--theme-text-accent); font-size: 2.5rem; font-weight: bold;">Alphabet</h1>
 
-        <!-- TTS Status Message -->
-        <div class="tts-status-message" x-cloak x-show="showTTSWarning">
-            <span x-text="ttsWarningMessage"></span>
-        </div>
-
         <div class="grid-container">
              <!-- Loop through letters data -->
             <template x-for="letterData in letters" :key="letterData.letter">
                 <div class="grid-item"
-                     @click="speakText(letterData.letter); openModal(letterData);"> <!-- Speak letter, then open modal -->
+                     @click="openModal(letterData)">
                     <span x-text="letterData.letter"></span>
                 </div>
             </template>
@@ -519,8 +308,7 @@
                          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
                        </svg>
                     </button>
-                    <!-- Make the modal title clickable to speak the letter again -->
-                    <h2 class="modal-title" x-text="currentLetter" @click="speakText(currentLetter)"></h2>
+                    <h2 class="modal-title" x-text="currentLetter"></h2>
 
                     <div class="example-grid">
                         <!-- Loop through examples -->
@@ -532,17 +320,11 @@
                             </div>
                         </template>
                     </div>
-                     <!-- Optional: Add "Lessons" button here if needed for English -->
-                      <!-- TODO: Replace '#' with the actual URL you want to link to -->
-                     <!-- <a href="#" class="modal-footer-button" role="button">
-                         Lessons
-                     </a> -->
                 </div>
             </div>
         </template>
 
     </div>
-    <!-- No specific audio tags needed here, using browser's TTS -->
 
     <!-- Alpine.js data object -->
     <script>
@@ -599,194 +381,118 @@
                     { letter: 'Y', examples: [{ text: 'Yacht', image: 'images/en/yacht.png' }, { text: 'Yak', image: 'images/en/yak.png' }, { text: 'Yarn', image: 'images/en/yarn.png' }, { text: 'Yellow', image: 'images/en/yellow.png' }] },
                     { letter: 'Z', examples: [{ text: 'Zebra', image: 'images/en/zebra.png' }, { text: 'Zipper', image: 'images/en/zipper.png' }, { text: 'Zoo', image: 'images/en/zoo.png' }, { text: 'Zero', image: 'images/en/zero.png' }] }
                 ],
-                synth: null,
-                voices: [],
-                selectedVoice: null,
-                isTTSAvailable: false, // Flag to check if TTS is supported
-                voicesLoaded: false,   // Flag to check if voices have been loaded
-                showTTSWarning: false, // Flag to show warning message
-                ttsWarningMessage: '', // Message content
+                synth: window.speechSynthesis,
+                voices: [], // To store available voices
+                selectedVoice: null, // To store the selected female English voice
 
                 init() {
-                    console.log("English App Initializing");
+                    console.log("English App Initializing.");
 
-                    // Check if TTS is supported by the browser
-                    if (!('speechSynthesis' in window)) {
-                         console.error('Text-to-Speech not supported in this browser.');
-                         this.isTTSAvailable = false;
-                         this.ttsWarningMessage = 'Sorry, Text-to-Speech is not supported by your browser.';
-                         this.showTTSWarning = true;
-                         return; // Exit init if not supported
-                    }
+                    if (this.synth) {
+                        // This event fires when voices are loaded or change.
+                        this.synth.onvoiceschanged = () => {
+                            console.log("Voices changed event fired. Attempting to load and select voice.");
+                            this.loadAndSelectVoice();
+                        };
 
-                    this.isTTSAvailable = true;
-                    this.synth = window.speechSynthesis;
-
-                    // Event listener for voices being loaded
-                    this.synth.onvoiceschanged = () => {
-                         console.log("Voices changed event fired.");
-                         this.loadAndSelectVoice();
-                    };
-
-                    // Try to load voices immediately if they are already available
-                    if (this.synth.getVoices().length > 0) {
-                         console.log("Voices already available on init.");
-                         this.loadAndSelectVoice();
+                        // Immediately try to load voices if they are already available (e.g., on desktop browsers)
+                        if (this.synth.getVoices().length > 0) {
+                            console.log("Voices already available on init. Selecting voice.");
+                            this.loadAndSelectVoice();
+                        } else {
+                            // On some mobile browsers, voices might not be immediately available.
+                            // The `onvoiceschanged` event is the most reliable way to know when they are.
+                            console.log("Voices not immediately available. Waiting for 'onvoiceschanged' event.");
+                        }
                     } else {
-                        console.log("Voices not immediately available, attempting workaround.");
-                        // Attempt a workaround to prompt voice loading in some browsers (especially mobile)
-                        // Speak a tiny, silent utterance with the target language.
-                         const dummyUtterance = new SpeechSynthesisUtterance(' '); // Space might be needed
-                         dummyUtterance.lang = 'en-US';
-                         try {
-                             this.synth.speak(dummyUtterance);
-                              console.log("Spoke dummy utterance to prompt voice loading.");
-                              // Cancel the dummy utterance immediately so it's not heard
-                               this.synth.cancel();
-                         } catch (e) {
-                             console.warn("Failed to speak dummy utterance:", e);
-                         }
-
-                        // Set a timeout to check if voices loaded after a short delay
-                        // This is a fallback in case onvoiceschanged doesn't fire as expected
-                        setTimeout(() => {
-                            if (!this.voicesLoaded) { // Only run if voices are still not marked as loaded
-                                console.warn("Voices still not loaded after workaround delay.");
-                                this.ttsWarningMessage = 'Text-to-Speech voices are loading or not available. Tap again if speech fails.';
-                                this.showTTSWarning = true; // Show warning
-                                // Attempt to load/select voice again in case the event was missed
-                                this.loadAndSelectVoice(); // This will also set voicesLoaded if successful
-                                if (!this.voicesLoaded && this.isTTSAvailable) {
-                                    console.error("TTS available but no voices found even after delay.");
-                                     this.ttsWarningMessage = 'TTS voices not found on your system. Speech may not work.';
-                                     this.showTTSWarning = true;
-                                }
-                            } else {
-                                 console.log("Voices confirmed loaded after delay.");
-                                 this.showTTSWarning = false; // Hide warning if it was shown
-                            }
-                        }, 1500); // Increased delay slightly
+                        console.error('Text-to-Speech not supported in this browser.');
                     }
                 },
 
                 loadAndSelectVoice() {
                     this.voices = this.synth.getVoices();
                     console.log(`Found ${this.voices.length} voices.`);
-                    console.log("Available voices:", this.voices.map(v => `${v.name} (${v.lang})`).join(', '));
+                    console.log("Available voices:", this.voices.map(v => `${v.name} (${v.lang})`));
 
-                     // Try to find a female English voice, prioritizing Google
+                    // Prioritize a high-quality US English female voice (like Google's if available)
+                    // "Kore (firm)" is a Google Cloud TTS specific voice, not available in browser's Web Speech API.
+                    // We'll prioritize common Google voices like "Google US English" and then general female voices.
                     this.selectedVoice = this.voices.find(voice =>
-                         voice.lang === 'en-US' && voice.name.toLowerCase().includes('female') && voice.name.toLowerCase().includes('google')
+                        voice.lang === 'en-US' && voice.name.toLowerCase().includes('google') && voice.name.toLowerCase().includes('female')
                     ) || this.voices.find(voice =>
-                         voice.lang === 'en-US' && voice.name.toLowerCase().includes('female')
+                        voice.lang === 'en-US' && voice.name.toLowerCase().includes('female')
                     ) || this.voices.find(voice =>
-                         voice.lang.startsWith('en') && voice.name.toLowerCase().includes('female') // Any English female
+                        voice.lang.startsWith('en') && voice.name.toLowerCase().includes('female')
                     ) || this.voices.find(voice =>
                         voice.lang === 'en-US' // Fallback to any US English voice
                     ) || this.voices.find(voice =>
-                         voice.lang.startsWith('en') // Fallback to any English voice
-                    ) || this.voices[0] || null; // Fallback to first available voice or null
+                        voice.lang.startsWith('en') // Fallback to any English voice
+                    ) || this.voices[0]; // Fallback to the first available voice
 
                     if (this.selectedVoice) {
-                         console.log('Selected voice:', this.selectedVoice.name);
-                         this.voicesLoaded = true; // Mark voices as loaded if a voice is selected
-                         this.showTTSWarning = false; // Hide any warning
+                        console.log('Selected voice:', this.selectedVoice.name);
                     } else {
-                        console.warn('No suitable English female voice found. Using browser default or falling back.');
-                         // If no specific voice is selected, the browser will use its default for 'en-US' if available.
-                         // Keep voicesLoaded as false or show a different warning if needed.
-                         this.ttsWarningMessage = 'No preferred voice found. Using default voice if available.';
-                         // Decide if you want to show a warning here or not. Showing it might be confusing.
-                         // this.showTTSWarning = true; // Optional: show warning
-                          if(this.voices.length > 0) {
-                              this.voicesLoaded = true; // Voices ARE loaded, just didn't find the *preferred* one
-                               this.showTTSWarning = false; // Hide warning about loading
-                          } else {
-                             this.voicesLoaded = false;
-                             this.ttsWarningMessage = 'TTS voices are still loading or not found on your system.';
-                             this.showTTSWarning = true;
-                          }
+                        console.warn('No suitable English female voice found. Speech synthesis might use a default or fail.');
                     }
                 },
 
                 stopSpeaking() {
                     if (this.synth && this.synth.speaking) {
-                         console.log("Stopping speech.");
+                        console.log("Stopping current speech.");
                         this.synth.cancel();
                     }
                 },
 
                 speakText(text) {
-                     if (!this.isTTSAvailable) {
-                         console.warn('Text-to-Speech not available. Cannot speak.');
-                         return; // Don't try if not supported
-                     }
-                      if (!this.synth) {
-                          console.error('SpeechSynthesis object not initialized.');
-                          // This shouldn't happen if isTTSAvailable is true, but safety check
-                          return;
-                      }
+                    if (!this.synth) {
+                        console.error('Text-to-Speech not supported in this browser.');
+                        return;
+                    }
 
+                    // Attempt to load and select voice again if not ready (this is a common mobile workaround)
+                    // If voices array is empty or selectedVoice is null, try to load them again.
+                    if (!this.selectedVoice || this.voices.length === 0) {
+                        console.warn('Speech voice not ready yet or not found. Attempting to select voice before speaking.');
+                        this.loadAndSelectVoice(); // This might trigger 'onvoiceschanged' if voices are not yet loaded
+                    }
 
-                     // Stop any current speech before starting a new one
-                      this.stopSpeaking();
+                    this.stopSpeaking(); // Stop any previous speech
 
-                     const utterance = new SpeechSynthesisUtterance(text);
-                     utterance.lang = 'en-US'; // Specify language
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'en-US'; // Specify language for accurate pronunciation
 
-                     // Use the selected voice if available
-                     if (this.selectedVoice) {
-                          utterance.voice = this.selectedVoice;
-                          console.log(`Attempting to speak "${text}" with voice "${this.selectedVoice.name}"`);
-                     } else if (this.voicesLoaded) {
-                         console.warn(`No specific voice selected, but voices loaded. Attempting to speak "${text}" with browser default for en-US.`);
-                         // Browser *should* use default US English voice
-                     } else {
-                         console.warn(`Voices not yet loaded or found. Attempting to speak "${text}" with browser default for en-US. This might fail.`);
-                         // This is the tricky mobile case. The speak() call itself might trigger voices to load.
-                         // If it fails, the onerror handler should catch it.
-                     }
+                    if (this.selectedVoice) {
+                        utterance.voice = this.selectedVoice; // Use the selected voice
+                    } else {
+                        // Fallback to a generic English voice if specific not found
+                        utterance.lang = 'en-US'; // Ensure correct language for default voice too
+                    }
 
+                    utterance.rate = 0.9; // Slightly slower for clearer pronunciation
+                    utterance.pitch = 1; // Standard pitch
 
-                     utterance.rate = 0.9; // Adjust speech rate (slightly slower)
-                     utterance.pitch = 1; // Default pitch
+                    console.log(`Attempting to speak: "${text}" with voice "${this.selectedVoice ? this.selectedVoice.name : 'Default/None'}"`);
+                    this.synth.speak(utterance);
 
-                     utterance.onstart = () => { console.log(`Speech started: "${text}"`); };
-                     utterance.onend = () => { console.log(`Speech finished: "${text}"`); };
-                     utterance.onerror = (event) => {
-                         console.error('Speech synthesis error:', event.error, event);
-                          this.ttsWarningMessage = `Speech failed: ${event.error}. Please check device voice settings.`;
-                          this.showTTSWarning = true; // Show error message
-                         // On mobile, 'not-allowed' is common for the first attempt without user gesture,
-                         // but since we tied it to click, it might indicate no voices or other issues.
-                     };
-
-
-                     try {
-                         // Speak the utterance. On mobile, this needs to be called directly from a user gesture.
-                        this.synth.speak(utterance);
-                     } catch (e) {
-                         console.error("Error calling speak:", e);
-                          this.ttsWarningMessage = `Error speaking: ${e.message}. Try tapping again.`;
-                          this.showTTSWarning = true; // Show error message
-                     }
+                    utterance.onerror = (event) => {
+                        console.error('Speech synthesis error:', event);
+                        // Errors like 'not-allowed' typically mean autoplay policy blocked it.
+                        // Ensure speech is triggered by a direct user tap.
+                    };
                 },
                 openModal(letterData) {
                     console.log("Opening modal for:", letterData.letter);
                     this.currentLetter = letterData.letter;
                     this.examples = letterData.examples;
-                    this.showModal = true;
-                    // Speaking the letter on modal open is removed, handled by initial click
+                    // Speak the letter immediately when the button is clicked, BEFORE the modal is fully drawn.
+                    // This often feels more responsive on mobile devices as the sound starts instantly with the user's tap.
+                    this.speakText(letterData.letter);
+                    this.showModal = true; // Then open modal
                 },
                 closeModal() {
                     console.log("Closing modal");
                     this.showModal = false;
                     this.stopSpeaking(); // Stop speaking when closing modal
-                     // Clear any temporary TTS warning when modal closes
-                     if (this.ttsWarningMessage.includes("Speech failed") || this.ttsWarningMessage.includes("Error speaking")) {
-                         this.showTTSWarning = false;
-                         this.ttsWarningMessage = '';
-                     }
                 }
             }
         }

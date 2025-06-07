@@ -3,40 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بیرکاری</title>
-    <!-- Tailwind CSS (Optional, but your original code included it) -->
-    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <title>ژمارەکان بە ئایکۆن</title>
     <!-- Your Custom CSS Styles -->
     <style>
-        /* style.css - Updated Styles */
-
-        /* Define theme colors using CSS variables */
+        /* Define theme colors using CSS variables (Purple theme from Kurdish letters app) */
         :root {
-            --theme-bg-main: #fbfaf7; /* Light background */
-            --theme-bg-content: #fffefc; /* Slightly lighter content background */
-            --theme-bg-accent: #f5f0e8; /* Accent background, similar to sidebar in previous code */
+            /* Purple Theme - ڕەنگە مۆرەکان */
+            --theme-bg-main: #F3EBFF; /* زۆر کاڵ، وەک لاڤەندەر بۆ پاشبنەما */
+            --theme-bg-content: #FFFFFF; /* سپی پاک بۆ ناوەڕۆک */
+            --theme-bg-accent: #E6D8FF; /* لاڤەندەرێکی تۆختر بۆ بەشە جیاوازەکان */
 
-            --theme-border-light: #e8e0d4;
-            --theme-border-medium: #d8c8b8;
-            --theme-border-strong: #c8a97e;
-            --theme-border-accent: #d2b48c;
+            --theme-border-light: #D1BBE6; /* سنوورێکی مۆر کاڵ */
+            --theme-border-medium: #BBAACC; /* سنوورێکی مۆر مامناوەند */
+            --theme-border-strong: #A38CBF; /* سنوورێکی مۆری تۆختر */
+            --theme-border-accent: #8A7BB2; /* سنوورێکی دیارتر بۆ گشتگیر */
 
-            --theme-text-primary: #5a4d41; /* Dark brown */
-            --theme-text-secondary: #7a6d61; /* Medium brown */
-            --theme-text-accent: #8b5a2b; /* Accent brown/orange */
+            --theme-text-primary: #4B0082; /* ئیندگۆ - مۆرێکی قووڵ و تۆخ بۆ دەقی سەرەکی */
+            --theme-text-secondary: #6A1B9A; /* مۆرێکی مامناوەند بۆ دەقی لاوەکی */
+            --theme-text-accent: #9932CC; /* ئۆرکیدی تۆخ - مۆرێکی زیندوو بۆ ناونیشان و هایلایتەکان */
 
-            --theme-button-primary-bg: #8b5a2b; /* Primary button background */
-            --theme-button-primary-text: white; /* Primary button text color */
-            --theme-button-primary-hover-bg: #a07d5b; /* Primary button hover background */
+            --theme-button-primary-bg: #9932CC; /* ئۆرکیدی تۆخ بۆ پاشبنەمای دوگمەی سەرەکی */
+            --theme-button-primary-text: white; /* ڕەنگی سپی بۆ دەقی دوگمەی سەرەکی */
+            --theme-button-primary-hover-bg: #B86ED1; /* ئۆرکیدی تۆخی کاڵتر بۆ کاتی جووڵاندنی ماوس بەسەر دوگمەدا */
 
-            --theme-card-bg: #fffefc; /* Background for cards/items */
-            --theme-card-border: #e8e0d4; /* Border for cards/items */
-            --theme-card-hover-border: #d2b48c; /* Hover border for cards */
+            --theme-card-bg: #FFFFFF; /* کارتە سپییەکان بۆ خوێندنەوەی ئاسان */
+            --theme-card-border: #D1BBE6; /* سنووری مۆر کاڵ بۆ کارتەکان */
+            --theme-card-hover-border: #9932CC; /* مۆری سەرەکی لەسەر سنووری کارتەکان کاتێک ماوس دەچێتە سەریان */
         }
 
         /* Apply font and background to body */
         body {
-            font-family: "NRT Reg", "Rudaw", "Unikurd Web", "Vazirmatn", "Tahoma", sans-serif;
+            font-family: "Vazirmatn", "NRT Reg", "Rudaw", "Unikurd Web", "Tahoma", sans-serif;
             background-color: var(--theme-bg-main);
             color: var(--theme-text-primary);
             line-height: 1.6;
@@ -89,83 +86,15 @@
              transform: rotate(180deg); /* Arrow points left in LTR */
         }
 
-        /* Subject Button Styles (for index.html and math.html main screen) */
-        .subject-button {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background-color: var(--theme-card-bg);
-            border: 2px solid var(--theme-card-border);
-            border-radius: 1rem; /* More rounded for a friendly look */
-            padding: 1.5rem;
-            text-decoration: none;
-            color: var(--theme-text-primary);
-            font-size: 1.2rem;
-            font-weight: 600;
-            text-align: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* Subtle shadow */
-            min-height: 180px; /* Minimum height for consistency */
-            width: 100%;
-        }
-
-        .subject-button:hover {
-            border-color: var(--theme-card-hover-border);
-            transform: translateY(-5px); /* More pronounced lift on hover */
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-        }
-
-        .subject-button img {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-            margin-bottom: 0.75rem;
-        }
-
-         /* Home page buttons grid layout (specifically for the 2 math buttons) */
-        .math-main-buttons-grid {
-            display: grid;
-            gap: 1.5rem; /* Space between buttons */
-            /* Default: 1 column on very small screens */
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            justify-content: center; /* Center grid if items don't fill line */
-             /* Inherits padding-top from .container */
-             max-width: 600px; /* Limit width if only 2 buttons */
-             margin-left: auto; /* Center the grid horizontally */
-             margin-right: auto;
-        }
-
-         /* Force 2 columns on screens 500px and wider */
-         @media (min-width: 500px) {
-             .math-main-buttons-grid {
-                 grid-template-columns: repeat(2, minmax(250px, 1fr)); /* Force 2 columns */
-             }
-         }
-
-        /* --- Letter/Number Grid Styles --- */
+        /* --- Grid Styles for Numbers (0-100) --- */
         .grid-container {
             display: grid;
             gap: 1rem; /* Space between items */
             padding-top: 1rem;
-             text-align: center; /* Center grid items text */
-             /* Default (Mobile): Aim for more items per row */
+            text-align: center; /* Center grid items text */
+            /* Default (Mobile): Aim for more items per row to reduce scroll */
             grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
         }
-
-         @media (min-width: 768px) { /* md */
-             /* Grid container for numbers/letters becomes denser on larger screens */
-            .grid-container {
-                grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-            }
-         }
-         @media (min-width: 1024px) { /* lg */
-              /* Grid container for numbers/letters even denser on large screens */
-             .grid-container {
-                 grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-             }
-         }
-
 
         .grid-item {
             display: flex;
@@ -174,15 +103,14 @@
             background-color: var(--theme-card-bg);
             border: 1px solid var(--theme-card-border);
             border-radius: 0.75rem; /* Slightly rounded */
-            font-size: 2rem; /* Large font size for letters/numbers */
+            font-size: 2rem; /* Large font size for numbers */
             font-weight: bold;
             color: var(--theme-text-accent);
             cursor: pointer;
             transition: all 0.2s ease;
             user-select: none; /* Prevent text selection */
             min-height: 80px; /* Minimum size for touch targets */
-             /* Added animation on hover as requested */
-             transition: all 0.3s ease, transform 0.3s ease; /* Add transform to transition */
+            transition: all 0.3s ease, transform 0.3s ease; /* Add transform to transition */
         }
 
         .grid-item:hover {
@@ -191,18 +119,18 @@
             transform: scale(1.05); /* Slightly enlarge on hover */
         }
 
-         /* Subtle animation for letters (Applied to the span inside) */
-         @keyframes gentle-pulse {
-             0%, 100% { transform: scale(1); }
-             50% { transform: scale(1.02); }
-         }
-
-         .grid-item span {
-             display: block; /* Allow transform */
-             transform-origin: center; /* Center the transform */
+        /* Subtle animation for numbers (Applied to the span inside) */
+        @keyframes gentle-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
         }
-         .grid-item:hover span {
-             animation: gentle-pulse 1.5s infinite ease-in-out; /* Apply animation on hover */
+
+        .grid-item span {
+            display: block; /* Allow transform */
+            transform-origin: center; /* Center the transform */
+        }
+        .grid-item:hover span {
+            animation: gentle-pulse 1.5s infinite ease-in-out; /* Apply animation on hover */
         }
 
 
@@ -219,7 +147,7 @@
             justify-content: center;
             z-index: 50; /* Above other content */
             padding: 1rem;
-             overflow-y: auto; /* Allow scrolling if modal is taller than screen */
+            overflow-y: auto; /* Allow scrolling if modal is taller than screen */
         }
 
         .modal-content {
@@ -230,7 +158,7 @@
             width: 100%;
             position: relative; /* Needed for back button positioning */
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-             text-align: right; /* Align modal content text to the right */
+            text-align: right; /* Align modal content text to the right */
         }
 
         .modal-title {
@@ -255,617 +183,413 @@
             cursor: pointer;
             transition: background-color 0.2s ease, border-color 0.2s ease;
             z-index: 20; /* Ensure it's above modal content */
-             /* Arrow direction adjustment handled by global back-button rule */
-             transform: none; /* Reset potential rotation from grid-item */
+            transform: none; /* Reset potential rotation from grid-item */
         }
-         .modal-content .back-button:hover {
-             background-color: var(--theme-border-light);
-             border-color: var(--theme-border-accent);
-         }
-
-        .example-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Responsive grid for examples */
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        @media (max-width: 767px) { /* Specifically for mobile/smaller screens */
-            .example-grid {
-                 grid-template-columns: repeat(2, 1fr); /* Force 2 columns on small screens */
-                 gap: 0.75rem; /* Slightly smaller gap on mobile */
-             }
-         }
-
-
-        .example-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            padding: 0.75rem;
-            border: 1px solid var(--theme-card-border);
-            border-radius: 0.75rem;
-            background-color: var(--theme-card-bg);
-            transition: all 0.2s ease;
-            user-select: none;
+        .modal-content .back-button:hover {
+            background-color: var(--theme-border-light);
+            border-color: var(--theme-border-accent);
         }
 
-        .example-item:hover {
-            background-color: var(--theme-bg-accent);
-            border-color: var(--theme-card-hover-border);
-            transform: scale(1.03);
-        }
-
-        .example-item img {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-            margin-bottom: 0.5rem;
-        }
-
-        .example-item span {
-            font-size: 1rem;
-            font-weight: 500;
-            color: var(--theme-text-primary);
-            text-align: center;
-        }
-
-         /* --- Special Button Style inside Modal (Wanakan Button) --- */
-         .modal-footer-button {
-             display: block; /* Make it a block element to take full width */
-             width: fit-content; /* Shrink to content width */
-             margin: 1.5rem auto 0 auto; /* Center horizontally, add space above */
-             padding: 0.75rem 1.5rem;
-             font-size: 1.1rem;
-             font-weight: 600;
-             text-align: center;
-             text-decoration: none; /* Remove underline */
-             color: var(--theme-button-primary-text);
-             background-color: var(--theme-button-primary-bg);
-             border: 1px solid var(--theme-button-primary-bg);
-             border-radius: 0.5rem;
-             transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-             cursor: pointer;
-         }
-         .modal-footer-button:hover {
-             background-color: var(--theme-button-primary-hover-bg);
-             border-color: var(--theme-button-primary-hover-bg);
-             transform: translateY(-2px); /* Lift on hover */
-         }
-
-
-         /* --- Math Icons Section Styles --- */
-         .icon-display-area {
+        /* --- Icon Display Area Styles --- */
+        .icon-display-area {
             margin-top: 1.5rem;
             padding: 1rem;
             border: 1px solid var(--theme-card-border);
             border-radius: 1rem;
             background-color: var(--theme-card-bg);
-            display: grid; /* Use grid for controlled layout */
-            gap: 0.5rem; /* Default gap */
-             justify-items: center; /* Center items within their grid cells */
-             align-items: center;
             overflow-y: auto; /* Allow vertical scrolling if needed */
             max-height: 400px; /* Limit height to prevent excessive scrolling */
+            display: grid; /* Use grid for controlled layout */
+            gap: 0.5rem; /* Default gap */
+            justify-items: center; /* Center items within their grid cells */
+            align-items: center;
         }
 
-         /* Specific styles for math icons scaling and grid density based on number size */
+        /* Specific styles for math icons scaling and grid density based on number size */
         .icon-display-area.grid-icons {
-            /* Base density for large numbers (e.g. > 50) */
             grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
             gap: 0.2rem; /* Small gap */
         }
-         .icon-display-area.large-icons {
-             /* For numbers up to ~25 */
-             grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
-             gap: 0.5rem;
-         }
-         .icon-display-area.medium-icons {
-             /* For numbers up to ~50 */
-             grid-template-columns: repeat(auto-fit, minmax(25px, 1fr));
-             gap: 0.3rem;
-         }
-         .icon-display-area.xlarge-icons {
-              /* For numbers up to ~10 */
-             grid-template-columns: repeat(auto-fit, minmax(40px, 1fr)); /* Might fit 5-10 per row depending on screen */
-             gap: 1rem;
-         }
+        .icon-display-area.large-icons {
+            grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
+            gap: 0.5rem;
+        }
+        .icon-display-area.medium-icons {
+            grid-template-columns: repeat(auto-fit, minmax(25px, 1fr));
+            gap: 0.3rem;
+        }
+        .icon-display-area.xlarge-icons {
+            grid-template-columns: repeat(auto-fit, minmax(40px, 1fr)); /* Might fit 5-10 per row depending on screen */
+            gap: 1rem;
+        }
 
+        .math-icon { object-fit: contain; flex-shrink: 0;}
 
-         .math-icon { object-fit: contain; flex-shrink: 0;}
-
-         /* Define icon sizes */
+        /* Define icon sizes */
         .math-icon.small { width: 20px; height: 20px; }
         .math-icon.medium { width: 30px; height: 30px; }
         .math-icon.large { width: 40px; height: 40px; }
         .math-icon.xlarge { width: 50px; height: 50px; }
 
 
-         /* --- Math Arithmetic Section Styles (Removed) --- */
-        /*
-         .arithmetic-container { ... }
-         .problem-display { ... }
-         .answer-display { ... }
-         .arithmetic-buttons { ... }
-         .arithmetic-button { ... }
-         .arithmetic-actions { ... }
-         .feedback-message { ... }
-         .feedback-message.correct { ... }
-         .feedback-message.incorrect { ... }
-         .level-selection-grid { ... }
-         .level-button { ... }
-         .results-container { ... }
-        */
-
-
         /* --- Responsive Adjustments --- */
-        @media (min-width: 768px) { /* md */
+        @media (min-width: 768px) { /* md breakpoint */
             .container {
                 padding: 2rem;
             }
-             /* Back button position adjustment on larger screens */
-            .back-button {
-                top: 2rem;
-                left: 2rem;
+            .grid-container {
+                grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
             }
-             html[dir="rtl"] .back-button {
-                 left: 2rem;
-            }
-             html[dir="ltr"] .back-button {
-                left: 2rem;
-            }
-
             .modal-content {
                 max-width: 700px; /* Wider modal */
             }
-             /* Back button inside modal */
             .modal-content .back-button {
-                top: 1.5rem; /* Adjust position slightly */
-                left: 1.5rem;
-                 right: auto;
+                left: 2rem; /* Position slightly further in on larger screens */
             }
-
-
+            html[dir="rtl"] .modal-content .back-button {
+                left: 2rem;
+            }
+            html[dir="ltr"] .modal-content .back-button {
+                left: 2rem;
+            }
         }
 
+        @media (min-width: 1024px) { /* lg */
+            .grid-container {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+        }
 
         /* Hide element when AlpineJS x-cloak is used */
         [x-cloak] { display: none !important; }
 
-         .math-section-title {
-            font-size: 1.3rem;
+        .math-section-title {
+            font-size: 1.8rem; /* Slightly larger title for the main section */
             font-weight: bold;
-            color: var(--theme-text-secondary);
-            margin-top: 2rem;
+            color: var(--theme-text-accent);
+            margin-top: 1rem;
             margin-bottom: 1rem;
-            border-bottom: 2px solid var(--theme-border-light);
-            padding-bottom: 0.5rem;
             text-align: center; /* Center titles */
+        }
+         .section-description {
+            font-size: 1.1rem;
+            color: var(--theme-text-secondary);
+            text-align: center;
+            margin-bottom: 2rem;
         }
     </style>
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body x-data="mathApp()" dir="rtl">
+<body x-data="numbersIconApp()">
 
-    <div class="container relative"> <!-- Added relative positioning for back button -->
-        <!-- Back Button (always visible on math pages, position depends on view) -->
-         <!-- This back button shows when NOT on the main menu, goes back TO main menu -->
-         <button @click="goBackToMain()" class="back-button" x-show="currentView !== 'main'" aria-label="گەڕانەوە">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
-              </svg>
-          </button>
+    <!-- The single back button that always links to index.html -->
+    <a href="index.html" class="back-button" aria-label="گەڕانەوە بۆ سەرەتا">
+       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+       </svg>
+    </a>
 
-         <!-- Back Button to Home (only visible ON the main math page, goes to index.html) -->
-         <a href="index.html" class="back-button" x-show="currentView === 'main'" aria-label="گەڕانەوە بۆ سەرەتا">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
-            </svg>
-         </a>
-
-
-        <!-- Main Title: Centered -->
-        <h1 class="text-3xl md:text-4xl font-bold text-center mb-6" style="color: var(--theme-text-accent); text-align: center;">
-            بیرکاری
+    <div class="container">
+        <h1 class="math-section-title">
+            ژمارەکان بە ئایکۆن
         </h1>
-
-        <!-- Main Math Menu (showing the two buttons) -->
-        <div class="math-main-buttons-grid" x-show="currentView === 'main'" x-cloak>
-            <button @click="setView('numbers-read')" class="subject-button">
-                 <!-- TODO: Replace with actual image for reading numbers -->
-                 <img src="images/math/numbers_read.png" alt="خوێندنەوەی ژمارەکان">
-                <span>خوێندنەوەی ژمارەکان</span>
-            </button>
-
-            <button @click="setView('numbers-icons')" class="subject-button">
-                 <!-- TODO: Replace with actual image for numbers with icons -->
-                 <img src="images/math/numbers_icons.png" alt="ژمارەکان بە ئایکۆن">
-                <span>ژمارەکان بە ئایکۆن</span>
-            </button>
-             <!-- The Arithmetic button is removed from here -->
+        <!-- Main Content: Numbers with Icons (0-100) -->
+        <div class="grid-container">
+            <template x-for="number in numbers" :key="'icon-num-' + number">
+                <div class="grid-item" @click="openIconModal(number)">
+                    <span x-text="toKurdishDigits(number)" dir="ltr"></span> <!-- Convert to Kurdish digits -->
+                </div>
+            </template>
         </div>
 
-        <!-- Section 1: Read Numbers (0-100) -->
-        <div x-show="currentView === 'numbers-read'" x-cloak>
-             <h2 class="math-section-title">
-                ژمارەکان (٠ تا ١٠٠) - خوێندنەوەی دەنگی
-             </h2>
-             <p style="text-align: center; color: var(--theme-text-secondary);">دەست بنێ بە هەر ژمارەیەکدا بۆ ئەوەی گوێت لە خوێندنەوەکەی ببێت.</p>
-             <div class="grid-container">
-                 <template x-for="number in numbers" :key="'read-num-' + number">
-                     <div class="grid-item" @click="playNumberSound(number)">
-                         <!-- Numbers are displayed LTR even in RTL context -->
-                         <span x-text="toKurdishDigits(number)" dir="ltr"></span>
-                     </div>
-                 </template>
-             </div>
-        </div>
+        <!-- Icon Detail Modal -->
+        <template x-if="modalOpen">
+            <div class="modal-backdrop" @click.self="closeModal()"> <!-- Close modal when clicking outside (on backdrop) -->
+                <div class="modal-content" @click.stop> <!-- Prevent click inside modal from closing it -->
+                    <!-- Modal Back Button -->
+                    <button @click="closeModal()" class="back-button" aria-label="گەڕانەوە">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
+                        </svg>
+                    </button>
 
-        <!-- Section 2: Numbers with Icons (0-100) -->
-        <div x-show="currentView === 'numbers-icons'" x-cloak>
-            <h2 class="math-section-title">
-                ژمارەکان بە ئایکۆن (٠ تا ١٠٠)
-            </h2>
-             <p style="text-align: center; color: var(--theme-text-secondary);">دەست بنێ بە هەر ژمارەیەکدا بۆ ئەوەی ژمارەکە بە ئایکۆن ببینیت.</p>
-            <div class="grid-container">
-                <template x-for="number in numbers" :key="'icon-num-' + number">
-                    <div class="grid-item" @click="openIconModal(number)">
-                         <!-- Numbers are displayed LTR even in RTL context -->
-                        <span x-text="toKurdishDigits(number)" dir="ltr"></span>
+                    <h3 class="modal-title">
+                        ژمارەی <span x-text="toKurdishDigits(selectedNumberForIcons)" dir="ltr"></span> <!-- Convert to Kurdish digits -->
+                    </h3>
+
+                    <!-- Area to display Icons -->
+                    <!-- Conditional class based on number size for better layout -->
+                    <div class="icon-display-area" :class="iconGridClass">
+                        <template x-for="(iconSrc, index) in displayedIcons" :key="'icon-item-' + index">
+                            <!-- TODO: Replace with actual animal icon image paths -->
+                            <img :src="iconSrc" :alt="'Icon ' + (index + 1)" class="math-icon" :class="iconSizeClass">
+                        </template>
+                        <p x-show="selectedNumberForIcons === 0" class="text-center text-xl" style="color: var(--theme-text-secondary);">هیچ</p>
                     </div>
-                </template>
+                </div>
             </div>
-
-            <!-- Icon Detail Modal -->
-             <template x-if="modalOpen">
-                 <div class="modal-backdrop" @click.self="closeModal()"> <!-- Close modal when clicking outside (on backdrop) -->
-                     <div class="modal-content" @click.stop> <!-- Prevent click inside modal from closing it -->
-                          <!-- Modal Back Button -->
-                         <button @click="closeModal()" class="back-button" aria-label="گەڕانەوە">
-                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                   <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
-                               </svg>
-                           </button>
-
-                         <h3 class="modal-title">
-                             ژمارەی <span x-text="toKurdishDigits(selectedNumberForIcons)" dir="ltr"></span> <!-- Convert to Kurdish digits for display -->
-                         </h3>
-
-                         <!-- Area to display Icons -->
-                         <!-- Conditional class based on number size for better layout -->
-                         <div class="icon-display-area" :class="iconGridClass">
-                             <template x-for="(iconSrc, index) in displayedIcons" :key="'icon-item-' + index">
-                                 <!-- TODO: Replace with actual animal icon image paths -->
-                                 <img :src="iconSrc" :alt="'Icon ' + (index + 1)" class="math-icon" :class="iconSizeClass">
-                             </template>
-                             <p x-show="selectedNumberForIcons === 0" class="text-center text-xl" style="color: var(--theme-text-secondary);">هیچ</p>
-                         </div>
-                     </div>
-                 </div>
-             </template>
-        </div>
-
-        <!-- The Arithmetic section is entirely removed from here -->
+        </template>
 
     </div>
 
     <!-- Audio elements for Math Numbers (0-100) -->
     <!-- You MUST add 101 <audio> tags here, one for each number from 0 to 100 -->
     <!-- Ensure the src path is correct, e.g., "audio/math/0.mp3" -->
-    <!-- IMPORTANT: Add ALL audio tags from 0.mp3 to 100.mp3 here -->
-     <audio id="sound-0" src="audio/math/0.mp3" preload="auto"></audio>
-     <audio id="sound-1" src="audio/math/1.mp3" preload="auto"></audio>
-     <audio id="sound-2" src="audio/math/2.mp3" preload="auto"></audio>
-     <audio id="sound-3" src="audio/math/3.mp3" preload="auto"></audio>
-     <audio id="sound-4" src="audio/math/4.mp3" preload="auto"></audio>
-     <audio id="sound-5" src="audio/math/5.mp3" preload="auto"></audio>
-     <audio id="sound-6" src="audio/math/6.mp3" preload="auto"></audio>
-     <audio id="sound-7" src="audio/math/7.mp3" preload="auto"></audio>
-     <audio id="sound-8" src="audio/math/8.mp3" preload="auto"></audio>
-     <audio id="sound-9" src="audio/math/9.mp3" preload="auto"></audio>
-     <audio id="sound-10" src="audio/math/10.mp3" preload="auto"></audio>
-     <audio id="sound-11" src="audio/math/11.mp3" preload="auto"></audio>
-     <audio id="sound-12" src="audio/math/12.mp3" preload="auto"></audio>
-     <audio id="sound-13" src="audio/math/13.mp3" preload="auto"></audio>
-     <audio id="sound-14" src="audio/math/14.mp3" preload="auto"></audio>
-     <audio id="sound-15" src="audio/math/15.mp3" preload="auto"></audio>
-     <audio id="sound-16" src="audio/math/16.mp3" preload="auto"></audio>
-     <audio id="sound-17" src="audio/math/17.mp3" preload="auto"></audio>
-     <audio id="sound-18" src="audio/math/18.mp3" preload="auto"></audio>
-     <audio id="sound-19" src="audio/math/19.mp3" preload="auto"></audio>
-     <audio id="sound-20" src="audio/math/20.mp3" preload="auto"></audio>
-     <audio id="sound-21" src="audio/math/21.mp3" preload="auto"></audio>
-     <audio id="sound-22" src="audio/math/22.mp3" preload="auto"></audio>
-     <audio id="sound-23" src="audio/math/23.mp3" preload="auto"></audio>
-     <audio id="sound-24" src="audio/math/24.mp3" preload="auto"></audio>
-     <audio id="sound-25" src="audio/math/25.mp3" preload="auto"></audio>
-     <audio id="sound-26" src="audio/math/26.mp3" preload="auto"></audio>
-     <audio id="sound-27" src="audio/math/27.mp3" preload="auto"></audio>
-     <audio id="sound-28" src="audio/math/28.mp3" preload="auto"></audio>
-     <audio id="sound-29" src="audio/math/29.mp3" preload="auto"></audio>
-     <audio id="sound-30" src="audio/math/30.mp3" preload="auto"></audio>
-     <audio id="sound-31" src="audio/math/31.mp3" preload="auto"></audio>
-     <audio id="sound-32" src="audio/math/32.mp3" preload="auto"></audio>
-     <audio id="sound-33" src="audio/math/33.mp3" preload="auto"></audio>
-     <audio id="sound-34" src="audio/math/34.mp3" preload="auto"></audio>
-     <audio id="sound-35" src="audio/math/35.mp3" preload="auto"></audio>
-     <audio id="sound-36" src="audio/math/36.mp3" preload="auto"></audio>
-     <audio id="sound-37" src="audio/math/37.mp3" preload="auto"></audio>
-     <audio id="sound-38" src="audio/math/38.mp3" preload="auto"></audio>
-     <audio id="sound-39" src="audio/math/39.mp3" preload="auto"></audio>
-     <audio id="sound-40" src="audio/math/40.mp3" preload="auto"></audio>
-     <audio id="sound-41" src="audio/math/41.mp3" preload="auto"></audio>
-     <audio id="sound-42" src="audio/math/42.mp3" preload="auto"></audio>
-     <audio id="sound-43" src="audio/math/43.mp3" preload="auto"></audio>
-     <audio id="sound-44" src="audio/math/44.mp3" preload="auto"></audio>
-     <audio id="sound-45" src="audio/math/45.mp3" preload="auto"></audio>
-     <audio id="sound-46" src="audio/math/46.mp3" preload="auto"></audio>
-     <audio id="sound-47" src="audio/math/47.mp3" preload="auto"></audio>
-     <audio id="sound-48" src="audio/math/48.mp3" preload="auto"></audio>
-     <audio id="sound-49" src="audio/math/49.mp3" preload="auto"></audio>
-     <audio id="sound-50" src="audio/math/50.mp3" preload="auto"></audio>
-     <audio id="sound-51" src="audio/math/51.mp3" preload="auto"></audio>
-     <audio id="sound-52" src="audio/math/52.mp3" preload="auto"></audio>
-     <audio id="sound-53" src="audio/math/53.mp3" preload="auto"></audio>
-     <audio id="sound-54" src="audio/math/54.mp3" preload="auto"></audio>
-     <audio id="sound-55" src="audio/math/55.mp3" preload="auto"></audio>
-     <audio id="sound-56" src="audio/math/56.mp3" preload="auto"></audio>
-     <audio id="sound-57" src="audio/math/57.mp3" preload="auto"></audio>
-     <audio id="sound-58" src="audio/math/58.mp3" preload="auto"></audio>
-     <audio id="sound-59" src="audio/math/59.mp3" preload="auto"></audio>
-     <audio id="sound-60" src="audio/math/60.mp3" preload="auto"></audio>
-     <audio id="sound-61" src="audio/math/61.mp3" preload="auto"></audio>
-     <audio id="sound-62" src="audio/math/62.mp3" preload="auto"></audio>
-     <audio id="sound-63" src="audio/math/63.mp3" preload="auto"></audio>
-     <audio id="sound-64" src="audio/math/64.mp3" preload="auto"></audio>
-     <audio id="sound-65" src="audio/math/65.mp3" preload="auto"></audio>
-     <audio id="sound-66" src="audio/math/66.mp3" preload="auto"></audio>
-     <audio id="sound-67" src="audio/math/67.mp3" preload="auto"></audio>
-     <audio id="sound-68" src="audio/math/68.mp3" preload="auto"></audio>
-     <audio id="sound-69" src="audio/math/69.mp3" preload="auto"></audio>
-     <audio id="sound-70" src="audio/math/70.mp3" preload="auto"></audio>
-     <audio id="sound-71" src="audio/math/71.mp3" preload="auto"></audio>
-     <audio id="sound-72" src="audio/math/72.mp3" preload="auto"></audio>
-     <audio id="sound-73" src="audio/math/73.mp3" preload="auto"></audio>
-     <audio id="sound-74" src="audio/math/74.mp3" preload="auto"></audio>
-     <audio id="sound-75" src="audio/math/75.mp3" preload="auto"></audio>
-     <audio id="sound-76" src="audio/math/76.mp3" preload="auto"></audio>
-     <audio id="sound-77" src="audio/math/77.mp3" preload="auto"></audio>
-     <audio id="sound-78" src="audio/math/78.mp3" preload="auto"></audio>
-     <audio id="sound-79" src="audio/math/79.mp3" preload="auto"></audio>
-     <audio id="sound-80" src="audio/math/80.mp3" preload="auto"></audio>
-     <audio id="sound-81" src="audio/math/81.mp3" preload="auto"></audio>
-     <audio id="sound-82" src="audio/math/82.mp3" preload="auto"></audio>
-     <audio id="sound-83" src="audio/math/83.mp3" preload="auto"></audio>
-     <audio id="sound-84" src="audio/math/84.mp3" preload="auto"></audio>
-     <audio id="sound-85" src="audio/math/85.mp3" preload="auto"></audio>
-     <audio id="sound-86" src="audio/math/86.mp3" preload="auto"></audio>
-     <audio id="sound-87" src="audio/math/87.mp3" preload="auto"></audio>
-     <audio id="sound-88" src="audio/math/88.mp3" preload="auto"></audio>
-     <audio id="sound-89" src="audio/math/89.mp3" preload="auto"></audio>
-     <audio id="sound-90" src="audio/math/90.mp3" preload="auto"></audio>
-     <audio id="sound-91" src="audio/math/91.mp3" preload="auto"></audio>
-     <audio id="sound-92" src="audio/math/92.mp3" preload="auto"></audio>
-     <audio id="sound-93" src="audio/math/93.mp3" preload="auto"></audio>
-     <audio id="sound-94" src="audio/math/94.mp3" preload="auto"></audio>
-     <audio id="sound-95" src="audio/math/95.mp3" preload="auto"></audio>
-     <audio id="sound-96" src="audio/math/96.mp3" preload="auto"></audio>
-     <audio id="sound-97" src="audio/math/97.mp3" preload="auto"></audio>
-     <audio id="sound-98" src="audio/math/98.mp3" preload="auto"></audio>
-     <audio id="sound-99" src="audio/math/99.mp3" preload="auto"></audio>
-     <audio id="sound-100" src="audio/math/100.mp3" preload="auto"></audio>
-
+    <audio id="sound-0" src="audio/math/0.wav" preload="auto"></audio>
+    <audio id="sound-1" src="audio/math/1.mp3" preload="auto"></audio>
+    <audio id="sound-2" src="audio/math/2.mp3" preload="auto"></audio>
+    <audio id="sound-3" src="audio/math/3.wav" preload="auto"></audio>
+    <audio id="sound-4" src="audio/math/4.mp3" preload="auto"></audio>
+    <audio id="sound-5" src="audio/math/5.mp3" preload="auto"></audio>
+    <audio id="sound-6" src="audio/math/6.mp3" preload="auto"></audio>
+    <audio id="sound-7" src="audio/math/7.mp3" preload="auto"></audio>
+    <audio id="sound-8" src="audio/math/8.mp3" preload="auto"></audio>
+    <audio id="sound-9" src="audio/math/9.mp3" preload="auto"></audio>
+    <audio id="sound-10" src="audio/math/10.mp3" preload="auto"></audio>
+    <audio id="sound-11" src="audio/math/11.mp3" preload="auto"></audio>
+    <audio id="sound-12" src="audio/math/12.mp3" preload="auto"></audio>
+    <audio id="sound-13" src="audio/math/13.mp3" preload="auto"></audio>
+    <audio id="sound-14" src="audio/math/14.mp3" preload="auto"></audio>
+    <audio id="sound-15" src="audio/math/15.mp3" preload="auto"></audio>
+    <audio id="sound-16" src="audio/math/16.mp3" preload="auto"></audio>
+    <audio id="sound-17" src="audio/math/17.mp3" preload="auto"></audio>
+    <audio id="sound-18" src="audio/math/18.mp3" preload="auto"></audio>
+    <audio id="sound-19" src="audio/math/19.mp3" preload="auto"></audio>
+    <audio id="sound-20" src="audio/math/20.mp3" preload="auto"></audio>
+    <audio id="sound-21" src="audio/math/21.mp3" preload="auto"></audio>
+    <audio id="sound-22" src="audio/math/22.mp3" preload="auto"></audio>
+    <audio id="sound-23" src="audio/math/23.mp3" preload="auto"></audio>
+    <audio id="sound-24" src="audio/math/24.mp3" preload="auto"></audio>
+    <audio id="sound-25" src="audio/math/25.mp3" preload="auto"></audio>
+    <audio id="sound-26" src="audio/math/26.mp3" preload="auto"></audio>
+    <audio id="sound-27" src="audio/math/27.mp3" preload="auto"></audio>
+    <audio id="sound-28" src="audio/math/28.mp3" preload="auto"></audio>
+    <audio id="sound-29" src="audio/math/29.mp3" preload="auto"></audio>
+    <audio id="sound-30" src="audio/math/30.mp3" preload="auto"></audio>
+    <audio id="sound-31" src="audio/math/31.mp3" preload="auto"></audio>
+    <audio id="sound-32" src="audio/math/32.mp3" preload="auto"></audio>
+    <audio id="sound-33" src="audio/math/33.mp3" preload="auto"></audio>
+    <audio id="sound-34" src="audio/math/34.mp3" preload="auto"></audio>
+    <audio id="sound-35" src="audio/math/35.mp3" preload="auto"></audio>
+    <audio id="sound-36" src="audio/math/36.mp3" preload="auto"></audio>
+    <audio id="sound-37" src="audio/math/37.mp3" preload="auto"></audio>
+    <audio id="sound-38" src="audio/math/38.mp3" preload="auto"></audio>
+    <audio id="sound-39" src="audio/math/39.mp3" preload="auto"></audio>
+    <audio id="sound-40" src="audio/math/40.mp3" preload="auto"></audio>
+    <audio id="sound-41" src="audio/math/41.mp3" preload="auto"></audio>
+    <audio id="sound-42" src="audio/math/42.mp3" preload="auto"></audio>
+    <audio id="sound-43" src="audio/math/43.mp3" preload="auto"></audio>
+    <audio id="sound-44" src="audio/math/44.mp3" preload="auto"></audio>
+    <audio id="sound-45" src="audio/math/45.mp3" preload="auto"></audio>
+    <audio id="sound-46" src="audio/math/46.mp3" preload="auto"></audio>
+    <audio id="sound-47" src="audio/math/47.mp3" preload="auto"></audio>
+    <audio id="sound-48" src="audio/math/48.mp3" preload="auto"></audio>
+    <audio id="sound-49" src="audio/math/49.mp3" preload="auto"></audio>
+    <audio id="sound-50" src="audio/math/50.mp3" preload="auto"></audio>
+    <audio id="sound-51" src="audio/math/51.mp3" preload="auto"></audio>
+    <audio id="sound-52" src="audio/math/52.mp3" preload="auto"></audio>
+    <audio id="sound-53" src="audio/math/53.mp3" preload="auto"></audio>
+    <audio id="sound-54" src="audio/math/54.mp3" preload="auto"></audio>
+    <audio id="sound-55" src="audio/math/55.mp3" preload="auto"></audio>
+    <audio id="sound-56" src="audio/math/56.mp3" preload="auto"></audio>
+    <audio id="sound-57" src="audio/math/57.mp3" preload="auto"></audio>
+    <audio id="sound-58" src="audio/math/58.mp3" preload="auto"></audio>
+    <audio id="sound-59" src="audio/math/59.mp3" preload="auto"></audio>
+    <audio id="sound-60" src="audio/math/60.mp3" preload="auto"></audio>
+    <audio id="sound-61" src="audio/math/61.mp3" preload="auto"></audio>
+    <audio id="sound-62" src="audio/math/62.mp3" preload="auto"></audio>
+    <audio id="sound-63" src="audio/math/63.mp3" preload="auto"></audio>
+    <audio id="sound-64" src="audio/math/64.mp3" preload="auto"></audio>
+    <audio id="sound-65" src="audio/math/65.mp3" preload="auto"></audio>
+    <audio id="sound-66" src="audio/math/66.mp3" preload="auto"></audio>
+    <audio id="sound-67" src="audio/math/67.mp3" preload="auto"></audio>
+    <audio id="sound-68" src="audio/math/68.mp3" preload="auto"></audio>
+    <audio id="sound-69" src="audio/math/69.mp3" preload="auto"></audio>
+    <audio id="sound-70" src="audio/math/70.mp3" preload="auto"></audio>
+    <audio id="sound-71" src="audio/math/71.mp3" preload="auto"></audio>
+    <audio id="sound-72" src="audio/math/72.mp3" preload="auto"></audio>
+    <audio id="sound-73" src="audio/math/73.mp3" preload="auto"></audio>
+    <audio id="sound-74" src="audio/math/74.mp3" preload="auto"></audio>
+    <audio id="sound-75" src="audio/math/75.mp3" preload="auto"></audio>
+    <audio id="sound-76" src="audio/math/76.mp3" preload="auto"></audio>
+    <audio id="sound-77" src="audio/math/77.mp3" preload="auto"></audio>
+    <audio id="sound-78" src="audio/math/78.mp3" preload="auto"></audio>
+    <audio id="sound-79" src="audio/math/79.mp3" preload="auto"></audio>
+    <audio id="sound-80" src="audio/math/80.mp3" preload="auto"></audio>
+    <audio id="sound-81" src="audio/math/81.mp3" preload="auto"></audio>
+    <audio id="sound-82" src="audio/math/82.mp3" preload="auto"></audio>
+    <audio id="sound-83" src="audio/math/83.mp3" preload="auto"></audio>
+    <audio id="sound-84" src="audio/math/84.mp3" preload="auto"></audio>
+    <audio id="sound-85" src="audio/math/85.mp3" preload="auto"></audio>
+    <audio id="sound-86" src="audio/math/86.mp3" preload="auto"></audio>
+    <audio id="sound-87" src="audio/math/87.mp3" preload="auto"></audio>
+    <audio id="sound-88" src="audio/math/88.mp3" preload="auto"></audio>
+    <audio id="sound-89" src="audio/math/89.mp3" preload="auto"></audio>
+    <audio id="sound-90" src="audio/math/90.mp3" preload="auto"></audio>
+    <audio id="sound-91" src="audio/math/91.mp3" preload="auto"></audio>
+    <audio id="sound-92" src="audio/math/92.mp3" preload="auto"></audio>
+    <audio id="sound-93" src="audio/math/93.mp3" preload="auto"></audio>
+    <audio id="sound-94" src="audio/math/94.mp3" preload="auto"></audio>
+    <audio id="sound-95" src="audio/math/95.mp3" preload="auto"></audio>
+    <audio id="sound-96" src="audio/math/96.mp3" preload="auto"></audio>
+    <audio id="sound-97" src="audio/math/97.mp3" preload="auto"></audio>
+    <audio id="sound-98" src="audio/math/98.mp3" preload="auto"></audio>
+    <audio id="sound-99" src="audio/math/99.mp3" preload="auto"></audio>
+    <audio id="sound-100" src="audio/math/100.mp3" preload="auto"></audio>
 
     <!-- Alpine.js data object -->
     <script>
-        function mathApp() {
+        function numbersIconApp() {
             return {
-                currentView: 'main', // 'main', 'numbers-read', 'numbers-icons'
                 numbers: Array.from({ length: 101 }, (_, i) => i), // Numbers from 0 to 100
                 modalOpen: false, // For icon modal
                 selectedNumberForIcons: 0, // Number selected for icon display
                 displayedIcons: [], // Array to hold the src of icons to display
                 selectedAnimalIcon: '', // Store the path of the single selected animal icon
 
-                 // Audio player elements references
-                 numberSoundElements: {}, // To store references to individual number audio elements
-                 synth: window.speechSynthesis, // For potential TTS fallback
+                // Audio player elements
+                numberSoundElements: {}, // To store references to individual number audio elements
+                synth: window.speechSynthesis, // For potential TTS fallback
 
-                 // List of animal icon paths (TODO: Replace with your actual paths)
-                 animalIconPaths: [
-                     'images/icons/animal_cat.png',
-                     'images/icons/animal_dog.png',
-                     'images/icons/animal_elephant.png',
-                     'images/icons/animal_fish.png',
-                     'images/icons/animal_lion.png',
-                     'images/icons/animal_monkey.png',
-                     'images/icons/animal_owl.png',
-                     'images/icons/animal_pig.png',
-                     'images/icons/animal_rabbit.png',
-                     'images/icons/animal_zebra.png',
-                     'images/icons/animal_bird.png',
-                     'images/icons/animal_cow.png',
-                     'images/icons/animal_frog.png',
-                     'images/icons/animal_horse.png',
-                     'images/icons/animal_mouse.png',
-                     'images/icons/animal_snake.png',
-                     'images/icons/animal_tiger.png',
-                     'images/icons/animal_wolf.png',
-                      // Add more animal icon paths here as needed
-                 ],
+                // List of animal icon paths (TODO: Replace with your actual paths)
+                animalIconPaths: [
+                    'images/icons/animal_cat.png',
+                    'images/icons/animal_dog.png',
+                    'images/icons/animal_elephant.png',
+                    'images/icons/animal_fish.png',
+                    'images/icons/animal_lion.png',
+                    'images/icons/animal_monkey.png',
+                    'images/icons/animal_owl.png',
+                    'images/icons/animal_pig.png',
+                    'images/icons/animal_rabbit.png',
+                    'images/icons/animal_zebra.png',
+                    'images/icons/animal_bird.png',
+                    'images/icons/animal_cow.png',
+                    'images/icons/animal_frog.png',
+                    'images/icons/animal_horse.png',
+                    'images/icons/animal_mouse.png',
+                    'images/icons/animal_snake.png',
+                    'images/icons/animal_tiger.png',
+                    'images/icons/animal_wolf.png',
+                    // Add more animal icon paths here (ensure these paths are correct in your project)
+                ],
 
-                 // Kurdish digits mapping
-                 kurdishDigits: ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'],
+                // Kurdish digits mapping
+                kurdishDigits: ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'],
 
                 init() {
-                     console.log("Math App Initializing - Arithmetic Section Removed"); // Debugging log
-
-                     // Initialize number sound elements (find them by ID)
-                     this.$nextTick(() => { // Ensure DOM is ready and audio tags exist
-                          for(let i = 0; i <= 100; i++) {
-                               const soundElement = document.getElementById(`sound-${i}`);
-                               if(soundElement) {
-                                   this.numberSoundElements[i] = soundElement;
-                                   // Optional: Add error handling for individual audio elements
-                                    soundElement.onerror = (e) => console.error(`Error loading audio for number ${i}:`, soundElement.src, e);
-                               } else {
-                                    // Create a dummy object if element not found, so calls don't error
-                                   this.numberSoundElements[i] = { play: () => { /* console.warn(`Audio tag not found for number ${i}. Expected ID: sound-${i}.`); */ }, pause: () => {}, currentTime: 0 };
-                               }
-                          }
-                         console.log('Math sound elements initialized. Numbers:', Object.keys(this.numberSoundElements).length); // Debugging
-                     });
-
-                    // Watch for view changes
-                     this.$watch('currentView', (newView, oldView) => {
-                        // Only handle cleanup when leaving the numbers-icons view
-                        if (oldView === 'numbers-icons') {
-                            this.closeModal(); // Close modal if leaving icon view
+                    console.log("Numbers with Icons App Initializing"); // Debugging log
+                    // Initialize number sound elements (find them by ID)
+                    this.$nextTick(() => { // Ensure DOM is ready and audio tags exist
+                        for(let i = 0; i <= 100; i++) {
+                            const soundElement = document.getElementById(`sound-${i}`);
+                            if(soundElement) {
+                                this.numberSoundElements[i] = soundElement;
+                                soundElement.onerror = (e) => console.error(`Error loading audio for number ${i}:`, soundElement.src, e);
+                            } else {
+                                this.numberSoundElements[i] = { play: () => { console.warn(`Audio tag not found for number ${i}. Expected ID: sound-${i}.`); }, pause: () => {}, currentTime: 0 };
+                            }
                         }
-                         // Stop sounds when changing views
-                         this.stopAllMathSounds();
-
-                         // Scroll to top
-                         this.$nextTick(() => {
-                              document.documentElement.scrollTo({top: 0, behavior: 'smooth'});
-                         });
-                     });
+                        console.log('Number sound elements count:', Object.keys(this.numberSoundElements).length); // Debugging
+                    });
 
                     // Stop sounds if the window/tab becomes inactive (optional but good practice)
-                      document.addEventListener('visibilitychange', () => {
-                         if (document.hidden) {
-                            this.stopAllMathSounds();
-                         }
-                     });
-
-                     // Handle modal closing on escape key
-                     document.addEventListener('keydown', (e) => {
-                         if (this.modalOpen && e.key === 'Escape') {
-                             this.closeModal();
-                         }
-                     });
-
+                    document.addEventListener('visibilitychange', () => {
+                        if (document.hidden) {
+                            this.stopAllSounds();
+                            if (this.synth && this.synth.speaking) {
+                                this.synth.cancel();
+                            }
+                        }
+                    });
                 },
 
-                 // Convert Western number or number string to Kurdish digits string
-                 toKurdishDigits(number) {
-                     if (number === null || number === undefined) return ''; // Handle null/undefined
-                     // If it's already a string and possibly contains a mix (e.g., during typing), handle that
-                     const numberString = String(number);
-                     if (numberString === '') return ''; // Handle empty string
-
-                     return numberString.split('').map(digit => {
-                         // Handle characters that are not Western digits (e.g., '.', operator symbols if ever passed)
-                         const westernDigit = parseInt(digit, 10);
-                         // Check if the parsed digit is a valid number 0-9
-                         return isNaN(westernDigit) || westernDigit < 0 || westernDigit > 9 ? digit : this.kurdishDigits[westernDigit];
-                     }).join('');
-                 },
-
-
-                setView(view) {
-                    this.currentView = view;
-                    // Scroll to top handled by the $watch on currentView
+                // Convert Western number to Kurdish digits string
+                toKurdishDigits(number) {
+                    return String(number).split('').map(digit => {
+                        if (digit === '.') return '.';
+                        const westernDigit = parseInt(digit, 10);
+                        return isNaN(westernDigit) ? digit : this.kurdishDigits[westernDigit];
+                    }).join('');
                 },
 
-                goBackToMain() {
-                    this.setView('main');
+                // --- Sound Control ---
+                stopAllSounds() {
+                    // Stop all currently playing number sounds
+                    Object.values(this.numberSoundElements).forEach(audio => {
+                        if (audio && typeof audio.pause === 'function' && !audio.paused) {
+                            audio.pause();
+                            audio.currentTime = 0;
+                        }
+                    });
+                    if (this.synth && this.synth.speaking) { // Also stop TTS fallback if it was used
+                        this.synth.cancel();
+                    }
                 },
-
-                 // --- Sound Management ---
-                 stopAllMathSounds() {
-                      // Stop all currently playing number sounds
-                      Object.values(this.numberSoundElements).forEach(audio => {
-                           if (audio && typeof audio.pause === 'function' && !audio.paused) {
-                              audio.pause();
-                              audio.currentTime = 0;
-                           }
-                      });
-                      // Stop any active TTS speech
-                       if (this.synth && this.synth.speaking) {
-                           this.synth.cancel();
-                       }
-                 },
 
                 playNumberSound(number) {
-                    // console.log("Attempting to play sound for number:", number); // Debugging log
+                    console.log("Attempting to play sound for number:", number); // Debugging log
                     const soundElement = this.numberSoundElements[number];
                     if (soundElement && typeof soundElement.play === 'function') {
-                        this.stopAllMathSounds(); // Stop any other sound
+                        this.stopAllSounds(); // Stop any other number sound or TTS
                         soundElement.currentTime = 0; // Reset to start
                         soundElement.play().catch(error => console.error(`Error playing sound for number ${number}:`, error));
                     } else {
                         console.warn(`Sound element not found or play function missing for number ${number}. Check audio tags and paths.`);
-                         // Fallback: Text-to-Speech for numbers if audio is missing (optional)
-                         // TTS might struggle with Kurdish numbers like ٢٥ for 25. Speaking the Western digit string might be better.
-                         // This fallback is kept in case audio files are missing or don't load.
+                        // Fallback: Text-to-Speech for numbers if audio is missing (optional)
                         if (window.speechSynthesis && this.synth) {
-                             this.synth.cancel(); // Stop any other TTS
-                             const utterance = new SpeechSynthesisUtterance(number.toString()); // Speak the actual number string (e.g. "25")
-                              // Attempt to find a suitable voice (Kurdish or generic/English is better than default often)
-                             const voices = this.synth.getVoices();
-                             const kurdishVoice = voices.find(v => v.lang === 'ckb' || v.lang.startsWith('ku'));
-                             const englishVoice = voices.find(v => v.lang.startsWith('en'));
-
-                             if (kurdishVoice) {
-                                 utterance.lang = kurdishVoice.lang;
-                                 utterance.voice = kurdishVoice;
-                             } else if (englishVoice) {
-                                 utterance.lang = englishVoice.lang;
-                                  utterance.voice = englishVoice;
-                             } else {
-                                 utterance.lang = 'en-US'; // Default to a common language
-                             }
-
-                             this.synth.speak(utterance);
-                             utterance.onerror = (event) => {
-                                 console.error('TTS fallback error for number:', number, event);
-                             };
-                         }
+                            this.synth.cancel(); // Stop any other TTS
+                            const utterance = new SpeechSynthesisUtterance(number.toString()); // Speak the actual number string (e.g., "25")
+                            utterance.lang = 'en-US'; // Use English TTS for numbers, which is more likely to pronounce digits correctly
+                            const voice = this.synth.getVoices().find(v => v.lang === 'en-US' && (v.name.toLowerCase().includes('child') || v.name.toLowerCase().includes('male')));
+                            if (voice) utterance.voice = voice;
+                            this.synth.speak(utterance);
+                            utterance.onerror = (event) => {
+                                console.error('TTS fallback error for number:', number, event);
+                            };
+                        }
                     }
                 },
 
-
-                // --- Numbers with Icons Section ---
+                // --- Numbers with Icons Section Functions ---
                 generateAnimalIcons(count) {
-                     if (count < 0) count = 0; // Ensure count is non-negative
-                     if (count === 0) {
-                         this.displayedIcons = [];
-                         this.selectedAnimalIcon = '';
-                         return;
-                     }
-                     const numAnimals = this.animalIconPaths.length;
-                     if (numAnimals === 0) {
-                         console.warn("No animal icons available in animalIconPaths array.");
-                         this.displayedIcons = [];
-                         this.selectedAnimalIcon = '';
-                         return;
-                     }
+                    if (count === 0) {
+                        this.displayedIcons = [];
+                        this.selectedAnimalIcon = '';
+                        return;
+                    }
+                    const numAnimals = this.animalIconPaths.length;
+                    if (numAnimals === 0) {
+                        console.warn("No animal icons available in animalIconPaths array.");
+                        this.displayedIcons = [];
+                        this.selectedAnimalIcon = '';
+                        return;
+                    }
 
-                     // Pick one random animal type for this number
-                     const randomIndex = Math.floor(Math.random() * numAnimals);
-                     this.selectedAnimalIcon = this.animalIconPaths[randomIndex];
+                    // Pick one random animal type for this number
+                    const randomIndex = Math.floor(Math.random() * numAnimals);
+                    this.selectedAnimalIcon = this.animalIconPaths[randomIndex];
 
-                     // Create an array with the selected icon path repeated 'count' times
-                     this.displayedIcons = Array(count).fill(this.selectedAnimalIcon);
-                     console.log(`Generated ${count} icons of type: ${this.selectedAnimalIcon}`); // Debugging log
+                    // Create an array with the selected icon path repeated 'count' times
+                    this.displayedIcons = Array(count).fill(this.selectedAnimalIcon);
+                    console.log(`Generated ${count} icons of type: ${this.selectedAnimalIcon}`); // Debugging log
                 },
 
                 openIconModal(number) {
                     console.log("Opening icon modal for number:", number); // Debugging log
                     this.selectedNumberForIcons = number;
                     this.generateAnimalIcons(number); // Generate icons based on the number
-                     // Play the number sound when the modal opens
+                    // Play the number sound when the modal opens
                     this.playNumberSound(number);
                     this.modalOpen = true;
-                     // Scroll modal content to top
-                     this.$nextTick(() => {
-                         const modalContent = document.querySelector('.modal-content');
-                         if (modalContent) {
+                    // Scroll modal content to top
+                    this.$nextTick(() => {
+                        const modalContent = document.querySelector('.modal-content');
+                        if (modalContent) {
                             modalContent.scrollTo({top: 0, behavior: 'smooth'});
-                         }
-                     });
+                        }
+                    });
                 },
 
                 closeModal() {
@@ -874,28 +598,27 @@
                     this.selectedNumberForIcons = 0; // Reset icon count
                     this.displayedIcons = []; // Clear icons array
                     this.selectedAnimalIcon = ''; // Clear selected animal icon
-                    this.stopAllMathSounds(); // Stop sounds when modal closes
+                    this.stopAllSounds(); // Stop sounds when modal closes
                 },
 
-                 // Computed property/function to dynamically calculate icon size class based on number
+                // Computed property/function to dynamically calculate icon size class based on number
                 iconSizeClass() {
-                    if (this.selectedNumberForIcons === 0) return ''; // No icons for 0
+                    if (this.selectedNumberForIcons === 0) return ''; // No icons
                     if (this.selectedNumberForIcons <= 10) return 'xlarge'; // up to 10 icons, largest size
                     if (this.selectedNumberForIcons <= 25) return 'large'; // up to 25 icons, large size
                     if (this.selectedNumberForIcons <= 50) return 'medium'; // up to 50 icons, medium size
                     return 'small'; // For numbers > 50 icons, small size
                 },
-                 // Computed class for the icon container grid layout based on number
-                 iconGridClass() {
-                     if (this.selectedNumberForIcons === 0) return ''; // No special grid for 0
-                      // Use specific grid classes based on size to control column density
-                     if (this.selectedNumberForIcons <= 10) return 'xlarge-icons'; // Use xlarge-icons class for sparser grid
-                     if (this.selectedNumberForIcons <= 25) return 'large-icons'; // Use large-icons class
-                     if (this.selectedNumberForIcons <= 50) return 'medium-icons'; // Use medium-icons class
-                      // For very large numbers, use the base grid-icons with smallest minmax/gap
-                     return 'grid-icons';
-                 },
-
+                // Computed class for the icon container grid layout
+                iconGridClass() {
+                    if (this.selectedNumberForIcons === 0) return '';
+                    // Use specific grid classes based on size to control column density
+                    if (this.selectedNumberForIcons <= 10) return 'xlarge-icons'; // Use xlarge-icons class
+                    if (this.selectedNumberForIcons <= 25) return 'large-icons'; // Use large-icons class
+                    if (this.selectedNumberForIcons <= 50) return 'medium-icons'; // Use medium-icons class
+                    // For very large numbers, use the base grid-icons with smallest minmax/gap
+                    return 'grid-icons';
+                }
             }
         }
     </script>

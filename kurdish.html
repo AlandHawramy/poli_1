@@ -4,37 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>زمانی کوردی</title>
+    <!-- Google Fonts for Vazirmatn (friendly, modern Kurdish support) -->
+    <!-- ئەمە فۆنتی Vazirmatn'ە کە شێوازێکی دۆستانەی هەیە و پشتیوانی پیتەکانی کوردی دەکات -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- CSS Styles -->
     <style>
-        /* style.css - Updated Styles (Copy the whole block again) */
+        /* style.css - Updated Styles */
 
         /* Define theme colors using CSS variables */
         :root {
-            --theme-bg-main: #fbfaf7; /* Light background */
-            --theme-bg-content: #fffefc; /* Slightly lighter content background */
-            --theme-bg-accent: #f5f0e8; /* Accent background, similar to sidebar in previous code */
+            /* Purple Theme - ڕەنگە مۆرەکان */
+            --theme-bg-main: #F3EBFF; /* زۆر کاڵ، وەک لاڤەندەر بۆ پاشبنەما */
+            --theme-bg-content: #FFFFFF; /* سپی پاک بۆ ناوەڕۆک */
+            --theme-bg-accent: #E6D8FF; /* لاڤەندەرێکی تۆختر بۆ بەشە جیاوازەکان */
 
-            --theme-border-light: #e8e0d4;
-            --theme-border-medium: #d8c8b8;
-            --theme-border-strong: #c8a97e;
-            --theme-border-accent: #d2b48c;
+            --theme-border-light: #D1BBE6; /* سنوورێکی مۆر کاڵ */
+            --theme-border-medium: #BBAACC; /* سنوورێکی مۆر مامناوەند */
+            --theme-border-strong: #A38CBF; /* سنوورێکی مۆری تۆختر */
+            --theme-border-accent: #8A7BB2; /* سنوورێکی دیارتر بۆ گشتگیر */
 
-            --theme-text-primary: #5a4d41; /* Dark brown */
-            --theme-text-secondary: #7a6d61; /* Medium brown */
-            --theme-text-accent: #8b5a2b; /* Accent brown/orange */
+            --theme-text-primary: #4B0082; /* ئیندگۆ - مۆرێکی قووڵ و تۆخ بۆ دەقی سەرەکی */
+            --theme-text-secondary: #6A1B9A; /* مۆرێکی مامناوەند بۆ دەقی لاوەکی */
+            --theme-text-accent: #9932CC; /* ئۆرکیدی تۆخ - مۆرێکی زیندوو بۆ ناونیشان و هایلایتەکان */
 
-            --theme-button-primary-bg: #8b5a2b; /* Primary button background */
-            --theme-button-primary-text: white; /* Primary button text color */
-            --theme-button-primary-hover-bg: #a07d5b; /* Primary button hover background */
+            --theme-button-primary-bg: #9932CC; /* ئۆرکیدی تۆخ بۆ پاشبنەمای دوگمەی سەرەکی */
+            --theme-button-primary-text: white; /* ڕەنگی سپی بۆ دەقی دوگمەی سەرەکی */
+            --theme-button-primary-hover-bg: #B86ED1; /* ئۆرکیدی تۆخی کاڵتر بۆ کاتی جووڵاندنی ماوس بەسەر دوگمەدا */
 
-            --theme-card-bg: #fffefc; /* Background for cards/items */
-            --theme-card-border: #e8e0d4; /* Border for cards/items */
-            --theme-card-hover-border: #d2b48c; /* Hover border for cards */
+            --theme-card-bg: #FFFFFF; /* کارتە سپییەکان بۆ خوێندنەوەی ئاسان */
+            --theme-card-border: #D1BBE6; /* سنووری مۆر کاڵ بۆ کارتەکان */
+            --theme-card-hover-border: #9932CC; /* مۆری سەرەکی لەسەر سنووری کارتەکان کاتێک ماوس دەچێتە سەریان */
         }
 
         /* Apply font and background to body */
         body {
-            font-family: "NRT Reg", "Rudaw", "Unikurd Web", "Vazirmatn", "Tahoma", sans-serif;
+            /* فۆنتی Vazirmatn وەک فۆنتی سەرەکی دانراوە بۆ شێوازێکی منداڵانە و دۆستانە. */
+            /* فۆنتەکانی تری کوردی وەک پشتگیری (fallback) دانراون. */
+            font-family: "Vazirmatn", "NRT Reg", "Rudaw", "Unikurd Web", "Tahoma", sans-serif;
             background-color: var(--theme-bg-main);
             color: var(--theme-text-primary);
             line-height: 1.6;
@@ -280,7 +286,7 @@
             object-fit: contain;
             margin-bottom: 0.5rem;
             /* NEW: Added border-radius for rounded corners */
-            border-radius: 0.5rem; 
+            border-radius: 0.5rem;
         }
 
         .example-item span {
