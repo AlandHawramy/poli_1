@@ -46,6 +46,12 @@
             text-align: left; /* Default text alignment for LTR */
         }
 
+        /* Class to prevent scrolling on the body when modal is open */
+        .overflow-hidden {
+            overflow: hidden;
+        }
+
+
         /* Basic container styling */
         .container {
             max-width: 1200px;
@@ -145,13 +151,13 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.6);
+            background-color: rgba(0, 0, 0, 0.6); /* This creates the dimming effect */
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 50;
             padding: 1rem;
-            overflow-y: auto;
+            overflow-y: auto; /* Allows modal content to scroll if needed */
         }
 
         .modal-content {
@@ -163,6 +169,7 @@
             position: relative;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             text-align: left;
+            z-index: 60; /* Ensure modal content is above backdrop */
         }
 
         @keyframes gentle-pulse-title {
@@ -191,7 +198,7 @@
             border-radius: 0.5rem;
             cursor: pointer;
             transition: background-color 0.2s ease, border-color 0.2s ease;
-            z-index: 20;
+            z-index: 20; /* Ensure modal's back button is clickable */
             transform: none;
         }
         .modal-content .back-button:hover {
@@ -278,7 +285,8 @@
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body dir="ltr">
+<body dir="ltr" :class="{ 'overflow-hidden': showModal }">
+    <!-- Added :class binding to hide scroll when modal is open -->
 
     <a href="index.html" class="back-button" aria-label="Back to home">
        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
