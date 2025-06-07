@@ -352,7 +352,8 @@
 <body dir="rtl">
 
     <!-- Visible Back Button: This explicitly links to index.html -->
-    <a href="index.html" class="back-button" aria-label="گەڕانەوە بۆ سەرەتا">
+    <!-- MODIFIED: Using window.location.replace to change history behavior -->
+    <a href="#" @click.prevent="window.location.replace('index.html')" class="back-button" aria-label="گەڕانەوە بۆ سەرەتا">
        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
        </svg>
@@ -611,7 +612,7 @@
                         { text: 'یاسەمین', image: 'images/ku/yasamin.png', audio: 'audio/ku/yasamin.mp3' },
                         { text: 'یەک', image: 'images/ku/yak.png', audio: 'audio/ku/yak.mp3' }
                     ]}
-                     // Add other Kurdish letters... (زنجیرەی پیتە کوردییەکانی تر لێرە زیاد بکە)
+                     // Add other Kurdish letters here...
                      // Ensure you have audio files for each letter sound and example word.
                 ],
                 audioPlayer: null, // Use a single Audio object
@@ -637,11 +638,12 @@
                             console.log("Modal is open. Closing modal via popstate.");
                              this.closeModal(); // Close the modal
                              // The default browser back navigation *after* this state is popped
-                             // will then take the user to the previous page (likely index.html)
-                             // on the *next* back press.
+                             // will then take the user to the previous page (likely index.html,
+                             // as replaced) on the *next* back press.
                         }
                          // If the modal is NOT open when popstate fires, do nothing here.
-                         // The default browser behavior will handle the navigation to the previous page.
+                         // The default browser behavior will handle the navigation to the previous page
+                         // based on the history entries (which were modified by replace()).
                     });
                 },
 
@@ -657,11 +659,8 @@
                     console.log("Attempting to play:", path);
                     if (path) {
                          this.stopAllSounds(); // Stop any previous sounds
-                         // Avoid setting src if it's already the same to prevent unnecessary reloads
-                         const fullPath = window.location.origin + '/' + path.replace(/^\//, ''); // Make path absolute from origin
-                         if (this.audioPlayer.src !== fullPath) {
-                              this.audioPlayer.src = path; // Use the relative path for src
-                         }
+                         // Use the relative path directly for src
+                         this.audioPlayer.src = path;
                          this.audioPlayer.play().catch(e => console.error('Autoplay prevented or other play error for', path, ':', e));
                     } else {
                         console.warn('Audio path is missing.');
