@@ -53,8 +53,8 @@
             padding: 1rem;
         }
 
-        /* Back button style */
-        .back-button {
+        /* Back button style - Applied to the one *outside* the modal */
+        .back-button.page-back {
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -73,23 +73,29 @@
             text-decoration: none;
         }
 
-        .back-button:hover {
+        .back-button.page-back:hover {
             background-color: var(--theme-border-light);
             border-color: var(--theme-border-accent);
             transform: translateY(-1px);
         }
 
-        .back-button svg {
+        .back-button.page-back svg {
             width: 1.5rem;
             height: 1.5rem;
             transform: rotate(0deg); /* Arrow points left in LTR (standard for back) */
         }
 
+         /* Add margin-top to the container to make space for the absolute positioned back button if needed */
+        .container {
+            padding-top: 3rem; /* Adjust based on back button size + margin */
+        }
+
+
         /* --- Letter/Number Grid Styles --- */
         .grid-container {
             display: grid;
             gap: 1rem;
-            padding-top: 1rem;
+            padding-top: 1rem; /* Adjust padding based on container padding-top */
             text-align: center;
             grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
         }
@@ -179,6 +185,7 @@
             animation: gentle-pulse-title 2.5s infinite ease-in-out;
         }
 
+        /* Back button INSIDE the modal */
         .modal-content .back-button {
             position: absolute;
             top: 1rem;
@@ -192,12 +199,21 @@
             cursor: pointer;
             transition: background-color 0.2s ease, border-color 0.2s ease;
             z-index: 20;
-            transform: none;
+            transform: none; /* Override the translateY(-1px) from .page-back:hover if needed */
+            display: inline-flex; /* Ensure it's displayed */
+            align-items: center;
+            justify-content: center;
         }
         .modal-content .back-button:hover {
             background-color: var(--theme-border-light);
             border-color: var(--theme-border-accent);
         }
+         .modal-content .back-button svg {
+            width: 1.5rem;
+            height: 1.5rem;
+             transform: rotate(0deg);
+        }
+
 
         .example-grid {
             display: grid;
@@ -250,6 +266,7 @@
         @media (min-width: 768px) {
             .container {
                 padding: 2rem;
+                 padding-top: 4rem; /* More space for back button */
             }
             .grid-container {
                 grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
@@ -263,6 +280,9 @@
             .modal-content .back-button {
                 left: 2rem;
             }
+             .back-button.page-back {
+                 left: 2rem;
+             }
         }
 
         @media (min-width: 1024px) {
@@ -280,7 +300,9 @@
 </head>
 <body dir="ltr">
 
-    <a href="index.html" class="back-button" aria-label="Back to home">
+    <!-- This is an *in-app* back button on the main page.
+         It simply links back to index.html, which is fine. -->
+    <a href="index.html" class="back-button page-back" aria-label="Back to home">
        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
        </svg>
@@ -320,6 +342,7 @@
                      x-transition:leave-start="opacity-100 translate-y-0"
                      x-transition:leave-end="opacity-0 translate-y-4"
                      @click.stop>
+                    <!-- Back button INSIDE the modal -->
                     <button class="back-button" @click="closeModal()" aria-label="Back">
                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
@@ -426,27 +449,35 @@
 
                     // Add listener for the browser's back/forward buttons
                     // This will fire when history state changes (e.g., user presses OS back button)
+                    // Bind `this` so `this` inside handlePopstate refers to the Alpine component.
                     window.addEventListener('popstate', this.handlePopstate.bind(this));
-                     console.log("popstate listener added.");
+                    console.log("popstate listener added.");
 
-                     // Optional: Check initial hash if you want to open modal on page load with #hash
-                     // This is beyond the scope of the user's specific back button problem but is related
-                     // if (window.location.hash.startsWith('#modal-')) {
-                     //     const letter = window.location.hash.substring(7); // Remove '#modal-'
-                     //     const letterData = this.letters.find(l => l.letter === letter);
-                     //     if (letterData) {
-                     //         // Use a timeout to ensure Alpine is fully initialized
-                     //         setTimeout(() => {
-                     //              // We don't pushState here because the state is already in the URL
-                     //             this.currentLetter = letterData.letter;
-                     //             this.examples = letterData.examples;
-                     //             this.showModal = true;
-                     //             console.log(`Opened modal for ${letter} from hash.`);
-                     //             // Maybe speak the letter on load? User interaction needed for autoplay.
-                     //             // this.speakText(letterData.letter);
-                     //         }, 0);
-                     //     }
-                     // }
+                    // Optional: Check initial hash if you want to open modal on page load with #hash
+                    // if (window.location.hash.startsWith('#modal-')) {
+                    //     const letter = window.location.hash.substring(7); // Remove '#modal-'
+                    //     const letterData = this.letters.find(l => l.letter === letter);
+                    //     if (letterData) {
+                    //         // Use a timeout to ensure Alpine is fully initialized
+                    //         setTimeout(() => {
+                    //             // We don't pushState here because the state is already in the URL
+                    //             this.currentLetter = letterData.letter;
+                    //             this.examples = letterData.examples;
+                    //             this.showModal = true;
+                    //             console.log(`Opened modal for ${letter} from hash.`);
+                    //             // Speaking on load might be blocked by autoplay policies.
+                    //         }, 0);
+                    //     }
+                    // }
+
+                    // IMPORTANT for trapping: Ensure the initial history state is controlled.
+                    // Replacing the initial state with itself can sometimes help normalize the history stack,
+                    // especially in single-page apps or when dealing with initial loads.
+                    // history.replaceState({ initial: true }, '', window.location.href);
+                    // console.log("Initial history state replaced.");
+
+                    // A simpler and often sufficient method is just relying on the popstate handler
+                    // to push when showModal is false. No specific replaceState needed on load for this.
                 },
 
                 loadAndSelectVoice() {
@@ -497,21 +528,23 @@
                     }
 
                      // If voices haven't been loaded/selected, try again synchronously
+                    // This handles cases where speakText is called before onvoiceschanged fires
+                    // or if onvoiceschanged fired but found no suitable voice.
                     if (!this.selectedVoice && !this.voiceLoadAttempted) {
                          console.log("Attempting to load/select voice immediately before speaking.");
-                         this.loadAndSelectVoice(); // This is synchronous
+                         this.loadAndSelectVoice();
                          if (!this.selectedVoice) {
-                             console.warn('Still no suitable voice selected after immediate attempt.');
-                             // We can continue, browser might use a default, but log the warning
+                              console.warn('Still no suitable voice selected after immediate attempt. Cannot speak.');
+                             return; // If still no voice, we cannot speak.
                          }
                     } else if (!this.selectedVoice && this.voices.length === 0 && this.voiceLoadAttempted) {
-                         // This case means voiceschanged fired, but returned 0 voices or no suitable voice was found.
-                         console.warn('Voice list is empty or no suitable voice found after voiceschanged event. Cannot speak.');
+                         // This case means voiceschanged fired, but returned 0 voices.
+                         console.warn('Voice list is empty after voiceschanged event. Cannot speak.');
                          return; // Cannot speak if no voices are available at all
                     } else if (!this.selectedVoice) {
                         // This case means voiceLoadAttempted is true, but selectedVoice is null.
                         // loadAndSelectVoice likely ran, but found no *suitable* voice according to criteria.
-                        console.warn('No *suitable* English voice found. Attempting to speak with browser default.');
+                        console.warn('No *suitable* English voice found according to criteria. Attempting to speak with browser default.');
                         // We will proceed, but won't set utterance.voice, letting browser pick default
                     }
 
@@ -532,7 +565,6 @@
                          console.log(`Speaking "${text}" using browser default voice for ${utterance.lang}.`);
                     }
 
-
                     utterance.rate = 0.9; // Slightly slower
                     utterance.pitch = 1;
 
@@ -542,6 +574,7 @@
                     utterance.onerror = (event) => {
                         console.error('Speech synthesis error:', event.error, event);
                         // event.error can be 'canceled', 'interrupted', 'not-allowed' (autoplay), 'network', 'synthesizer-unavailable', etc.
+                        // 'not-allowed' is common if speak() is called without direct user interaction.
                     };
 
                     // Attempt to speak
@@ -564,15 +597,19 @@
 
                     // 2. Add a new entry to the browser history for this modal state
                     // This makes the OS back button return to the state *before* this push
-                    // We add a simple state object (can be useful for debugging) and potentially a hash to the URL
+                    // We add a simple state object and a hash to the URL for clarity/debugging.
                     const modalHash = `#modal-${letterData.letter}`;
                     // Check if we are already at this hash (prevents pushing duplicate history entries if clicking same letter repeatedly)
-                    if (window.location.hash !== modalHash) {
-                       history.pushState({ modalOpen: true, letter: letterData.letter }, '', modalHash);
-                       console.log(`Pushed history state for ${letterData.letter}.`);
-                    } else {
-                       console.log(`Hash ${modalHash} already exists. Not pushing history state.`);
-                    }
+                    // Also check if modal is already open for this letter
+                     // Use a timeout to ensure the DOM update for the modal is processed before potentially changing history
+                    this.$nextTick(() => {
+                         if (window.location.hash !== modalHash || !window.history.state || !window.history.state.modalOpen || window.history.state.letter !== letterData.letter) {
+                            history.pushState({ modalOpen: true, letter: letterData.letter }, '', modalHash);
+                            console.log(`Pushed history state for ${letterData.letter}.`);
+                         } else {
+                            console.log(`Hash ${modalHash} already exists or state matches. Not pushing history state.`);
+                         }
+                    });
 
 
                     // 3. Immediately attempt to speak the letter.
@@ -595,46 +632,52 @@
                     this.showModal = false;
 
                     // When closing the modal via UI, REPLACE the current history state
-                    // (the one we pushed when opening) with the previous state (original URL)
+                    // (the one we pushed when opening, if any) with the state *before* it
+                    // (the root index.html state without the hash).
                     // This prevents the OS back button from navigating back to the modal state we just closed.
-                    if (window.history.state && window.history.state.modalOpen) {
-                        // If the current state was indeed pushed by the modal opening
-                        history.replaceState({}, '', window.location.pathname + window.location.search);
-                        console.log("Replaced history state on UI close.");
-                    } else if (window.location.hash.startsWith('#modal-')) {
-                        // Fallback: if a modal hash exists but no state object (maybe due to reload?)
-                         history.replaceState({}, '', window.location.pathname + window.location.search);
-                         console.log("Replaced history state (hash) on UI close.");
-                    } else {
-                         console.log("No modal history state to replace on UI close.");
-                         // If the modal was opened without pushing history (e.g. directly setting showModal=true for some reason)
-                         // or if we are already back at the original state, do nothing with history.
-                    }
-
+                    // Check if the current state looks like a modal state pushed by us or has a modal hash.
+                     // Add a small timeout to allow modal close transition to start before changing history
+                    setTimeout(() => {
+                        if (window.history.state && window.history.state.modalOpen || window.location.hash.startsWith('#modal-')) {
+                            console.log("Replacing history state with base URL on UI close.");
+                            // Replace the current state with the URL without hash/search
+                            history.replaceState({}, '', window.location.pathname + window.location.search);
+                        } else {
+                             console.log("No modal history state found to replace on UI close or already at base URL.");
+                        }
+                    }, 50); // Small delay to allow transition to begin
                 },
 
                 // Handles the popstate event (triggered by OS back/forward buttons)
                 handlePopstate(event) {
                     console.log("popstate event fired.", event.state);
 
-                    // Check if the modal is currently visible according to Alpine state
+                    // Check the Alpine state (our UI state) to see if the modal is currently displayed.
                     if (this.showModal) {
-                        // If the modal is open AND popstate fired, it means the user pressed
-                        // the OS back button, and the browser is trying to navigate away
-                        // FROM the modal state. We need to close the modal in the UI.
-                         console.log("Modal is open, popstate fired. Closing modal.");
-                        this.closeModal(); // closeModal will handle setting showModal=false and stopping speech
+                        // If the modal is open in the UI, and popstate fired, it means the browser
+                        // has moved back *from* the modal state. We need to synchronize the UI
+                        // by closing the modal.
+                        console.log("Modal is open (UI), popstate fired. Closing modal UI.");
+                        this.closeModal(); // This hides the modal UI and stops speech.
+                                            // closeModal also tries to replace history state, which is
+                                            // slightly redundant here as browser already moved, but safe.
+
+                        // IMPORTANT: We DO NOT pushState here when closing the modal via popstate.
+                        // The browser already handled the history navigation back. We just sync the UI.
+
                     } else {
-                        // If the modal is NOT open AND popstate fired, it might mean:
-                        // 1. The user pressed back from a state *before* the modal state.
-                        // 2. The user pressed forward *into* a modal state (if supported by state object).
-                        // In this simple case, we only handle the back action to close the modal.
-                        // If you wanted to handle navigating FORWARD into a modal, you'd check event.state
-                        // to see if event.state.modalOpen is true and open the modal here.
-                         console.log("Modal is closed, popstate fired. No action needed by app UI.");
+                        // If the modal is NOT open in the UI, and popstate fired, it means the browser
+                        // is trying to navigate back FROM the main index.html page state.
+                        // This is the scenario we want to trap. We push the current state back onto
+                        // the history stack to prevent leaving index.html.
+                        console.log("Modal is closed (UI), popstate fired. Trapping back button on index.html.");
+                        // Push the current state (index.html) back onto the stack.
+                        // Use window.location.href to preserve potential search/hash parameters, though none expected normally.
+                        history.pushState(null, '', window.location.href);
+
+                        // Optional: If you wanted to trigger a refresh instead of just trapping:
+                        // window.location.reload();
                     }
-                     // Note: If you implemented the optional check for hash on init,
-                     // you might also need logic here to open the modal if event.state suggests it should be open.
                 }
             }
         }
