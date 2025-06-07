@@ -470,6 +470,7 @@
 </head>
 <body dir="rtl">
 
+    <!-- ئەم دوگمەیە هی ئەپەکەیە و هەمیشە دەچێتەوە index.html -->
     <a href="index.html" class="back-button" aria-label="گەڕانەوە بۆ سەرەتا">
        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
@@ -494,6 +495,7 @@
         <template x-if="showModal">
             <div class="modal-backdrop" @click.self="closeModal()"> <!-- Close modal when clicking outside (on backdrop) -->
                 <div class="modal-content" @click.stop> <!-- Prevent click inside modal from closing it -->
+                     <!-- ئەم دوگمەیە هی مۆداڵەکەیە بۆ داخستنی مۆداڵەکە -->
                      <button @click="closeModal()" class="back-button" aria-label="گەڕانەوە">
                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
@@ -741,17 +743,46 @@
                     this.audioPlayer.onerror = (e) => console.error('Audio playback error:', e);
                     this.audioPlayer.onended = () => console.log('Audio finished playing');
 
-                    // Add popstate listener for browser/mobile back button
+                    // *** NEW LOGIC FOR BROWSER BACK BUTTON ***
+
+                    // 1. Replace the current history state when the page loads.
+                    // This makes the browser think we arrived at this page with a specific state ID.
+                    // When the user presses back, they are popping this state.
+                    history.replaceState({ page: 'letters_page_base' }, '', window.location.href);
+                    console.log("Initial state replaced with { page: 'letters_page_base' }");
+
+
+                    // 2. Listen for the popstate event (triggered by browser back/forward buttons)
                     window.addEventListener('popstate', (event) => {
-                        // Check if the modal is currently open AND the new history state
-                        // does NOT indicate the modal should be open.
-                        if (this.showModal && (!event.state || event.state.modalOpen !== true)) {
-                            console.log("Popstate detected, closing modal.");
-                            this.closeModal(); // Use the general close function
+                        console.log("Popstate fired. Navigating to state:", event.state);
+                        console.log("Current modal state:", this.showModal);
+
+                        // Check if the modal is currently open.
+                        if (this.showModal) {
+                            // If the modal is open AND the new history state doesn't indicate the modal
+                            // should still be open (or is null), then close the modal.
+                            // This handles the first browser back press when the modal is active.
+                            if (!event.state || event.state.modalOpen !== true) {
+                                console.log("Popstate: Modal is open, detected back from modal state. Closing modal.");
+                                this.closeModal();
+                                // After closing the modal, the current history entry is the 'letters_page_base' state.
+                                // We stop processing here so the user stays on the letters page, just without the modal.
+                                return;
+                            }
+                            // If the modal is open and the new state *does* have modalOpen: true (unlikely with this logic),
+                            // do nothing, let Alpine handle it.
+                        } else {
+                             // If the modal is NOT open (`!this.showModal`), any popstate event
+                             // means the user is trying to navigate away from the base letters page state.
+                             // We want to force them back to index.html.
+                             console.log("Popstate: Modal is NOT open. Redirecting to index.html.");
+                             window.location.href = 'index.html'; // Redirect to index.html
+                             // Note: Redirecting stops further execution of script on this page for this history step.
                         }
-                         // If the state indicates modal *should* be open but it's not (e.g., user navigated back *to* a modal state from history),
-                         // you might want to re-open the modal based on event.state data. This is more complex and not covered here.
+
                     });
+
+                    // *** END NEW LOGIC ***
                 },
 
                 stopAllSounds() {
@@ -766,7 +797,8 @@
                     console.log("Attempting to play:", path);
                     if (path) {
                          this.stopAllSounds(); // Stop any previous sounds
-                         if (this.audioPlayer.src !== window.location.origin + '/' + path) {
+                         // Avoid setting src again if it's the same file to prevent unnecessary loading
+                         if (this.audioPlayer.src !== (new URL(path, window.location.href)).href) {
                               this.audioPlayer.src = path;
                          }
                          // this.audioPlayer.load(); // Load is often implicit on play/setting src
@@ -795,7 +827,9 @@
                     // **** End Add Class ****
 
 
-                    // Add history state when modal opens
+                    // Add a new history state when modal opens
+                    // This new state indicates the modal is open.
+                    // When the user presses back, the browser will pop THIS state, and the popstate listener will see the state *before* this one.
                     history.pushState({ modalOpen: true, letter: letterData.letter }, '', ''); // Pass letter in state if needed later
 
                     this.$nextTick(() => {
@@ -814,11 +848,20 @@
                          this.lastClickedElement.classList.remove('is-active-modal-opener');
 
                          // Optional: Keep the reflow trick as a safety measure, although class removal is primary
-                         void this.lastClickedElement.offsetHeight;
+                         // void this.lastClickedElement.offsetHeight;
 
                          this.lastClickedElement = null; // Clear the reference
                     }
                     // **** End Remove Class ****
+
+                    // When closing the modal *via clicking the modal's back button or backdrop*,
+                    // we should also navigate back in history to remove the modal state.
+                    // This is crucial so the browser's *next* back button press correctly targets the base page state.
+                    // We check history.state to avoid going back twice if the modal was closed *by* a popstate event already.
+                    if (history.state && history.state.modalOpen === true) {
+                         console.log("Closing modal via UI, moving back in history.");
+                         history.back(); // Go back one step in browser history
+                    }
                 }
             }
         }
