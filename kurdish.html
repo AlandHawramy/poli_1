@@ -417,394 +417,428 @@
                 currentLessonLink: '#', // Added: To store the specific lesson link for the current letter
                 lastClickedElement: null, // To store the element that was clicked to open the modal
                 letters: [
-                    // TODO: Add ALL Kurdish letters here with their audio paths and 4 examples
-                    // IMPORTANT: Replace placeholder image paths ('images/ku/....png') with your actual image paths
-                    // IMPORTANT: Replace placeholder audio paths ('audio/ku/....mp3') with your actual audio paths
-                    // IMPORTANT: Add / Update the lessonLink property for EACH letter
-                   {
-                         letter: 'د',
-                         audio: 'audio/ku/d.mp3',
-                         examples: [
-                             { text: 'دەرگا', image: 'images/ku/1.دەرگا.png', audio: 'audio/ku/dar2.mp3' },
-                            { text: 'پەردە', image: 'images/ku/1.پەردە.png', audio: 'audio/ku/dast.mp3' },
-                            { text: 'دڵ', image: 'images/ku/1.دڵ.png', audio: 'audio/ku/dayk.mp3' },
-                            { text: 'دەم', image: 'images/ku/1.دەم.png', audio: 'audio/ku/dyari.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                    {
-                         letter: 'ر',
-                         audio: 'audio/ku/r.mp3',
-                         examples: [
-                             { text: 'باران', image: 'images/ku/2.باران.png', audio: 'audio/ku/radio.mp3' },
-                            { text: 'کۆلارە', image: 'images/ku/2.کۆلارە.png', audio: 'audio/ku/rega.mp3' },
-                            { text: 'مار', image: 'images/ku/2.مار.png', audio: 'audio/ku/rubar.mp3' },
-                            { text: 'ورچ', image: 'images/ku/2.ورچ.png', audio: 'audio/ku/ransa.mp3' } // Example seems less common, but kept
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                    {
-                         letter: 'ب',
-                         audio: 'audio/ku/b.mp3',
-                         examples: [
-                            { text: 'بزن', image: 'images/ku/3.بزن.png', audio: 'audio/ku/balnda.mp3' },
-                            { text: 'زانکۆ', image: 'images/ku/3.زانکۆ.png', audio: 'audio/ku/bab.mp3' },
-                            { text: 'قاز', image: 'images/ku/3.قاز.png', audio: 'audio/ku/nan.mp3' }, // Check if this example fits 'ب' - it does if the letter is in the word
-                            { text: 'مۆز', image: 'images/ku/3.مۆز.png', audio: 'audio/ku/kab.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                    
-                     {
-                         letter: 'و',
-                         audio: 'audio/ku/w.mp3',
-                         examples: [
-                             { text: 'پیاو', image: 'images/ku/4.پیاو.png', audio: 'audio/ku/warzish.mp3' },
-                            { text: 'کڵاو', image: 'images/ku/4.کڵاو.png', audio: 'audio/ku/wlat.mp3' },
-                            { text: 'گوڵ', image: 'images/ku/4.گوڵ.png', audio: 'audio/ku/westga.mp3' },
-                            { text: 'زەیتون', image: 'images/ku/4.زەیتون.png', audio: 'audio/ku/wafadar.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                     {
-                         letter: 'ڕ',
-                         audio: 'audio/ku/rr.mp3',
-                         examples: [
-                            { text: 'پەڕ', image: 'images/ku/5.پەڕ.png', audio: 'audio/ku/marr.mp3' },
-                            { text: 'ڕەنگ', image: 'images/ku/5.ڕەنگ.png', audio: 'audio/ku/baroo.mp3' },
-                            { text: 'مەڕ', image: 'images/ku/5.مەڕ.png', audio: 'audio/ku/karoo.mp3' },
-                            { text: 'شەڕ', image: 'images/ku/5.شەڕ.png', audio: 'audio/ku/sharr.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                    {
-                         letter: 'ۆ',
-                         audio: 'audio/ku/rr.mp3',
-                         examples: [
-                            { text: 'تۆپ', image: 'images/ku/6.تۆپ.png', audio: 'audio/ku/marr.mp3' },
-                            { text: 'نۆک', image: 'images/ku/6.نۆک.png', audio: 'audio/ku/baroo.mp3' },
-                            { text: 'قۆخ', image: 'images/ku/6.قۆخ.png', audio: 'audio/ku/karoo.mp3' },
-                            { text: 'دۆ', image: 'images/ku/6.دۆ.png', audio: 'audio/ku/sharr.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },{
-                         letter: 'ی',
-                         audio: 'audio/ku/y.mp3',
-                         examples: [
-                            { text: 'کیسەڵ', image: 'images/ku/7.کیسەڵ.png', audio: 'audio/ku/yani.mp3' },
-                            { text: 'ماسی', image: 'images/ku/7.ماسی.png', audio: 'audio/ku/yari.mp3' },
-                            { text: 'مراوی', image: 'images/ku/7.مراوی.png', audio: 'audio/ku/yasamin.mp3' },
-                            { text: 'یاری', image: 'images/ku/7.یاری.png', audio: 'audio/ku/yak.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                     {
-                         letter: 'پ',
-                         audio: 'audio/ku/p.mp3',
-                         examples: [
-                             { text: 'ئەسپ', image: 'images/ku/8.ئەسپ.png', audio: 'audio/ku/pshila.mp3' },
-                            { text: 'پێ', image: 'images/ku/8.پێ.png', audio: 'audio/ku/pe.mp3' },
-                            { text: 'پاڵتو', image: 'images/ku/8.پاڵتو.png', audio: 'audio/ku/palto.mp3' },
-                            { text: 'پەڕ', image: 'images/ku/8.پەڕ.png', audio: 'audio/ku/par.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                    {
-                        letter: 'ئ',
-                        audio: 'audio/ku/alif.mp3',
-                        examples: [
-                            { text: 'ئەستێرە', image: 'images/ku/astera.png', audio: 'audio/ku/astera.mp3' },
-                            { text: 'ئاو', image: 'images/ku/aw.png', audio: 'audio/ku/aw.mp3' },
-                            { text: 'ئاگر', image: 'images/kurdish/fire.jpg', audio: 'audio/ku/agir.mp3' }, // Using original image path
-                            { text: 'ئازا', image: 'images/ku/aza.png', audio: 'audio/ku/aza.mp3' }
-                        ],
-                        lessonLink: '#' // placeholder link
-                    },
-                    {
-                        letter: 'ا',
-                        audio: 'audio/ku/a.mp3',
-                        examples: [
-                            { text: 'باپیر', image: 'images/ku/fire.jpg', audio: 'audio/ku/bapir.mp3' },
-                            { text: 'دار', image: 'images/ku/dar.png', audio: 'audio/ku/dar.mp3' },
-                            { text: 'مانگا', image: 'images/ku/manga.png', audio: 'audio/ku/manga.mp3' },
-                            { text: 'کاڵ', image: 'images/ku/kal.png', audio: 'audio/ku/kal.mp3' }
-                        ],
-                         lessonLink: 'https://www.youtube.com/watch?v=uxLbl0RNLzs' // Specific link for 'ا'
-                    },
-                     
-                    
-                     {
-                         letter: 'ت',
-                         audio: 'audio/ku/t.mp3',
-                         examples: [
-                             { text: 'تۆپ', image: 'images/ku/top.png', audio: 'audio/ku/top.mp3' },
-                            { text: 'تیشک', image: 'images/ku/tishk.png', audio: 'audio/ku/tishk.mp3' },
-                            { text: 'تاس', image: 'images/ku/tas.png', audio: 'audio/ku/tas.mp3' },
-                            { text: 'توێژاڵ', image: 'images/ku/twezhal.png', audio: 'audio/ku/twezhal.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                    {
-                        letter: 'ج',
-                        audio: 'audio/ku/c.mp3',
-                        examples: [
-                             { text: 'جوان', image: 'images/ku/cwan.png', audio: 'audio/ku/cwan.mp3' },
-                            { text: 'جەندرمە', image: 'images/ku/jandarma.png', audio: 'audio/ku/jandarma.mp3' },
-                            { text: 'جۆگە', image: 'images/ku/coga.png', audio: 'audio/ku/coga.mp3' },
-                            { text: 'جریوە', image: 'images/ku/jriwa.png', audio: 'audio/ku/jriwa.mp3' }
-                        ],
-                        lessonLink: '#' // placeholder link
-                    },
-                     {
-                         letter: 'چ',
-                         audio: 'audio/ku/ch.mp3',
-                         examples: [
-                             { text: 'چاو', image: 'images/ku/chaw.png', audio: 'audio/ku/chaw.mp3' },
-                            { text: 'چەتر', image: 'images/ku/chatr.png', audio: 'audio/ku/chatr.mp3' },
-                            { text: 'چنار', image: 'images/ku/chnar.png', audio: 'audio/ku/chnar.mp3' },
-                            { text: 'چۆلەکە', image: 'images/ku/cholaka.png', audio: 'audio/ku/cholaka.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                     {
-                         letter: 'ح',
-                         audio: 'audio/ku/h.mp3',
-                         examples: [
-                             { text: 'حەلیم', image: 'images/ku/halim.png', audio: 'audio/ku/halim.mp3' },
-                            { text: 'حەمام', image: 'images/ku/hamam.png', audio: 'audio/ku/hamam.mp3' },
-                            { text: 'حیجاب', image: 'images/ku/hijab.png', audio: 'audio/ku/hijab.mp3' },
-                            { text: 'حەوشە', image: 'images/ku/hawsha.png', audio: 'audio/ku/hawsha.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                     {
-                         letter: 'خ',
-                         audio: 'audio/ku/kh.mp3',
-                         examples: [
-                             { text: 'خۆر', image: 'images/ku/xor.png', audio: 'audio/ku/xor.mp3' },
-                            { text: 'خانوو', image: 'images/ku/xanoo.png', audio: 'audio/ku/xanoo.mp3' },
-                            { text: 'خوێندن', image: 'images/ku/xwendin.png', audio: 'audio/ku/xwendin.mp3' },
-                            { text: 'خزم', image: 'images/ku/xizm.png', audio: 'audio/ku/xizm.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                     
-                     
-                     {
-                         letter: 'ز',
-                         audio: 'audio/ku/z.mp3',
-                         examples: [
-                            { text: 'زەردەواڵە', image: 'images/ku/zardwala.png', audio: 'audio/ku/zardwala.mp3' },
-                            { text: 'زێڕ', image: 'images/ku/zer.png', audio: 'audio/ku/zer.mp3' },
-                            { text: 'زانکۆ', image: 'images/ku/zanko.png', audio: 'audio/ku/zanko.mp3' },
-                            { text: 'زمان', image: 'images/ku/zman.png', audio: 'audio/ku/zman.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                     {
-                         letter: 'ژ',
-                         audio: 'audio/ku/zh.mp3',
-                         examples: [
-                            { text: 'ژمارە', image: 'images/ku/zhmara.png', audio: 'audio/ku/zhmara.mp3' },
-                            { text: 'ژوور', image: 'images/ku/zhoor.png', audio: 'audio/ku/zhoor.mp3' },
-                            { text: 'پژیلە', image: 'images/ku/pizhila.png', audio: 'audio/ku/pizhila.mp3' }, // Example seems less common, but kept
-                            { text: 'توێژاڵ', image: 'images/ku/twezhal2.png', audio: 'audio/ku/twezhal2.mp3' } // Example seems less common, but kept
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                     {
-                         letter: 'س',
-                         audio: 'audio/ku/s.mp3',
-                         examples: [
-                            { text: 'سێو', image: 'images/ku/sew.png', audio: 'audio/ku/sew.mp3' },
-                            { text: 'سەگ', image: 'images/ku/sag.png', audio: 'audio/ku/sag.mp3' },
-                            { text: 'سوار', image: 'images/ku/swar.png', audio: 'audio/ku/swar.mp3' },
-                            { text: 'سڵاو', image: 'images/ku/slaw.png', audio: 'audio/ku/slaw.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                     {
-                         letter: 'ش',
-                         audio: 'audio/ku/sh.mp3',
-                         examples: [
-                            { text: 'شێر', image: 'images/ku/sher.png', audio: 'audio/ku/sher.mp3' },
-                            { text: 'شەپۆل', image: 'images/ku/shapol.png', audio: 'audio/ku/shapol.mp3' },
-                            { text: 'شەو', image: 'images/ku/shaw.png', audio: 'audio/ku/shaw.mp3' },
-                            { text: 'شوێن', image: 'images/ku/shwen.png', audio: 'audio/ku/shwen.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                     {
-                         letter: 'ع',
-                         audio: 'audio/ku/e.mp3',
-                         examples: [ // This letter's sound might be tricky depending on pronunciation
-                             { text: 'عەزیز', image: 'images/ku/aziz.png', audio: 'audio/ku/aziz.mp3' },
-                            { text: 'عومەر', image: 'images/ku/umar.png', audio: 'audio/ku/umar.mp3' },
-                            { text: 'عیسا', image: 'images/ku/isa.png', audio: 'audio/ku/isa.mp3' },
-                            { text: 'عەلی', image: 'images/ku/ali.png', audio: 'audio/ku/ali.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                     {
-                         letter: 'غ',
-                         audio: 'audio/ku/gh.mp3',
-                         examples: [
-                             { text: 'غەمگین', image: 'images/ku/ghamgin.png', audio: 'audio/ku/ghamgin.mp3' },
-                            { text: 'غەریب', image: 'images/ku/gharib.png', audio: 'audio/ku/gharib.mp3' },
-                            { text: 'غوڵام', image: 'images/ku/ghulam.png', audio: 'audio/ku/ghulam.mp3' },
-                            { text: 'غار', image: 'images/ku/ghar.png', audio: 'audio/ku/ghar.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                     {
-                         letter: 'ف',
-                         audio: 'audio/ku/f.mp3',
-                         examples: [
-                             { text: 'فڕۆکە', image: 'images/ku/froka.png', audio: 'audio/ku/froka.mp3' },
-                            { text: 'فیل', image: 'images/ku/fil.png', audio: 'audio/ku/fil.mp3' },
-                            { text: 'فەراش', image: 'images/ku/farash.png', audio: 'audio/ku/farash.mp3' },
-                            { text: 'فۆتۆ', image: 'images/ku/foto.png', audio: 'audio/ku/foto.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                     {
-                         letter: 'ڤ',
-                         audio: 'audio/ku/v.mp3',
-                         examples: [
-                            { text: 'ڤیۆلا', image: 'images/ku/viola.png', audio: 'audio/ku/viola.mp3' },
-                            { text: 'ڤایرۆس', image: 'images/ku/vayrus.png', audio: 'audio/ku/vayrus.mp3' },
-                            { text: 'ڤیست', image: 'images/ku/vist.png', audio: 'audio/ku/vist.mp3' }, // Example seems less common, but kept
-                            { text: 'ڤار', image: 'images/ku/var.png', audio: 'audio/ku/var.mp3' } // Example seems less common, but kept
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                     {
-                         letter: 'ق',
-                         audio: 'audio/ku/q.mp3',
-                         examples: [
-                             { text: 'قەڵەم', image: 'images/ku/qalam.png', audio: 'audio/ku/qalam.mp3' },
-                            { text: 'قوتابي', image: 'images/ku/qutabi.png', audio: 'audio/ku/qutabi.mp3' },
-                            { text: 'قاز', image: 'images/ku/qaz.png', audio: 'audio/ku/qaz.mp3' },
-                            { text: 'قاوە', image: 'images/ku/qawa.png', audio: 'audio/ku/qawa.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                     {
-                         letter: 'ک',
-                         audio: 'audio/ku/k.mp3',
-                         examples: [
-                             { text: 'کەوگیر', image: 'images/ku/kawgir.png', audio: 'audio/ku/kawgir.mp3' },
-                            { text: 'کتێب', image: 'images/ku/kteb.png', audio: 'audio/ku/kteb.mp3' },
-                            { text: 'کەر', image: 'images/ku/kar.png', audio: 'audio/ku/kar.mp3' },
-                            { text: 'کۆتر', image: 'images/ku/kotr.png', audio: 'audio/ku/kotr.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                     {
-                         letter: 'گ',
-                         audio: 'audio/ku/g.mp3',
-                         examples: [
-                            { text: 'گۆڤار', image: 'images/ku/govar.png', audio: 'audio/ku/govar.mp3' },
-                            { text: 'گورگ', image: 'images/ku/gurg.png', audio: 'audio/ku/gurg.mp3' },
-                            { text: 'گوڵ', image: 'images/ku/gul.png', audio: 'audio/ku/gul.mp3' },
-                            { text: 'گەنم', image: 'images/ku/ganm.png', audio: 'audio/ku/ganm.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                     {
-                         letter: 'ل',
-                         audio: 'audio/ku/l.mp3',
-                         examples: [
-                             { text: 'لووت', image: 'images/ku/lut.png', audio: 'audio/ku/lut.mp3' },
-                            { text: 'لێو', image: 'images/ku/lew.png', audio: 'audio/ku/lew.mp3' },
-                            { text: 'لانکە', image: 'images/ku/lanka.png', audio: 'audio/ku/lanka.mp3' },
-                            { text: 'لامپ', image: 'images/ku/lamp.png', audio: 'audio/ku/lamp.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                     {
-                         letter: 'ڵ',
-                         audio: 'audio/ku/ll.mp3',
-                         examples: [
-                            { text: 'سەوڵ', image: 'images/ku/sawll.png', audio: 'audio/ku/sawll.mp3' },
-                            { text: 'کۆڵان', image: 'images/ku/kolan.png', audio: 'audio/ku/kolan.mp3' },
-                            { text: 'دووکان', image: 'images/ku/dukan.png', audio: 'audio/ku/dukan.mp3' }, // Example seems less common, but kept
-                            { text: 'ماڵ', image: 'images/ku/mall.png', audio: 'audio/ku/mall.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                     {
-                         letter: 'م',
-                         audio: 'audio/ku/m.mp3',
-                         examples: [
-                             { text: 'مریشک', image: 'images/ku/mriishk.png', audio: 'audio/ku/mriishk.mp3' },
-                            { text: 'مۆز', image: 'images/ku/moz.png', audio: 'audio/ku/moz.png' }, // Image extension might be wrong?
-                            { text: 'ماسی', image: 'images/ku/masi.png', audio: 'audio/ku/masi.mp3' },
-                            { text: 'مێروو', image: 'images/ku/miroo.png', audio: 'audio/ku/miroo.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                     {
-                         letter: 'ن',
-                         audio: 'audio/ku/n.mp3',
-                         examples: [
-                             { text: 'نان', image: 'images/ku/nan2.png', audio: 'audio/ku/nan2.mp3' },
-                            { text: 'نەورۆز', image: 'images/ku/nawroz.png', audio: 'audio/ku/nawroz.mp3' },
-                            { text: 'نوێژ', image: 'images/ku/nwezh.png', audio: 'audio/ku/nwezh.mp3' },
-                            { text: 'نموونە', image: 'images/ku/nmuna.png', audio: 'audio/ku/nmuna.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                    // Added the letter 'ێ' as requested
-                     {
-                        letter: 'ێ',
-                        audio: 'audio/ku/ye.mp3', // Assuming an audio file exists for 'ye' sound
-                        examples: [
-                            // Add example words for 'ێ' here
-                            { text: 'کێک', image: 'images/ku/cake.png', audio: 'audio/ku/cake.mp3' }, // Placeholder examples
-                            { text: 'بێر', image: 'images/ku/bear.png', audio: 'audio/ku/bear.mp3' },
-                            { text: 'لێفە', image: 'images/ku/blanket.png', audio: 'audio/ku/blanket.mp3' },
-                            { text: 'پێنووس', image: 'images/ku/pen.png', audio: 'audio/ku/pen.mp3' }
-                        ],
-                        lessonLink: 'https://www.youtube.com/watch?v=8uffQ8qJfWE' // Specific link for 'ێ'
-                    },
-                     {
-                         letter: 'وو',
-                         audio: 'audio/ku/uu.mp3',
-                         examples: [
-                            { text: 'سوور', image: 'images/ku/sur.png', audio: 'audio/ku/sur.mp3' },
-                            { text: 'نوور', image: 'images/ku/nur.png', audio: 'audio/ku/nur.mp3' },
-                            { text: 'دوور', image: 'images/ku/dur.png', audio: 'audio/ku/dur.mp3' },
-                            { text: 'زوو', image: 'images/ku/zuu.png', audio: 'audio/ku/zuu.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                     {
-                         letter: 'ه',
-                         audio: 'audio/ku/hh.mp3',
-                         examples: [
-                             { text: 'هەڵۆ', image: 'images/ku/halo.png', audio: 'audio/ku/halo.mp3' },
-                            { text: 'هەنگوین', image: 'images/ku/hangwin.png', audio: 'audio/ku/hangwin.mp3' },
-                            { text: 'هەور', image: 'images/ku/hawr.png', audio: 'audio/ku/hawr.mp3' },
-                            { text: 'هەرگیز', image: 'images/ku/hargiz.png', audio: 'audio/ku/hargiz.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                     {
-                         letter: 'ـە',
-                         audio: 'audio/ku/a2.mp3',
-                         examples: [
-                             { text: 'قەڵەمە', image: 'images/ku/qalama.png', audio: 'audio/ku/qalama.mp3' },
-                            { text: 'جوانە', image: 'images/ku/cwana.png', audio: 'audio/ku/cwana.mp3' },
-                            { text: 'باشە', image: 'images/ku/basha.png', audio: 'audio/ku/basha.mp3' },
-                            { text: 'خۆشە', image: 'images/ku/xosha.png', audio: 'audio/ku/xosha.mp3' }
-                        ],
-                         lessonLink: '#' // placeholder link
-                    },
-                     
-                     // Add other Kurdish letters here, making sure each has a lessonLink property
-                     // (زنجیرەی پیتە کوردییەکانی تر لێرە زیاد بکە، دڵنیابەرەوە لەوەی هەریەکەیان تایبەتمەندی lessonLink یان هەیە)
-                ],
+    // The order follows the initial list provided by the user (1-32),
+    // starting the reordering from the 9th letter ('ن').
+    // Letters 'ا' and 'ـە' from the original code are appended at the end
+    // as they were not part of the numbered list for reordering.
+    // The letter 'پ' (number 20 in the user's list) has been added.
+
+    // 1. د
+    {
+        letter: 'د',
+        audio: 'audio/ku/d.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'دەرگا', image: 'images/ku/1.دەرگا.png', audio: 'audio/ku/دەرگا.mp3' },
+            { text: 'پەردە', image: 'images/ku/1.پەردە.png', audio: 'audio/ku/پەردە.mp3' },
+            { text: 'دڵ', image: 'images/ku/1.دڵ.png', audio: 'audio/ku/دڵ.mp3' },
+            { text: 'دەم', image: 'images/ku/1.دەم.png', audio: 'audio/ku/دەم.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZ06qTVZIYf2QxjLudyC9tjcw0AiSV9RKMNy' // Placeholder link, keep original if existed
+    },
+    // 2. ر
+    {
+        letter: 'ر',
+        audio: 'audio/ku/r.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'باران', image: 'images/ku/2.باران.png', audio: 'audio/ku/باران.mp3' },
+            { text: 'کۆلارە', image: 'images/ku/2.کۆلارە.png', audio: 'audio/ku/کۆلارە.mp3' },
+            { text: 'مار', image: 'images/ku/2.مار.png', audio: 'audio/ku/مار.mp3' },
+            { text: 'ورچ', image: 'images/ku/2.ورچ.png', audio: 'audio/ku/ورچ.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZH6qTVZpWhYgV04wY0eg5r72f1omXKxxGhX' // Placeholder link, keep original if existed
+    },
+    // 3. ز
+    {
+        letter: 'ز',
+        audio: 'audio/ku/z.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'بزن', image: 'images/ku/3.بزن.png', audio: 'audio/ku/بزن.mp3' },
+            { text: 'زانکۆ', image: 'images/ku/3.زانکۆ.png', audio: 'audio/ku/زانکۆ.mp3' },
+            { text: 'قاز', image: 'images/ku/3.قاز.png', audio: 'audio/ku/قاز.mp3' },
+            { text: 'مۆز', image: 'images/ku/3.مۆز.png', audio: 'audio/ku/مۆز.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZR6qTVZyxXDCIiN7y7PHbwV1VjvD8ybclok' // Placeholder link, keep original if existed
+    },
+    // 4. و
+    {
+        letter: 'و',
+        audio: 'audio/ku/w.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'پیاو', image: 'images/ku/4.پیاو.png', audio: 'audio/ku/پیاو.mp3' },
+            { text: 'کڵاو', image: 'images/ku/4.کڵاو.png', audio: 'audio/ku/کڵاو.mp3' },
+            { text: 'گوڵ', image: 'images/ku/4.گوڵ.png', audio: 'audio/ku/گوڵ.mp3' },
+            { text: 'زەیتون', image: 'images/ku/4.زەیتون.png', audio: 'audio/ku/زەیتون.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZY6qTVZqWnwO70KnSpxzlBTScd7B76xlldX' // Placeholder link, keep original if existed
+    },
+    // 5. ڕ
+    {
+        letter: 'ڕ',
+        audio: 'audio/ku/rr.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'پەڕ', image: 'images/ku/5.پەڕ.png', audio: 'audio/ku/پەڕ.mp3' },
+            { text: 'ڕەنگ', image: 'images/ku/5.ڕەنگ.png', audio: 'audio/ku/ڕەنگ.mp3' },
+            { text: 'مەڕ', image: 'images/ku/5.مەڕ.png', audio: 'audio/ku/مەڕ.mp3' },
+            { text: 'پۆڕ', image: 'images/ku/5.پۆڕ.png', audio: 'audio/ku/پۆڕ.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZB6qTVZI8rwvwqngyzd9P84jOKCaHHBvC47' // Placeholder link, keep original if existed
+    },
+    // 6. ۆ
+    {
+        letter: 'ۆ',
+        audio: 'audio/ku/rr.mp3', // Keep original audio path for the letter (might need correction if 'ۆ' has a different audio)
+        examples: [
+            { text: 'تۆپ', image: 'images/ku/6.تۆپ.png', audio: 'audio/ku/تۆپ.mp3' },
+            { text: 'نۆک', image: 'images/ku/6.نۆک.png', audio: 'audio/ku/نۆک.mp3' },
+            { text: 'قۆخ', image: 'images/ku/6.قۆخ.png', audio: 'audio/ku/قۆخ.mp3' },
+            { text: 'دۆ', image: 'images/ku/6.دۆ.png', audio: 'audio/ku/دۆ.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZs6qTVZrD58MJQI0TSk9jGMlNnS8fpiCg4V' // Placeholder link, keep original if existed
+    },
+    // 7. ی
+    {
+        letter: 'ی',
+        audio: 'audio/ku/y.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'کیسەڵ', image: 'images/ku/7.کیسەڵ.png', audio: 'audio/ku/کیسەڵ.mp3' },
+            { text: 'ماسی', image: 'images/ku/7.ماسی.png', audio: 'audio/ku/ماسی.mp3' },
+            { text: 'مراوی', image: 'images/ku/7.مراوی.png', audio: 'audio/ku/مراوی.mp3' },
+            { text: 'یاری', image: 'images/ku/7.یاری.png', audio: 'audio/ku/یاری.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZ16qTVZN90rv7RN7A5vz4xaChhetF5AFFpX' // Placeholder link, keep original if existed
+    },
+    // 8. ئ
+    {
+        letter: 'ئ',
+        audio: 'audio/ku/alif.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'ئەسپ', image: 'images/ku/8.ئەسپ.png', audio: 'audio/ku/ئەسپ.mp3' },
+            { text: 'ئاڵا', image: 'images/ku/8.ئاڵا.png', audio: 'audio/ku/ئاڵا.mp3' },
+            { text: 'ئەستێرە', image: 'images/ku/8.ئەستێرە.png', audio: 'audio/ku/ئەستێرە.mp3' },
+            { text: 'ئاو', image: 'images/ku/8.ئاو.png', audio: 'audio/ku/ئاو.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZe6qTVZ0fu54ceUCPJvlrY2pYkwv0T8JCDk' // Placeholder link, keep original if existed
+    },
+
+    // --- Starting Reordering from Letter 9 ---
+
+    // 9. ن
+    {
+        letter: 'ن',
+        audio: 'audio/ku/n.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'ئاوێنە', image: 'images/ku/9.ئاوێنە.png', audio: 'audio/ku/ئاوێنە.mp3' },
+            { text: 'برنج', image: 'images/ku/9.برنج.png', audio: 'audio/ku/برنج.mp3' },
+            { text: 'شانە', image: 'images/ku/9.شانە.png', audio: 'audio/ku/شانە.mp3' },
+            { text: 'بازن', image: 'images/ku/9.بازن.png', audio: 'audio/ku/بازن.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZg6qTVZEOlVg2D2OmbqesonSorofHoErLQk' // Placeholder link, keep original if existed
+    },
+    // 10. ژ
+    {
+        letter: 'ژ',
+        audio: 'audio/ku/zh.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'برژانگ', image: 'images/ku/10.برژانگ.png', audio: 'audio/ku/برژانگ.mp3' },
+            { text: 'قژ', image: 'images/ku/10.قژ.png', audio: 'audio/ku/قژ.mp3' },
+            { text: 'مێوژ', image: 'images/ku/10.مێوژ.png', audio: 'audio/ku/مێوژ.mp3' },
+            { text: 'ژوور', image: 'images/ku/10.ژوور.png', audio: 'audio/ku/ژوور.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZK6qTVZQ5BHuauQCSfMe9MABGDSN4IH6PSX' // Placeholder link, keep original if existed
+    },
+    // 11. ێ
+    {
+        letter: 'ێ',
+        audio: 'audio/ku/ye.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'شێر', image: 'images/ku/11.شێر.png', audio: 'audio/ku/شێر.mp3' },
+            { text: 'ڕێوی', image: 'images/ku/11.ڕێوی.png', audio: 'audio/ku/ڕێوی.mp3' },
+            { text: 'وێنە', image: 'images/ku/11.وێنە.png', audio: 'audio/ku/وێنە.mp3' },
+            { text: 'دێ', image: 'images/ku/11.دێ.png', audio: 'audio/ku/دێ.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZE6qTVZly8pvxhKPQ0SuyqC33w56u8iPoWV' // Keep original link
+    },
+    // 12. ب
+    {
+        letter: 'ب',
+        audio: 'audio/ku/b.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'بەفر', image: 'images/ku/12.بەفر.png', audio: 'audio/ku/بەفر.mp3' },
+            { text: 'بزن', image: 'images/ku/12.بزن.png', audio: 'audio/ku/بزن.mp3' },
+            { text: 'باز', image: 'images/ku/12.باز.png', audio: 'audio/ku/باز.mp3' },
+            { text: 'باوی', image: 'images/ku/12.باوی.png', audio: 'audio/ku/باوی.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZI6qTVZU1ccDP0Npqk91AvP4SPb6yHVlFNX' // Placeholder link, keep original if existed
+    },
+    // 13. س
+    {
+        letter: 'س',
+        audio: 'audio/ku/s.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'سێو', image: 'images/ku/13.سێو.png', audio: 'audio/ku/سێو.mp3' },
+            { text: 'گێلاس', image: 'images/ku/13.گێلاس.png', audio: 'audio/ku/گێلاس.mp3' },
+            { text: 'سەرباز', image: 'images/ku/13.سەرباز.png', audio: 'audio/ku/سەرباز.mp3' },
+            { text: 'سەبەتە', image: 'images/ku/13.سەبەتە.png', audio: 'audio/ku/سەبەتە.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZ36qTVZ60yleXhRYIVt93V6gzvW6QwDDKpV' // Placeholder link, keep original if existed
+    },
+     // 14. وو
+     {
+         letter: 'وو',
+         audio: 'audio/ku/uu.mp3', // Keep original audio path for the letter
+         examples: [
+            { text: 'بەڕوو', image: 'images/ku/14.بەڕوو.png', audio: 'audio/ku/بەڕوو.mp3' },
+            { text: 'پەموو', image: 'images/ku/14.پەموو.png', audio: 'audio/ku/پەموو.mp3' },
+            { text: 'بازوو', image: 'images/ku/14.بازوو.png', audio: 'audio/ku/بازوو.mp3' },
+            { text: 'دەزوو', image: 'images/ku/14.دەزوو.png', audio: 'audio/ku/دەزوو.mp3' }
+        ],
+         lessonLink: 'https://u.pcloud.link/publink/show?code=kZv6qTVZe7ElwxU0bUjhCnyyLoHyKf4yLYKk' // Placeholder link, keep original if existed
+    },
+    // 15. م
+    {
+        letter: 'م',
+        audio: 'audio/ku/m.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'شەمامە', image: 'images/ku/15.شەمامە.png', audio: 'audio/ku/شەمامە.mp3' },
+            { text: 'شێلم', image: 'images/ku/15.شێلم.png', audio: 'audio/ku/شێلم.mp3' },
+            { text: 'مۆم', image: 'images/ku/15.مۆم.png', audio: 'audio/ku/مۆم.mp3' },
+            { text: 'مێو', image: 'images/ku/15.مێو.png', audio: 'audio/ku/مێو.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZo6qTVZPr4UTz7fzhJccKDwMx37DSw8nTk7' // Placeholder link, keep original if existed
+    },
+    // 16. ت
+    {
+        letter: 'ت',
+        audio: 'audio/ku/t.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'ترێ', image: 'images/ku/16.ترێ.png', audio: 'audio/ku/ترێ.mp3' },
+            { text: 'شوتی', image: 'images/ku/16.شوتی.png', audio: 'audio/ku/شوتی.mp3' },
+            { text: 'پرتەقال', image: 'images/ku/16.پرتەقال.png', audio: 'audio/ku/پرتەقال.mp3' },
+            { text: 'تەرزە', image: 'images/ku/16.تەرزە.png', audio: 'audio/ku/تەرزە.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZpEqTVZAbKegq9wG2QeUxlR5zlgoXE1jLvk' // Placeholder link, keep original if existed
+    },
+    // 17. ک
+    {
+        letter: 'ک',
+        audio: 'audio/ku/k.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'کۆتر', image: 'images/ku/17.کۆتر.png', audio: 'audio/ku/کۆتر.mp3' },
+            { text: 'مریشک', image: 'images/ku/17.مریشک.png', audio: 'audio/ku/مریشک.mp3' },
+            { text: 'کەو', image: 'images/ku/17.کەو.png', audio: 'audio/ku/کەو.mp3' },
+            { text: 'بوک', image: 'images/ku/17.بوک.png', audio: 'audio/ku/بوک.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZREqTVZMT3pFBTdc3R4FDPJhf9H8yr0P8xV' // Placeholder link, keep original if existed
+    },
+    // 18. ح
+    {
+        letter: 'ح',
+        audio: 'audio/ku/h.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'تیمساح', image: 'images/ku/18.تیمساح.png', audio: 'audio/ku/تیمساح.mp3' },
+            { text: 'مرزاح', image: 'images/ku/18.مرزاح.png', audio: 'audio/ku/مرزاح.mp3' },
+            { text: 'حاجی', image: 'images/ku/18.حاجی.png', audio: 'audio/ku/حاجی.mp3' },
+            { text: 'حەسیر', image: 'images/ku/18.حەسیر.png', audio: 'audio/ku/حەسیر.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZ8EqTVZNUk9OL37N4HkXyzBTPQE9jxJz7Sy' // Placeholder link, keep original if existed
+    },
+    // 19. ش
+    {
+        letter: 'ش',
+        audio: 'audio/ku/sh.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'شیر', image: 'images/ku/19.شیر.png', audio: 'audio/ku/شیر.mp3' },
+            { text: 'شەکر', image: 'images/ku/19.شەکر.png', audio: 'audio/ku/شەکر.mp3' },
+            { text: 'ئاش', image: 'images/ku/19.ئاش.png', audio: 'audio/ku/ئاش.mp3' },
+            { text: 'شین', image: 'images/ku/19.شین.png', audio: 'audio/ku/شین.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZYEqTVZ8OvhHtvAIluttdVKTM2dfmrDa9iV' // Placeholder link, keep original if existed
+    },
+    // 20. پ (Added based on user's list, was missing in the provided code)
+    {
+        letter: 'پ',
+        audio: 'audio/ku/p.mp3', // Placeholder audio path for the letter - MAKE SURE THIS FILE EXISTS
+        examples: [
+            { text: 'پەرژین', image: 'images/ku/20.پەرژین.png', audio: 'audio/ku/پەرژین.mp3' },
+            { text: 'لاپتۆپ', image: 'images/ku/20.لاپتۆپ.png', audio: 'audio/ku/لاپتۆپ.mp3' },
+            { text: 'پۆستە', image: 'images/ku/20.پۆستە.png', audio: 'audio/ku/پۆستە.mp3' },
+            { text: 'داپیرە', image: 'images/ku/20.داپیرە.png', audio: 'audio/ku/داپیرە.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZmEqTVZNBilHoRPFjQ6aFwlvXl7JSvuv2m7' // Placeholder link
+    },
+    // 21. گ
+    {
+        letter: 'گ',
+        audio: 'audio/ku/g.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'سەگ', image: 'images/ku/21.سەگ.png', audio: 'audio/ku/سەگ.mp3' },
+            { text: 'ڕەگ', image: 'images/ku/21.ڕەگ.png', audio: 'audio/ku/ڕەگ.mp3' },
+            { text: 'گەڵا', image: 'images/ku/21.گەڵا.png', audio: 'audio/ku/گەڵا.mp3' },
+            { text: 'مێرگ', image: 'images/ku/21.مێرگ.png', audio: 'audio/ku/مێرگ.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZsAdCVZ5TMEO29cWLjAYahiM9YnQFh3WY57' // Placeholder link, keep original if existed
+    },
+    // 22. ف
+    {
+        letter: 'ف',
+        audio: 'audio/ku/f.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'دەف', image: 'images/ku/22.دەف.png', audio: 'audio/ku/دەف.mp3' },
+            { text: 'فڕۆکە', image: 'images/ku/22.فڕۆکە.png', audio: 'audio/ku/فڕۆکە.mp3' },
+            { text: 'مافور', image: 'images/ku/22.مافور.png', audio: 'audio/ku/مافور.mp3' },
+            { text: 'فانۆس', image: 'images/ku/22.فانۆس.png', audio: 'audio/ku/فانۆس.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZnAdCVZoqeQeUfwEbJYUqdR0R75NynUCTP7' // Placeholder link, keep original if existed
+    },
+    // 23. ل
+    {
+        letter: 'ل',
+        audio: 'audio/ku/l.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'قەل', image: 'images/ku/23.قەل.png', audio: 'audio/ku/قەل.mp3' },
+            { text: 'چۆلەکە', image: 'images/ku/23.چۆلەکە.png', audio: 'audio/ku/چۆلەکە.mp3' },
+            { text: 'بولبول', image: 'images/ku/23.بولبول.png', audio: 'audio/ku/بولبول.mp3' },
+            { text: 'کلیل', image: 'images/ku/23.کلیل.png', audio: 'audio/ku/کلیل.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZPAdCVZ5bwvtJOhkfVk5egDsPmeFfvEBPLk' // Placeholder link, keep original if existed
+    },
+    // 24. ع
+    {
+        letter: 'ع',
+        audio: 'audio/ku/e.mp3', // Keep original audio path for the letter (might need correction if 'ع' has a different audio)
+        examples: [
+            { text: 'عود', image: 'images/ku/24.عود.png', audio: 'audio/ku/عود.mp3' },
+            { text: 'نەعناع', image: 'images/ku/24.نەعناع.png', audio: 'audio/ku/نەعناع.mp3' },
+            { text: 'قانع', image: 'images/ku/24.قانع.png', audio: 'audio/ku/قانع.mp3' },
+            { text: 'عەفرین', image: 'images/ku/24.عەفرین.png', audio: 'audio/ku/عەفرین.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZwAdCVZzOCQq7negByayNdiB9wDgmcquJMX' // Placeholder link, keep original if existed
+    },
+    // 25. هـ (Mapping to 'ه' object found in original code's audio path)
+    {
+        letter: 'هـ', // Keep as هـ according to list
+        audio: 'audio/ku/hh.mp3', // Keep original audio path for 'ه'
+        examples: [
+            { text: 'هەڵۆ', image: 'images/ku/25.هەڵۆ.png', audio: 'audio/ku/هەڵۆ.mp3' },
+            { text: 'شەهێن', image: 'images/ku/25.شەهێن.png', audio: 'audio/ku/شەهێن.mp3' },
+            { text: 'هەڵەبجە', image: 'images/ku/25.هەڵەبجە.png', audio: 'audio/ku/هەڵەبجە.mp3' },
+            { text: 'کاهوو', image: 'images/ku/25.کاهوو.png', audio: 'audio/ku/کاهوو.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZUAdCVZLTrh6TOMTsYGcz4oNmWXiLbOLFfy' // Placeholder link, keep original if existed
+    },
+    // 26. ڵ
+    {
+        letter: 'ڵ',
+        audio: 'audio/ku/ll.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'سەهۆڵ', image: 'images/ku/26.سەهۆڵ.png', audio: 'audio/ku/سەهۆڵ.mp3' },
+            { text: 'هەڵاڵە', image: 'images/ku/26.هەڵاڵە.png', audio: 'audio/ku/هەڵاڵە.mp3' },
+            { text: 'دەهۆڵ', image: 'images/ku/26.دەهۆڵ.png', audio: 'audio/ku/دەهۆڵ.mp3' },
+            { text: 'شمشاڵ', image: 'images/ku/26.شمشاڵ.png', audio: 'audio/ku/شمشاڵ.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZtAdCVZYigQXbEW4ik3WvSJNrY4cfbtyDGX' // Placeholder link, keep original if existed
+    },
+    // 27. ق
+    {
+        letter: 'ق',
+        audio: 'audio/ku/q.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'قاپ', image: 'images/ku/27.قاپ.png', audio: 'audio/ku/قاپ.mp3' },
+            { text: 'قەزوان', image: 'images/ku/27.قەزوان.png', audio: 'audio/ku/قەزوان.mp3' },
+            { text: 'پاقلە', image: 'images/ku/27.پاقلە.png', audio: 'audio/ku/پاقلە.mp3' },
+            { text: 'سڵق', image: 'images/ku/27.سڵق.png', audio: 'audio/ku/سڵق.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZiAdCVZVKoR1cWSVpBOnKY4YnHqdSNHddtk' // Placeholder link, keep original if existed
+    },
+    // 28. خ
+    {
+        letter: 'خ',
+        audio: 'audio/ku/kh.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'مێخەک', image: 'images/ku/28.مێخەک.png', audio: 'audio/ku/مێخەک.mp3' },
+            { text: 'مەشخەڵ', image: 'images/ku/28.مەشخەڵ.png', audio: 'audio/ku/مەشخەڵ.mp3' },
+            { text: 'بەرخ', image: 'images/ku/28.بەرخ.png', audio: 'audio/ku/بەرخ.mp3' },
+            { text: 'خانوو', image: 'images/ku/28.خانوو.png', audio: 'audio/ku/خانوو.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZyNdCVZ1uGsYR2ipXjK0MS1rlubi8l2rKek' // Placeholder link, keep original if existed
+    },
+    // 29. ج
+    {
+        letter: 'ج',
+        audio: 'audio/ku/c.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'جانتا', image: 'images/ku/29.جانتا.png', audio: 'audio/ku/جانتا.mp3' },
+            { text: 'برنج', image: 'images/ku/29.برنج.png', audio: 'audio/ku/برنج.mp3' },
+            { text: 'پەنجە', image: 'images/ku/29.پەنجە.png', audio: 'audio/ku/پەنجە.mp3' },
+            { text: 'جۆ', image: 'images/ku/29.جۆ.png', audio: 'audio/ku/جۆ.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZ7NdCVZN35QHyGmJxJ6FgcxotnVhFbHgufk' // Placeholder link, keep original if existed
+    },
+    // 30. غ
+    {
+        letter: 'غ',
+        audio: 'audio/ku/gh.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'باغ', image: 'images/ku/30.باغ.png', audio: 'audio/ku/باغ.mp3' },
+            { text: 'نەغەدە', image: 'images/ku/30.نەغەدە.png', audio: 'audio/ku/نەغەدە.mp3' }, // Using first word from 'نەغەدە لغاو'
+            { text: 'لغاو', image: 'images/ku/30.لغاو.png', audio: 'audio/ku/لغاو.mp3' }, // Using second word
+            { text: 'قەڵغان', image: 'images/ku/30.قەڵغان.png', audio: 'audio/ku/قەڵغان.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZRNdCVZKLFk4T77XbQrIGonM2BniuO4wpj7' // Placeholder link, keep original if existed
+    },
+    // 31. ڤ
+    {
+        letter: 'ڤ',
+        audio: 'audio/ku/v.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'شەڤ', image: 'images/ku/31.شەڤ.png', audio: 'audio/ku/شەڤ.mp3' },
+            { text: 'مرۆڤ', image: 'images/ku/31.مرۆڤ.png', audio: 'audio/ku/مرۆڤ.mp3' },
+            { text: 'هەتاڤ', image: 'images/ku/31.هەتاڤ.png', audio: 'audio/ku/هەتاڤ.mp3' },
+            { text: 'هەیڤ', image: 'images/ku/31.هەیڤ.png', audio: 'audio/ku/هەیڤ.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZmNdCVZi61l72RIbdFe09M5GQPYCJus6oHy' // Placeholder link, keep original if existed
+    },
+    // 32. چ
+    {
+        letter: 'چ',
+        audio: 'audio/ku/ch.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'چەقەڵ', image: 'images/ku/32.چەقەڵ.png', audio: 'audio/ku/چەقەڵ.mp3' },
+            { text: 'چەم', image: 'images/ku/32.چەم.png', audio: 'audio/ku/چەم.mp3' },
+            { text: 'چیا', image: 'images/ku/32.چیا.png', audio: 'audio/ku/چیا.mp3' },
+            { text: 'ورچ', image: 'images/ku/32.ورچ.png', audio: 'audio/ku/ورچ.mp3' }
+        ],
+        lessonLink: 'https://u.pcloud.link/publink/show?code=kZjNdCVZYpQInH7m7Uk1VewupuGF8S4PT8T7' // Placeholder link, keep original if existed
+    },
+
+    // --- Additional letters found in the original code but not in the user's numbered list ---
+    // These are placed at the end and do not follow the numbered filename convention
+
+     // ا (Kept original examples and link, filename based on word)
+     {
+        letter: 'ا',
+        audio: 'audio/ku/a.mp3', // Keep original audio path for the letter
+        examples: [
+            { text: 'باپیر', image: 'images/ku/باپیر.png', audio: 'audio/ku/باپیر.mp3' },
+            { text: 'دار', image: 'images/ku/دار.png', audio: 'audio/ku/دار.mp3' },
+            { text: 'مانگا', image: 'images/ku/مانگا.png', audio: 'audio/ku/مانگا.mp3' },
+            { text: 'کاڵ', image: 'images/ku/کاڵ.png', audio: 'audio/ku/کاڵ.mp3' }
+        ],
+        lessonLink: 'https://www.youtube.com/watch?v=uxLbl0RNLzs' // Keep original link
+    },
+     // ـە (Kept original examples and link, filename based on word)
+     {
+         letter: 'ـە',
+         audio: 'audio/ku/a2.mp3', // Keep original audio path for the letter
+         examples: [
+             { text: 'قەڵەمە', image: 'images/ku/قەڵەمە.png', audio: 'audio/ku/قەڵەمە.mp3' },
+            { text: 'جوانە', image: 'images/ku/جوانە.png', audio: 'audio/ku/جوانە.mp3' },
+            { text: 'باشە', image: 'images/ku/باشە.png', audio: 'audio/ku/باشە.mp3' },
+            { text: 'خۆشە', image: 'images/ku/خۆشە.png', audio: 'audio/ku/خۆشە.mp3' }
+        ],
+         lessonLink: '#' // Placeholder link, keep original if existed
+    }
+],
                 audioPlayer: null, // Use a single Audio object
                 lastClickedElement: null, // To store the element that was clicked
 
