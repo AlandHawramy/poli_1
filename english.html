@@ -365,7 +365,7 @@
                     { letter: 'I', examples: [{ text: 'Ice', image: 'images/en/ice.png' }, { text: 'Igloo', image: 'images/en/igloo.png' }, { text: 'Insect', image: 'images/en/insect.png' }, { text: 'Iron', image: 'images/en/iron.png' }] },
                     { letter: 'J', examples: [{ text: 'Jar', image: 'images/en/jar.png' }, { text: 'Jellyfish', image: 'images/en/jellyfish.png' }, { text: 'Jacket', image: 'images/en/jacket.png' }, { text: 'Jeep', image: 'images/en/jeep.png' }] },
                     { letter: 'K', examples: [{ text: 'Kite', image: 'images/en/kite.png' }, { text: 'King', image: 'images/en/king.png' }, { text: 'Kangaroo', image: 'images/en/kangaroo.png' }, { text: 'Key', image: 'images/en/key.png' }] },
-                    { letter: 'L', examples: [{ text: 'Lion', image: 'images/en/lion.png' }, { text: 'Lamp', image: 'images/en/lamp.png' }, { text: 'Leaf', image: 'images/en/leaf.png' }, { text: 'Lemon', image: 'images/en/lemon.png' }] },
+                    { text: 'L', examples: [{ text: 'Lion', image: 'images/en/lion.png' }, { text: 'Lamp', image: 'images/en/lamp.png' }, { text: 'Leaf', image: 'images/en/leaf.png' }, { text: 'Lemon', image: 'images/en/lemon.png' }] },
                     { letter: 'M', examples: [{ text: 'Monkey', image: 'images/en/monkey.png' }, { text: 'Mouse', image: 'images/en/mouse.png' }, { text: 'Moon', image: 'images/en/moon.png' }, { text: 'Milk', image: 'images/en/milk.png' }] },
                     { letter: 'N', examples: [{ text: 'Nest', image: 'images/en/nest.png' }, { text: 'Nurse', image: 'images/en/nurse.png' }, { text: 'Nine', image: 'images/en/nine.png' }, { text: 'Nose', image: 'images/en/nose.png' }] },
                     { letter: 'O', examples: [{ text: 'Orange', image: 'images/en/orange.png' }, { text: 'Owl', image: 'images/en/owl.png' }, { text: 'Octopus', image: 'images/en/octopus.png' }, { text: 'Onion', image: 'images/en/onion.png' }] },
@@ -388,41 +388,50 @@
                 init() {
                     console.log("English App Initializing.");
 
-                    if (this.synth) {
-                        // This event fires when voices are loaded or change.
-                        this.synth.onvoiceschanged = () => {
-                            console.log("Voices changed event fired. Attempting to load and select voice.");
-                            this.loadAndSelectVoice();
-                        };
-
-                        // Immediately try to load voices if they are already available (e.g., on desktop browsers)
-                        if (this.synth.getVoices().length > 0) {
-                            console.log("Voices already available on init. Selecting voice.");
-                            this.loadAndSelectVoice();
-                        } else {
-                            // On some mobile browsers, voices might not be immediately available.
-                            // The `onvoiceschanged` event is the most reliable way to know when they are.
-                            console.log("Voices not immediately available. Waiting for 'onvoiceschanged' event.");
-                        }
-                    } else {
+                    if (!this.synth) {
                         console.error('Text-to-Speech not supported in this browser.');
+                        return;
+                    }
+
+                    // This event fires when voices are loaded or change.
+                    // It's crucial for mobile browsers.
+                    this.synth.onvoiceschanged = () => {
+                        console.log("Voices changed event fired. Attempting to load and select voice.");
+                        this.loadAndSelectVoice();
+                    };
+
+                    // Try to load voices immediately if they are already available (e.g., on desktop browsers).
+                    // If not available, the onvoiceschanged event will handle it later.
+                    if (this.synth.getVoices().length > 0) {
+                         console.log("Voices available on init. Selecting voice.");
+                         this.loadAndSelectVoice();
+                    } else {
+                         console.log("Voices not immediately available. Waiting for 'onvoiceschanged' event.");
                     }
                 },
 
                 loadAndSelectVoice() {
+                    // Always get the latest list of voices
                     this.voices = this.synth.getVoices();
                     console.log(`Found ${this.voices.length} voices.`);
-                    console.log("Available voices:", this.voices.map(v => `${v.name} (${v.lang})`));
+                    // console.log("Available voices:", this.voices.map(v => `${v.name} (${v.lang})`)); // Uncomment for detailed voice list
+
+                    if (this.voices.length === 0) {
+                        console.warn('No voices available yet.');
+                        this.selectedVoice = null; // Explicitly set to null if no voices
+                        return; // Can't select if none exist
+                    }
 
                     // Prioritize a high-quality US English female voice (like Google's if available)
-                    // "Kore (firm)" is a Google Cloud TTS specific voice, not available in browser's Web Speech API.
                     // We'll prioritize common Google voices like "Google US English" and then general female voices.
                     this.selectedVoice = this.voices.find(voice =>
                         voice.lang === 'en-US' && voice.name.toLowerCase().includes('google') && voice.name.toLowerCase().includes('female')
                     ) || this.voices.find(voice =>
                         voice.lang === 'en-US' && voice.name.toLowerCase().includes('female')
                     ) || this.voices.find(voice =>
+                         // Check for English female voices from other regions
                         voice.lang.startsWith('en') && voice.name.toLowerCase().includes('female')
+                         // Add more specific checks if needed, e.g., voice.name.includes('Samantha')
                     ) || this.voices.find(voice =>
                         voice.lang === 'en-US' // Fallback to any US English voice
                     ) || this.voices.find(voice =>
@@ -430,9 +439,10 @@
                     ) || this.voices[0]; // Fallback to the first available voice
 
                     if (this.selectedVoice) {
-                        console.log('Selected voice:', this.selectedVoice.name);
+                        console.log('Selected voice:', this.selectedVoice.name, `(${this.selectedVoice.lang})`);
                     } else {
-                        console.warn('No suitable English female voice found. Speech synthesis might use a default or fail.');
+                        console.warn('No suitable English voice found based on criteria. Using browser default if available.');
+                        // The browser will typically use a default voice if utterance.voice is not set or set to null.
                     }
                 },
 
@@ -444,51 +454,75 @@
                 },
 
                 speakText(text) {
+                    // --- Crucial checks before speaking ---
                     if (!this.synth) {
                         console.error('Text-to-Speech not supported in this browser.');
                         return;
                     }
 
-                    // Attempt to load and select voice again if not ready (this is a common mobile workaround)
-                    // If voices array is empty or selectedVoice is null, try to load them again.
+                    // If voices haven't been loaded/selected yet, try again.
+                    // This handles cases where the first attempt in init() didn't work.
                     if (!this.selectedVoice || this.voices.length === 0) {
                         console.warn('Speech voice not ready yet or not found. Attempting to select voice before speaking.');
-                        this.loadAndSelectVoice(); // This might trigger 'onvoiceschanged' if voices are not yet loaded
+                        this.loadAndSelectVoice(); // This call is synchronous but updates this.selectedVoice
+                         // After attempting to load, check again if a voice was found
+                        if (!this.selectedVoice) {
+                             console.error('Failed to load or select a suitable voice. Cannot speak.');
+                             return; // Stop if no voice is available
+                        }
                     }
 
-                    this.stopSpeaking(); // Stop any previous speech
+                    // Stop any previous speech to avoid overlapping
+                    this.stopSpeaking();
 
                     const utterance = new SpeechSynthesisUtterance(text);
-                    utterance.lang = 'en-US'; // Specify language for accurate pronunciation
+                    utterance.lang = 'en-US'; // Always specify language
 
+                    // Assign the selected voice if one was found
                     if (this.selectedVoice) {
-                        utterance.voice = this.selectedVoice; // Use the selected voice
+                         utterance.voice = this.selectedVoice;
+                         console.log(`Speaking "${text}" using selected voice: ${this.selectedVoice.name}`);
                     } else {
-                        // Fallback to a generic English voice if specific not found
-                        utterance.lang = 'en-US'; // Ensure correct language for default voice too
+                         // Fallback: Browser will use a default voice for en-US if voice is null
+                         console.warn(`Speaking "${text}" using browser default voice for en-US (No specific voice selected).`);
+                         // utterance.voice remains null, browser picks default
                     }
+
 
                     utterance.rate = 0.9; // Slightly slower for clearer pronunciation
                     utterance.pitch = 1; // Standard pitch
 
-                    console.log(`Attempting to speak: "${text}" with voice "${this.selectedVoice ? this.selectedVoice.name : 'Default/None'}"`);
-                    this.synth.speak(utterance);
-
+                    // Add event listeners for more debugging
+                    utterance.onstart = () => console.log(`Speech started for: "${text}"`);
+                    utterance.onend = () => console.log(`Speech finished for: "${text}"`);
                     utterance.onerror = (event) => {
-                        console.error('Speech synthesis error:', event);
-                        // Errors like 'not-allowed' typically mean autoplay policy blocked it.
-                        // Ensure speech is triggered by a direct user tap.
+                        console.error('Speech synthesis error:', event.error, event); // event.error gives the type of error
+                        // Common errors: 'canceled', 'interrupted', 'not-allowed' (due to autoplay policy violations)
+                        // If 'not-allowed' occurs frequently despite being in a click handler,
+                        // it might indicate a tricky browser policy or timing issue.
                     };
+
+
+                    // Speak the utterance
+                    try {
+                         this.synth.speak(utterance);
+                    } catch (e) {
+                         console.error('Error calling synth.speak():', e);
+                    }
                 },
+
                 openModal(letterData) {
                     console.log("Opening modal for:", letterData.letter);
                     this.currentLetter = letterData.letter;
                     this.examples = letterData.examples;
-                    // Speak the letter immediately when the button is clicked, BEFORE the modal is fully drawn.
-                    // This often feels more responsive on mobile devices as the sound starts instantly with the user's tap.
+                    // Trigger speaking the letter first, inside the user's click event.
+                    // This is key for satisfying autoplay policies.
                     this.speakText(letterData.letter);
-                    this.showModal = true; // Then open modal
+
+                    // Then open the modal
+                    this.showModal = true;
                 },
+
                 closeModal() {
                     console.log("Closing modal");
                     this.showModal = false;
