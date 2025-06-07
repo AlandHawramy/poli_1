@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>وانەکانی پۆلی یەکەم</title>
+    <title>وانەکانی پۆلی یەکەم</title> <!-- Updated Title -->
     <!-- Google Fonts for Vazirmatn (friendly, modern Kurdish support) -->
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- CSS Styles -->
@@ -55,7 +55,7 @@
             padding: 1rem;
         }
 
-        /* Back button style (Not used on this page, but kept for consistency with other pages) */
+        /* Back button style (Not used on this page, but included for consistency if needed in other pages) */
         .back-button {
             display: inline-flex;
             align-items: center;
@@ -90,7 +90,7 @@
             transform: rotate(180deg); /* Arrow points left in LTR */
         }
 
-        /* NEW: Download Button (Icon only) and Menu Container */
+        /* Download Button (Icon only) and Menu Container */
         .download-container {
             position: absolute; /* Position relative to its containing block (body in this case) */
             top: 1rem;
@@ -131,7 +131,7 @@
             flex-shrink: 0;
         }
 
-        /* NEW: Download Menu Styles */
+        /* Download Menu Styles */
         .download-menu {
             position: absolute;
             top: calc(100% + 10px); /* Position below the button */
@@ -250,7 +250,6 @@
             cursor: pointer;
             transition: all 0.2s ease;
             user-select: none;
-            min-height: 80px;
              transition: all 0.3s ease, transform 0.3s ease;
              -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
         }
@@ -766,9 +765,10 @@
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body>
+<body dir="rtl">
 
-    <!-- NEW: Download button and menu container -->
+    <!-- Download button and menu container -->
+    <!-- @click.outside="open = false" ensures menu closes when clicking anywhere else -->
     <div class="download-container" x-data="{ open: false }" @click.outside="open = false">
         <!-- Download Button (Icon only) -->
         <button type="button" class="download-button" @click="open = !open" aria-label="دابەزاندن" title="دابەزاندن">
@@ -780,13 +780,15 @@
         <!-- Download Menu -->
         <!-- Use x-cloak to hide during page load if Alpine is slow -->
         <div class="download-menu" x-show="open" x-transition.origin.top-right x-cloak>
+            <!-- Link to your Google Drive folder (replace with actual link if needed) -->
             <a href="https://drive.google.com/drive/folders/1mzZxyoJC_CIWbS_5V71kbLbgK9x41J62?usp=sharing" target="_blank" class="download-menu-item">
-                کتێبەکان
+                کتێبەکان (گووگڵ درایڤ)
             </a>
-            <!-- Assuming kurdish.html is the page for Kurdish letters -->
-            <a href="https://t.me/AW_Graphic_IT" class="download-menu-item">
-                پیتەکانی کوردی
+            <!-- Link to your Telegram channel (replace with actual link if needed) -->
+            <a href="https://t.me/AW_Graphic_IT" target="_blank" class="download-menu-item">
+                پیتەکانی کوردی (تێلێگرام)
             </a>
+            <!-- Add more download links if needed -->
         </div>
     </div>
 
@@ -797,22 +799,52 @@
 
         <!-- Use grid for buttons -->
         <div class="home-buttons-grid">
-             <!-- Kurdish Button -->
-            <a href="kurdish.html" class="subject-button">
+             <!-- Kurdish Button - Links to kurdish.html -->
+            <a href="kurdish.html" class="subject-button" aria-label="وانەی کوردی">
                 <img src="images/kurdi.jpg" alt="وێنەی کتێبی کوردی">
             </a>
 
-            <!-- English Button -->
-            <a href="english.html" class="subject-button">
+            <!-- English Button - Links to english.html (assuming this page exists) -->
+            <a href="english.html" class="subject-button" aria-label="English Lesson">
                  <img src="images/english_book.jpeg" alt="English Book Image">
             </a>
 
-            <!-- Math Button -->
-            <a href="math.html" class="subject-button">
+            <!-- Math Button - Links to math.html -->
+            <a href="math.html" class="subject-button" aria-label="وانەی بیرکاری">
                 <img src="images/math.jpeg" alt="وێنەی کتێبی بیرکاری">
             </a>
         </div>
     </div>
+
+    <!--
+        Explanation regarding the browser/mobile back button on index.html:
+
+        When you are on the very first page visited in a browser tab (like index.html
+        if you opened it directly), the browser's native back button typically
+        cannot navigate "backwards" any further, as there's no previous page in
+        that tab's history.
+
+        Web browsers intentionally prevent websites from programmatically closing
+        the user's tab or window for security and user experience reasons, unless
+        the script itself opened that window/tab using `window.open()`.
+
+        Therefore, the most standard and safe behavior for the browser/mobile
+        back button when on the first page (index.html) is simply what the
+        browser does by default: either the button becomes inactive, or it
+        keeps the user on the page. This is the closest equivalent to "exiting"
+        the website's flow within that tab, as the user is then free to close
+        the tab/app using the operating system's controls.
+
+        Adding a custom JavaScript listener for 'popstate' on index.html to
+        try and force a back action or close the window would be either
+        redundant (if it's the first page) or unreliable/disruptive (if the user
+        arrived from somewhere else, it might unexpectedly send them two pages back,
+        or window.close() would likely fail).
+
+        The current code relies on the browser's default handling for index.html,
+        which is the standard and recommended approach for the "first screen"
+        back button behavior.
+    -->
 
 </body>
 </html>
