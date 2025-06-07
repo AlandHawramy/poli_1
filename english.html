@@ -293,16 +293,33 @@
              <!-- Loop through letters data -->
             <template x-for="letterData in letters" :key="letterData.letter">
                 <div class="grid-item"
-                     @click="handleLetterClick(letterData)"> <!-- Changed click handler -->
+                     @click="handleLetterClick(letterData)">
                     <span x-text="letterData.letter"></span>
                 </div>
             </template>
         </div>
 
         <!-- Modal -->
+        <!-- Added x-show with transition for smoother appearance -->
         <template x-if="showModal">
-            <div class="modal-backdrop" @click.self="closeModal()"> <!-- Close modal when clicking outside (on backdrop) -->
-                <div class="modal-content" @click.stop> <!-- Prevent click inside modal from closing it -->
+             <div class="modal-backdrop"
+                  x-show="showModal"
+                  x-transition:enter="transition ease-out duration-300"
+                  x-transition:enter-start="opacity-0"
+                  x-transition:enter-end="opacity-100"
+                  x-transition:leave="transition ease-in duration-200"
+                  x-transition:leave-start="opacity-100"
+                  x-transition:leave-end="opacity-0"
+                  @click.self="closeModal()">
+                <div class="modal-content"
+                     x-show="showModal"
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0 translate-y-4"
+                     x-transition:enter-end="opacity-100 translate-y-0"
+                     x-transition:leave="transition ease-in duration-200"
+                     x-transition:leave-start="opacity-100 translate-y-0"
+                     x-transition:leave-end="opacity-0 translate-y-4"
+                     @click.stop>
                     <button class="back-button" @click="closeModal()" aria-label="Back">
                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
@@ -406,6 +423,30 @@
                     } else {
                         console.error('Text-to-Speech not supported in this browser.');
                     }
+
+                    // Add listener for the browser's back/forward buttons
+                    // This will fire when history state changes (e.g., user presses OS back button)
+                    window.addEventListener('popstate', this.handlePopstate.bind(this));
+                     console.log("popstate listener added.");
+
+                     // Optional: Check initial hash if you want to open modal on page load with #hash
+                     // This is beyond the scope of the user's specific back button problem but is related
+                     // if (window.location.hash.startsWith('#modal-')) {
+                     //     const letter = window.location.hash.substring(7); // Remove '#modal-'
+                     //     const letterData = this.letters.find(l => l.letter === letter);
+                     //     if (letterData) {
+                     //         // Use a timeout to ensure Alpine is fully initialized
+                     //         setTimeout(() => {
+                     //              // We don't pushState here because the state is already in the URL
+                     //             this.currentLetter = letterData.letter;
+                     //             this.examples = letterData.examples;
+                     //             this.showModal = true;
+                     //             console.log(`Opened modal for ${letter} from hash.`);
+                     //             // Maybe speak the letter on load? User interaction needed for autoplay.
+                     //             // this.speakText(letterData.letter);
+                     //         }, 0);
+                     //     }
+                     // }
                 },
 
                 loadAndSelectVoice() {
@@ -512,28 +553,88 @@
                     }
                 },
 
-                // Changed handler name slightly for clarity, but does the same thing
+                // Handles click on a letter grid item
                 handleLetterClick(letterData) {
                     console.log("Letter clicked:", letterData.letter);
 
-                    // 1. Immediately attempt to speak the letter.
+                    // 1. Update Alpine state to show modal
+                    this.currentLetter = letterData.letter;
+                    this.examples = letterData.examples;
+                    this.showModal = true;
+
+                    // 2. Add a new entry to the browser history for this modal state
+                    // This makes the OS back button return to the state *before* this push
+                    // We add a simple state object (can be useful for debugging) and potentially a hash to the URL
+                    const modalHash = `#modal-${letterData.letter}`;
+                    // Check if we are already at this hash (prevents pushing duplicate history entries if clicking same letter repeatedly)
+                    if (window.location.hash !== modalHash) {
+                       history.pushState({ modalOpen: true, letter: letterData.letter }, '', modalHash);
+                       console.log(`Pushed history state for ${letterData.letter}.`);
+                    } else {
+                       console.log(`Hash ${modalHash} already exists. Not pushing history state.`);
+                    }
+
+
+                    // 3. Immediately attempt to speak the letter.
                     // This is the user interaction that should satisfy autoplay policies.
                     // Added a small timeout as a *potential* workaround for specific mobile timing issues.
                     // Remove the timeout if it doesn't help or causes issues.
                     setTimeout(() => {
                          this.speakText(letterData.letter);
                     }, 100); // 100ms delay - test if this helps on the specific device/browser
-
-                    // 2. Then, open the modal to show examples.
-                    this.currentLetter = letterData.letter;
-                    this.examples = letterData.examples;
-                    this.showModal = true;
                 },
 
+                // Handles closing the modal via the app's UI (button, backdrop click)
                 closeModal() {
                     console.log("Closing modal");
+
+                    // Stop speaking when closing modal
+                    this.stopSpeaking();
+
+                    // Set Alpine state to hide modal
                     this.showModal = false;
-                    this.stopSpeaking(); // Stop speaking when closing modal
+
+                    // When closing the modal via UI, REPLACE the current history state
+                    // (the one we pushed when opening) with the previous state (original URL)
+                    // This prevents the OS back button from navigating back to the modal state we just closed.
+                    if (window.history.state && window.history.state.modalOpen) {
+                        // If the current state was indeed pushed by the modal opening
+                        history.replaceState({}, '', window.location.pathname + window.location.search);
+                        console.log("Replaced history state on UI close.");
+                    } else if (window.location.hash.startsWith('#modal-')) {
+                        // Fallback: if a modal hash exists but no state object (maybe due to reload?)
+                         history.replaceState({}, '', window.location.pathname + window.location.search);
+                         console.log("Replaced history state (hash) on UI close.");
+                    } else {
+                         console.log("No modal history state to replace on UI close.");
+                         // If the modal was opened without pushing history (e.g. directly setting showModal=true for some reason)
+                         // or if we are already back at the original state, do nothing with history.
+                    }
+
+                },
+
+                // Handles the popstate event (triggered by OS back/forward buttons)
+                handlePopstate(event) {
+                    console.log("popstate event fired.", event.state);
+
+                    // Check if the modal is currently visible according to Alpine state
+                    if (this.showModal) {
+                        // If the modal is open AND popstate fired, it means the user pressed
+                        // the OS back button, and the browser is trying to navigate away
+                        // FROM the modal state. We need to close the modal in the UI.
+                         console.log("Modal is open, popstate fired. Closing modal.");
+                        this.closeModal(); // closeModal will handle setting showModal=false and stopping speech
+                    } else {
+                        // If the modal is NOT open AND popstate fired, it might mean:
+                        // 1. The user pressed back from a state *before* the modal state.
+                        // 2. The user pressed forward *into* a modal state (if supported by state object).
+                        // In this simple case, we only handle the back action to close the modal.
+                        // If you wanted to handle navigating FORWARD into a modal, you'd check event.state
+                        // to see if event.state.modalOpen is true and open the modal here.
+                         console.log("Modal is closed, popstate fired. No action needed by app UI.");
+                    }
+                     // Note: If you implemented the optional check for hash on init,
+                     // you might also need logic here to open the modal if event.state suggests it should be open.
                 }
             }
         }
