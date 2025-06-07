@@ -48,7 +48,18 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 1rem;
+             /* Add transition for the dimming effect */
+            transition: opacity 0.3s ease, filter 0.3s ease;
         }
+
+        /* --- NEW STYLE FOR DIMMING THE MAIN CONTENT --- */
+        .container.dimmed {
+            opacity: 0.4; /* Adjust opacity to your preferred level of dimness */
+            filter: blur(2px); /* Optional: Add a slight blur */
+            pointer-events: none; /* Prevent clicks on the dimmed content */
+        }
+        /* --- END NEW STYLE --- */
+
 
          /* Back button style */
         .back-button {
@@ -243,6 +254,7 @@
             .modal-content .back-button {
                 left: 2rem; /* Position slightly further in on larger screens */
             }
+             /* Ensure RTL is handled correctly if needed for the container padding */
             html[dir="rtl"] .modal-content .back-button {
                 left: 2rem;
             }
@@ -287,55 +299,59 @@
     <!-- The single back button that always links to index.html -->
     <!-- This button remains visible when the modal is closed -->
     <!-- It uses a standard link to ensure it goes to index.html -->
+    <!-- This button hides when modal is open as per original code -->
     <a href="index.html" class="back-button" aria-label="گەڕانەوە بۆ سەرەتا" x-show="!modalOpen">
        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
        </svg>
     </a>
 
-    <div class="container">
+    <!-- The main container that holds the title and the grid -->
+    <!-- Apply the 'dimmed' class when modalOpen is true -->
+    <div class="container" :class="{ 'dimmed': modalOpen }">
         <h1 class="math-section-title">
             ژمارەکان
         </h1>
         <!-- Main Content: Numbers with Icons (0-100) -->
-        <div class="grid-container" x-show="!modalOpen"> <!-- Hide grid when modal is open -->
+        <!-- Removed x-show="!modalOpen" from here so it remains visible -->
+        <div class="grid-container">
             <template x-for="number in numbers" :key="'icon-num-' + number">
                 <div class="grid-item" @click="openIconModal(number)">
                     <span x-text="toKurdishDigits(number)" dir="ltr"></span> <!-- Convert to Kurdish digits -->
                 </div>
             </template>
         </div>
+    </div>
 
-        <!-- Icon Detail Modal -->
-        <template x-if="modalOpen">
-            <div class="modal-backdrop" @click.self="closeModalFromUI()"> <!-- Use closeModalFromUI -->
-                <div class="modal-content" @click.stop> <!-- Prevent click inside modal from closing it -->
-                    <!-- Modal Back Button -->
-                    <!-- This button also uses closeModalFromUI -->
-                    <button @click="closeModalFromUI()" class="back-button" aria-label="گەڕانەوە">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
-                        </svg>
-                    </button>
+    <!-- Icon Detail Modal -->
+    <!-- This remains unchanged, it's shown/hidden by x-if -->
+    <template x-if="modalOpen">
+        <div class="modal-backdrop" @click.self="closeModalFromUI()"> <!-- Use closeModalFromUI -->
+            <div class="modal-content" @click.stop> <!-- Prevent click inside modal from closing it -->
+                <!-- Modal Back Button -->
+                <!-- This button also uses closeModalFromUI -->
+                <button @click="closeModalFromUI()" class="back-button" aria-label="گەڕانەوە">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
+                    </svg>
+                </button>
 
-                    <h3 class="modal-title">
-                        ژمارەی <span x-text="toKurdishDigits(selectedNumberForIcons)" dir="ltr"></span> <!-- Convert to Kurdish digits -->
-                    </h3>
+                <h3 class="modal-title">
+                    ژمارەی <span x-text="toKurdishDigits(selectedNumberForIcons)" dir="ltr"></span> <!-- Convert to Kurdish digits -->
+                </h3>
 
-                    <!-- Area to display Icons -->
-                    <!-- Conditional class based on number size for better layout -->
-                    <div class="icon-display-area" :class="iconGridClass">
-                        <template x-for="(iconSrc, index) in displayedIcons" :key="'icon-item-' + index">
-                            <!-- TODO: Replace with actual animal icon image paths -->
-                            <img :src="iconSrc" :alt="'Icon ' + (index + 1)" class="math-icon" :class="iconSizeClass">
-                        </template>
-                        <p x-show="selectedNumberForIcons === 0" class="text-center text-xl" style="color: var(--theme-text-secondary);">هیچ</p>
-                    </div>
+                <!-- Area to display Icons -->
+                <!-- Conditional class based on number size for better layout -->
+                <div class="icon-display-area" :class="iconGridClass">
+                    <template x-for="(iconSrc, index) in displayedIcons" :key="'icon-item-' + index">
+                        <!-- TODO: Replace with actual animal icon image paths -->
+                        <img :src="iconSrc" :alt="'Icon ' + (index + 1)" class="math-icon" :class="iconSizeClass">
+                    </template>
+                    <p x-show="selectedNumberForIcons === 0" class="text-center text-xl" style="color: var(--theme-text-secondary);">هیچ</p>
                 </div>
             </div>
-        </template>
-
-    </div>
+        </div>
+    </template>
 
     <!-- Audio elements for Math Numbers (0-100) -->
     <!-- Ensure the src path is correct, e.g., "audio/math/0.wav" -->
@@ -528,10 +544,12 @@
                                 // go to the state *before* the numbers page, which might not be index.html
                                 // if the user navigated here differently.
                                 console.log('Modal was closed, navigating to index.html as per requirement.');
-                                window.location.href = 'index.html';
-                                // Important: Returning false or preventing default might be needed in some complex cases,
-                                // but usually setting location.href is enough and stops further popstate handling
-                                // for the current page load.
+                                // Check if the current URL is already index.html to avoid unnecessary navigation
+                                if (window.location.pathname.split('/').pop() !== 'index.html' && window.location.pathname !== '/') {
+                                     window.location.href = 'index.html';
+                                } else {
+                                    console.log('Already on index.html or root, preventing double navigation.');
+                                }
                             }
                         }
                     });
