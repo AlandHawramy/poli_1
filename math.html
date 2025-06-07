@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ژمارەکان بە ئایکۆن</title>
+    <title>ژمارەکان</title>
     <!-- Your Custom CSS Styles -->
     <style>
         /* Define theme colors using CSS variables (Purple theme from Kurdish letters app) */
@@ -285,7 +285,8 @@
 <body x-data="numbersIconApp()">
 
     <!-- The single back button that always links to index.html -->
-    <a href="index.html" class="back-button" aria-label="گەڕانەوە بۆ سەرەتا">
+    <!-- This button remains visible when the modal is closed -->
+    <a href="index.html" class="back-button" aria-label="گەڕانەوە بۆ سەرەتا" x-show="!modalOpen">
        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
        </svg>
@@ -293,10 +294,10 @@
 
     <div class="container">
         <h1 class="math-section-title">
-            ژمارەکان بە ئایکۆن
+            ژمارەکان
         </h1>
         <!-- Main Content: Numbers with Icons (0-100) -->
-        <div class="grid-container">
+        <div class="grid-container" x-show="!modalOpen"> <!-- Hide grid when modal is open -->
             <template x-for="number in numbers" :key="'icon-num-' + number">
                 <div class="grid-item" @click="openIconModal(number)">
                     <span x-text="toKurdishDigits(number)" dir="ltr"></span> <!-- Convert to Kurdish digits -->
@@ -310,7 +311,7 @@
                 <div class="modal-content" @click.stop> <!-- Prevent click inside modal from closing it -->
                     <!-- Modal Back Button -->
                     <button @click="closeModal()" class="back-button" aria-label="گەڕانەوە">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/24/stroke-svgrepo-com" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
                         </svg>
                     </button>
@@ -335,8 +336,7 @@
     </div>
 
     <!-- Audio elements for Math Numbers (0-100) -->
-    <!-- You MUST add 101 <audio> tags here, one for each number from 0 to 100 -->
-    <!-- Ensure the src path is correct, e.g., "audio/math/0.mp3" -->
+    <!-- Ensure the src path is correct, e.g., "audio/math/0.wav" -->
     <audio id="sound-0" src="audio/math/0.wav" preload="auto"></audio>
     <audio id="sound-1" src="audio/math/1.mp3" preload="auto"></audio>
     <audio id="sound-2" src="audio/math/2.mp3" preload="auto"></audio>
@@ -481,6 +481,43 @@
 
                 init() {
                     console.log("Numbers with Icons App Initializing"); // Debugging log
+
+                    // --- History API Setup ---
+                    // 1. Replace the initial history state with a state indicating the modal is closed.
+                    //    This is important so that the first back button press *from* the modal state
+                    //    correctly lands on a state where modal should be closed.
+                    history.replaceState({ modal: false }, '', '');
+                    console.log('Initial history state set:', history.state);
+
+                    // 2. Listen for the 'popstate' event. This fires when the browser's active history entry changes,
+                    //    typically on back/forward button presses or history.back()/forward()/go().
+                    window.addEventListener('popstate', (event) => {
+                        console.log('Popstate triggered', event.state);
+                        // Check the state object associated with the history entry we've navigated to.
+                        if (event.state && event.state.modal === true) {
+                            // If the state indicates the modal should be open, open it for the specified number.
+                            console.log('Navigated to a history state where modal should be open for number:', event.state.number);
+                            this.selectedNumberForIcons = event.state.number;
+                            this.generateAnimalIcons(this.selectedNumberForIcons);
+                            this.playNumberSound(this.selectedNumberForIcons); // Re-play sound on back navigation
+                            this.modalOpen = true;
+                            // Scroll modal content to top if needed after opening
+                            this.$nextTick(() => {
+                                const modalContent = document.querySelector('.modal-content');
+                                if (modalContent) {
+                                    modalContent.scrollTo({top: 0, behavior: 'smooth'});
+                                }
+                            });
+                        } else {
+                             // If the state is null (initial state) or doesn't have the modal flag,
+                             // ensure the modal is closed.
+                             console.log('Navigated to a history state where modal should be closed.');
+                             this.closeModalWithoutHistory(); // Use the function that doesn't affect history
+                        }
+                    });
+                    // --- End History API Setup ---
+
+
                     // Initialize number sound elements (find them by ID)
                     this.$nextTick(() => { // Ensure DOM is ready and audio tags exist
                         for(let i = 0; i <= 100; i++) {
@@ -490,7 +527,8 @@
                                 soundElement.onerror = (e) => console.error(`Error loading audio for number ${i}:`, soundElement.src, e);
                             } else {
                                 // Create a dummy object if element not found to prevent errors
-                                this.numberSoundElements[i] = { play: () => { console.warn(`Audio tag not found for number ${i}. Expected ID: sound-${i}.`); }, pause: () => {}, currentTime: 0 };
+                                console.warn(`Audio tag not found for number ${i}. Expected ID: sound-${i}. Using dummy.`);
+                                this.numberSoundElements[i] = { play: () => { }, pause: () => {}, currentTime: 0 };
                             }
                         }
                         console.log('Number sound elements count:', Object.keys(this.numberSoundElements).length); // Debugging
@@ -588,13 +626,42 @@
                     console.log(`Generated ${count} icons of type: ${this.selectedAnimalIcon}`); // Debugging log
                 },
 
+                 // Function to close modal UI state without affecting browser history
+                 closeModalWithoutHistory() {
+                     console.log("Closing modal UI state (no history change)");
+                     if (this.modalOpen) { // Only do this if modal is actually open
+                        this.modalOpen = false;
+                        this.selectedNumberForIcons = 0; // Reset icon count
+                        this.displayedIcons = []; // Clear icons array
+                        this.selectedAnimalIcon = ''; // Clear selected animal icon
+                        this.stopAllSounds(); // Stop sounds when modal closes
+                     }
+                 },
+
+
+                // Function to open modal and handle history state
                 openIconModal(number) {
-                    console.log("Opening icon modal for number:", number); // Debugging log
+                    console.log("Opening icon modal for number:", number);
+                    // Check if the modal is already open for this number. If so, do nothing.
+                    // If it's open for a *different* number, we might replace the state,
+                    // but the current UI design hides the grid, so this isn't a typical case.
+                    // We'll proceed assuming modal is only opened from the main grid.
+
                     this.selectedNumberForIcons = number;
-                    this.generateAnimalIcons(number); // Generate icons based on the number
+                    this.generateAnimalIcons(number);
                     // Play the number sound when the modal opens
                     this.playNumberSound(number);
+
+                    // Set modalOpen to true *before* pushing history state,
+                    // so the state object reflects the *new* UI state.
                     this.modalOpen = true;
+
+                    // Add a new entry to the browser history stack.
+                    // The state object { modal: true, number: number } is saved with this history entry.
+                    // When the user clicks back, the popstate event will fire, and event.state will be this object.
+                    history.pushState({ modal: true, number: number }, '', ''); // Empty title and URL (keeps current URL)
+                    console.log('History state pushed:', history.state);
+
                     // Scroll modal content to top on next tick after DOM updates
                     this.$nextTick(() => {
                         const modalContent = document.querySelector('.modal-content');
@@ -604,13 +671,20 @@
                     });
                 },
 
+                // Function to close modal and go back in history (used by internal modal close button/backdrop click)
                 closeModal() {
-                    console.log("Closing icon modal"); // Debugging log
-                    this.modalOpen = false;
-                    this.selectedNumberForIcons = 0; // Reset icon count
-                    this.displayedIcons = []; // Clear icons array
-                    this.selectedAnimalIcon = ''; // Clear selected animal icon
-                    this.stopAllSounds(); // Stop sounds when modal closes
+                    console.log("Closing modal and going back in history");
+                    // Only perform history back if modal is currently open
+                    // This prevents potential issues if closeModal is somehow called when it shouldn't be
+                     if (this.modalOpen) {
+                        // Close the UI first without affecting history
+                        this.closeModalWithoutHistory();
+                        // Now, go back one step in browser history.
+                        // This will trigger the 'popstate' event, which our listener will catch
+                        // and determine that the modal should now be closed (because the state
+                        // it navigates *to* is not the modal state).
+                         history.back();
+                     }
                 },
 
                 // Computed property/function to dynamically calculate icon size class based on number
