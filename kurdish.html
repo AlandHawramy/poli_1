@@ -154,10 +154,22 @@
              transition: all 0.3s ease, transform 0.1s ease;
         }
 
-        .grid-item:hover {
+        /* Use this class to force styles similar to hover when modal is open from this element */
+        .grid-item.is-active-visual {
+             /* Apply the hover background, border, and scale */
+             background-color: var(--theme-bg-accent);
+             border-color: var(--theme-card-hover-border);
+             /* Keep the scale transformation minimal or remove it if it looks weird */
+             /* transform: scale(1.02); */
+             /* Ensure the span animation is applied */
+             animation: none; /* Reset potential hover animation */
+        }
+
+        /* Apply hover styles AND the active visual styles */
+        .grid-item:hover, .grid-item.is-active-visual {
             background-color: var(--theme-bg-accent);
             border-color: var(--theme-card-hover-border);
-            transform: scale(1.05); /* Slightly enlarge on hover */
+            transform: scale(1.05); /* Apply slight scale on hover/active */
         }
 
         /* Animation on click/press */
@@ -175,8 +187,9 @@
              display: block; /* Allow transform */
              transform-origin: center; /* Center the transform */
         }
-         .grid-item:hover span {
-             animation: gentle-pulse 1.5s infinite ease-in-out; /* Apply animation on hover */
+         /* Apply animation on hover AND when the element has the active visual class */
+         .grid-item:hover span, .grid-item.is-active-visual span {
+             animation: gentle-pulse 1.5s infinite ease-in-out; /* Apply animation on hover/active */
         }
 
 
@@ -477,9 +490,10 @@
 
         <div class="grid-container">
              <!-- Loop through letters data -->
+             <!-- Pass the event object ($event) to openModal -->
             <template x-for="letterData in letters" :key="letterData.letter">
                 <div class="grid-item"
-                     @click="openModal(letterData)">
+                     @click="openModal(letterData, $event)">
                     <span x-text="letterData.letter"></span>
                 </div>
             </template>
@@ -526,6 +540,7 @@
                 showModal: false,
                 currentLetter: '',
                 examples: [],
+                lastClickedElement: null, // To store the element that was clicked to open the modal
                 letters: [
                     // TODO: Add ALL Kurdish letters here with their audio paths and 4 examples
                     // IMPORTANT: Replace placeholder image paths ('images/ku/....png') with your actual image paths
@@ -721,18 +736,13 @@
                         { text: 'یاری', image: 'images/ku/yari.png', audio: 'audio/ku/yari.mp3' },
                         { text: 'یاسەمین', image: 'images/ku/yasamin.png', audio: 'audio/ku/yasamin.mp3' },
                         { text: 'یەک', image: 'images/ku/yak.png', audio: 'audio/ku/yak.mp3' }
-                    ]},
-                     { letter: 'ـی', audio: 'audio/ku/ii.mp3', examples: [
-                        { text: 'شیری', image: 'images/ku/shiri.png', audio: 'audio/ku/shiri.mp3' },
-                        { text: 'ئاوایی', image: 'images/ku/awayi.png', audio: 'audio/ku/awayi.mp3' },
-                        { text: 'بەیانی', image: 'images/ku/bayani.png', audio: 'audio/ku/bayani.mp3' },
-                        { text: 'خوێنی', image: 'images/ku/xweni.png', audio: 'audio/ku/xweni.mp3' }
                     ]}
                      // Add other Kurdish letters... (زنجیرەی پیتە کوردییەکانی تر لێرە زیاد بکە)
                      // Ensure you have audio files for each letter sound (audio/ku/alif.mp3, audio/ku/a.mp3, audio/ku/b.mp3, etc.)
                      // And audio files for each example word (audio/ku/astera.mp3, audio/ku/aw.mp3, etc.)
                 ],
                 audioPlayer: null, // Use a single Audio object
+                lastClickedElement: null, // To store the element that was clicked
 
                 init() {
                     this.audioPlayer = new Audio();
@@ -741,77 +751,75 @@
                     this.audioPlayer.onended = () => console.log('Audio finished playing');
 
                     // Add popstate listener for browser/mobile back button
-                    // Listener needs access to 'this', so bind it or use arrow function
                     window.addEventListener('popstate', (event) => {
                         // Check if the modal is currently open AND the new history state
                         // does NOT indicate the modal should be open.
-                        // This happens when the user presses the back button FROM the modal state.
-                        // If event.state is null, it means we've gone back past our pushed state.
                         if (this.showModal && (!event.state || event.state.modalOpen !== true)) {
-                            console.log("Popstate detected, closing modal."); // Debug log
-                            this.showModal = false; // Close the modal
-                            this.stopAllSounds(); // Stop any playing sound
+                            console.log("Popstate detected, closing modal.");
+                            this.closeModal(); // Use the general close function
                         }
-                        // Note: This implementation does not handle navigating *forward* back into a modal state.
-                        // That requires storing more information in the state object and reconstructing the modal.
                     });
-
-                     // Add a history state when the page loads initially, so there's somewhere to go back *to*
-                     // if the user opens the modal right away. This might prevent exiting the app entirely on the first back press.
-                     // This is often optional but can improve feel.
-                     // history.replaceState({ page: 'letters-list' }, '', ''); // Replace initial state if needed
                 },
 
                 stopAllSounds() {
                      if (this.audioPlayer && !this.audioPlayer.paused) {
-                         console.log("Stopping audio."); // Debugging log
+                         console.log("Stopping audio.");
                          this.audioPlayer.pause();
                          this.audioPlayer.currentTime = 0;
                      }
                  },
 
                 playAudio(path) {
-                    console.log("Attempting to play:", path); // Debugging log
+                    console.log("Attempting to play:", path);
                     if (path) {
                          this.stopAllSounds(); // Stop any previous sounds
-                         // Check if the path is different before setting src again (minor optimization)
-                         // window.location.origin + '/' is needed to get the absolute path for comparison
                          if (this.audioPlayer.src !== window.location.origin + '/' + path) {
                               this.audioPlayer.src = path;
                          }
-                         // audioPlayer.load(); // Load is often implicit on play/setting src, but explicit can help
-                         this.audioPlayer.play().catch(e => console.error('Autoplay prevented or other play error:', path, e)); // Attempt to play, catch potential errors
+                         // this.audioPlayer.load(); // Load is often implicit on play/setting src
+                         this.audioPlayer.play().catch(e => console.error('Autoplay prevented or other play error:', path, e));
                     } else {
                         console.warn('Audio path is missing for:', path);
                     }
                 },
-
-                openModal(letterData) {
-                    console.log("Opening modal for:", letterData.letter); // Debugging log
+                // Accept the event object from Alpine ($event)
+                openModal(letterData, event) {
+                    console.log("Opening modal for:", letterData.letter);
                     this.currentLetter = letterData.letter;
                     this.examples = letterData.examples;
                     this.showModal = true;
 
-                    // **** Add history state when modal opens ****
-                    // Push a new state onto the history stack.
-                    // The state object ({ modalOpen: true }) helps us identify this history entry later.
-                    // The URL part ('') can be empty, keeping the URL clean, or could be '#modal' for clarity.
-                    history.pushState({ modalOpen: true, letter: letterData.letter }, '', ''); // Pass letter in state if needed later
+                    // Store the specific DOM element that was clicked
+                    // event.currentTarget is safer than event.target as it refers to the element with the @click listener
+                    this.lastClickedElement = event.currentTarget;
+                    console.log("Stored clicked element:", this.lastClickedElement); // Debug log
 
-                    // Use $nextTick to ensure modal is rendered before playing sound (sometimes helps)
+
+                    // Add history state when modal opens
+                    history.pushState({ modalOpen: true, letter: letterData.letter }, '', '');
+
                     this.$nextTick(() => {
                          this.playAudio(letterData.audio); // Play letter sound
                     });
                 },
-
                 closeModal() {
-                    console.log("Closing modal manually"); // Debugging log
-                    // **** Simply set showModal to false ****
-                    // The popstate handler will take care of the history navigation.
-                    // We do *not* call history.back() here when closing manually,
-                    // as that would cause issues with the popstate listener.
+                    console.log("Closing modal manually or via popstate");
                     this.showModal = false;
-                    this.stopAllSounds(); // Stop sounds when closing modal manually
+                    this.stopAllSounds(); // Stop sounds when closing modal
+
+                    // **** Fix for lingering hover state on mobile ****
+                    // Use the stored element to try and clear the visual state
+                    if (this.lastClickedElement) {
+                         console.log("Attempting to clear lingering state on element:", this.lastClickedElement); // Debug log
+                         // Force a reflow by accessing a layout property
+                         // This often prompts the browser to recalculate styles and clear hover/active states
+                         void this.lastClickedElement.offsetHeight; // Reading offsetHeight forces reflow
+                         // You could also try removing/re-adding a class, but this is simpler
+                         // e.g., this.lastClickedElement.classList.remove('some-temp-class'); setTimeout(() => this.lastClickedElement.classList.add('some-temp-class'), 0);
+
+                         this.lastClickedElement = null; // Clear the reference after use
+                    }
+                    // **** End Fix ****
                 }
             }
         }
