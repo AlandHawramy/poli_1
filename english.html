@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ckb" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alphabet</title>
-    <!-- Google Fonts for Vazirmatn (friendly, modern Kurdish support) as fallback -->
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- CSS Styles -->
+    <title>ژمارەکان بە ئایکۆن</title>
+    <!-- Your Custom CSS Styles -->
     <style>
         /* Define theme colors using CSS variables (Purple theme from Kurdish letters app) */
         :root {
@@ -35,15 +33,14 @@
 
         /* Apply font and background to body */
         body {
-            /* Prioritize a common sans-serif for English, with Kurdish fonts as fallback */
-            font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif, "Vazirmatn", "NRT Reg", "Rudaw", "Unikurd Web", "Tahoma";
+            font-family: "Vazirmatn", "NRT Reg", "Rudaw", "Unikurd Web", "Tahoma", sans-serif;
             background-color: var(--theme-bg-main);
             color: var(--theme-text-primary);
             line-height: 1.6;
             margin: 0;
             padding: 0;
             overflow-x: hidden; /* Prevent horizontal scroll */
-            text-align: left; /* Default text alignment for LTR */
+            text-align: right; /* Default text alignment for RTL */
         }
 
         /* Basic container styling */
@@ -53,44 +50,49 @@
             padding: 1rem;
         }
 
-        /* Back button style */
+         /* Back button style */
         .back-button {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             position: absolute;
             top: 1rem;
-            left: 1rem; /* Position on the left visually in LTR */
+            left: 1rem; /* Position on the left visually in RTL */
             right: auto; /* Ensure it's not affected by RTL right */
-            background-color: var(--theme-bg-accent);
-            color: var(--theme-text-accent);
+            background-color: var(--theme-bg-accent); /* Use an accent background */
+            color: var(--theme-text-accent); /* Use accent text color */
             border: 1px solid var(--theme-border-medium);
-            border-radius: 0.5rem;
+            border-radius: 0.5rem; /* Rounded corners */
             padding: 0.5rem;
             cursor: pointer;
             transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-            z-index: 10;
-            text-decoration: none;
+            z-index: 10; /* Stay on top */
+            text-decoration: none; /* Remove underline for links */
         }
 
         .back-button:hover {
-            background-color: var(--theme-border-light);
+            background-color: var(--theme-border-light); /* Lighter on hover */
             border-color: var(--theme-border-accent);
-            transform: translateY(-1px);
+            transform: translateY(-1px); /* Slight lift on hover */
         }
 
         .back-button svg {
             width: 1.5rem;
             height: 1.5rem;
-            transform: rotate(0deg); /* Arrow points left in LTR (standard for back) */
+            /* Arrow points left in RTL */
+            transform: rotate(0deg);
+        }
+        html[dir="ltr"] .back-button svg {
+             transform: rotate(180deg); /* Arrow points left in LTR */
         }
 
-        /* --- Letter/Number Grid Styles --- */
+        /* --- Grid Styles for Numbers (0-100) --- */
         .grid-container {
             display: grid;
-            gap: 1rem;
+            gap: 1rem; /* Space between items */
             padding-top: 1rem;
-            text-align: center;
+            text-align: center; /* Center grid items text */
+            /* Default (Mobile): Aim for more items per row to reduce scroll */
             grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
         }
 
@@ -100,14 +102,15 @@
             justify-content: center;
             background-color: var(--theme-card-bg);
             border: 1px solid var(--theme-card-border);
-            border-radius: 0.75rem;
-            font-size: 2rem;
+            border-radius: 0.75rem; /* Slightly rounded */
+            font-size: 2rem; /* Large font size for numbers */
             font-weight: bold;
             color: var(--theme-text-accent);
             cursor: pointer;
-            user-select: none;
-            min-height: 80px;
-            transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease; /* Smooth transitions for active state */
+            transition: all 0.2s ease;
+            user-select: none; /* Prevent text selection */
+            min-height: 80px; /* Minimum size for touch targets */
+            transition: all 0.3s ease, transform 0.3s ease; /* Add transform to transition */
         }
 
         .grid-item:hover {
@@ -116,25 +119,18 @@
             transform: scale(1.05); /* Slightly enlarge on hover */
         }
 
-        /* Animation on click/press */
-        .grid-item:active {
-            background-color: var(--theme-bg-accent);
-            border-color: var(--theme-button-primary-bg); /* Highlight on active */
-            box-shadow: 0 0 0 2px var(--theme-button-primary-bg); /* Add a subtle shadow */
-            transform: scale(1); /* No scale change on active to prevent lingering visual state */
-        }
-
+        /* Subtle animation for numbers (Applied to the span inside) */
         @keyframes gentle-pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.02); }
         }
 
         .grid-item span {
-            display: block;
-            transform-origin: center;
+            display: block; /* Allow transform */
+            transform-origin: center; /* Center the transform */
         }
         .grid-item:hover span {
-            animation: gentle-pulse 1.5s infinite ease-in-out;
+            animation: gentle-pulse 1.5s infinite ease-in-out; /* Apply animation on hover */
         }
 
 
@@ -145,180 +141,196 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.6);
+            background-color: rgba(0, 0, 0, 0.6); /* Dark semi-transparent overlay */
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 50;
+            z-index: 50; /* Above other content */
             padding: 1rem;
-            overflow-y: auto;
+            overflow-y: auto; /* Allow scrolling if modal is taller than screen */
         }
 
         .modal-content {
             background-color: var(--theme-bg-content);
-            border-radius: 1rem;
-            padding: 2.5rem 1.5rem 1.5rem;
-            max-width: 600px;
+            border-radius: 1rem; /* Rounded corners */
+            padding: 1.5rem;
+            max-width: 600px; /* Maximum width */
             width: 100%;
-            position: relative;
+            position: relative; /* Needed for back button positioning */
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            text-align: left;
-        }
-
-        @keyframes gentle-pulse-title {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            text-align: right; /* Align modal content text to the right */
         }
 
         .modal-title {
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             font-weight: bold;
             color: var(--theme-text-accent);
             text-align: center;
             margin-bottom: 1.5rem;
-            animation: gentle-pulse-title 2.5s infinite ease-in-out;
         }
 
+        /* Back button inside modal (positioning relative to modal-content) */
         .modal-content .back-button {
             position: absolute;
             top: 1rem;
-            left: 1rem;
+            left: 1rem; /* Position on the left visually in RTL */
             right: auto;
-            padding: 0.35rem;
+            padding: 0.35rem; /* Smaller padding */
             background-color: var(--theme-bg-accent);
-            color: var(--theme-text-accent);
+            color: var(--theme-text-accent); /* Match modal elements */
             border: 1px solid var(--theme-border-medium);
             border-radius: 0.5rem;
             cursor: pointer;
             transition: background-color 0.2s ease, border-color 0.2s ease;
-            z-index: 20;
-            transform: none;
+            z-index: 20; /* Ensure it's above modal content */
+            transform: none; /* Reset potential rotation from grid-item */
         }
         .modal-content .back-button:hover {
             background-color: var(--theme-border-light);
             border-color: var(--theme-border-accent);
         }
 
-        .example-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        @media (max-width: 767px) {
-            .example-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 0.75rem;
-            }
-        }
-
-        .example-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            padding: 0.75rem;
+        /* --- Icon Display Area Styles --- */
+        .icon-display-area {
+            margin-top: 1.5rem;
+            padding: 1rem;
             border: 1px solid var(--theme-card-border);
-            border-radius: 0.75rem;
+            border-radius: 1rem;
             background-color: var(--theme-card-bg);
-            transition: all 0.2s ease;
-            user-select: none;
+            overflow-y: auto; /* Allow vertical scrolling if needed */
+            max-height: 400px; /* Limit height to prevent excessive scrolling */
+            display: grid; /* Use grid for controlled layout */
+            /* gap is defined by the specific column classes below */
+            justify-items: center; /* Center items within their grid cells */
+            align-items: center;
+            /* Default or fallback grid template */
+             grid-template-columns: repeat(auto-fit, minmax(20px, 1fr)); /* Fallback */
+             gap: 0.5rem; /* Default gap */
         }
 
-        .example-item:hover {
-            background-color: var(--theme-bg-accent);
-            border-color: var(--theme-card-hover-border);
-            transform: scale(1.03);
+        /* --- NEW GRID LAYOUT CLASSES BASED ON USER REQUIREMENT --- */
+        /* 5 icons per row for numbers 1-40 */
+        .icons-grid-5-per-row {
+            grid-template-columns: repeat(5, 1fr); /* Force 5 columns */
+            gap: 0.8rem; /* Gap for 5 columns */
         }
 
-        .example-item img {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-            margin-bottom: 0.5rem;
-            border-radius: 0.5rem;
+        /* 10 icons per row for numbers 41-100 */
+        .icons-grid-10-per-row {
+            grid-template-columns: repeat(10, 1fr); /* Force 10 columns */
+             gap: 0.4rem; /* Gap for 10 columns (smaller gap for more icons) */
         }
+         /* END NEW GRID LAYOUT CLASSES */
 
-        .example-item span {
-            font-size: 1rem;
-            font-weight: 500;
-            color: var(--theme-text-primary);
-            text-align: center;
-        }
+
+        /* Define icon sizes */
+        .math-icon { object-fit: contain; flex-shrink: 0;}
+         /* Adjust size thresholds based on the expected grid layout (5 or 10 columns) */
+        .math-icon.xlarge { width: 50px; height: 50px; } /* For numbers 1-5 (fits 5-col) */
+        .math-icon.large { width: 40px; height: 40px; }   /* For numbers 6-10 (fits 5-col) */
+        .math-icon.medium { width: 30px; height: 30px; } /* For numbers 11-40 (fits 5-col) */
+        .math-icon.small { width: 20px; height: 20px; }   /* For numbers > 40 (fits 10-col) */
+
 
         /* --- Responsive Adjustments --- */
-        @media (min-width: 768px) {
+        @media (min-width: 768px) { /* md breakpoint */
             .container {
                 padding: 2rem;
             }
             .grid-container {
                 grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
             }
-            .example-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
             .modal-content {
-                max-width: 700px;
+                max-width: 700px; /* Wider modal */
             }
             .modal-content .back-button {
+                left: 2rem; /* Position slightly further in on larger screens */
+            }
+            html[dir="rtl"] .modal-content .back-button {
+                left: 2rem;
+            }
+            html[dir="ltr"] .modal-content .back-button {
                 left: 2rem;
             }
         }
 
-        @media (min-width: 1024px) {
+        @media (min-width: 1024px) { /* lg */
             .grid-container {
                 grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+             /* Adjust modal max-width for larger screens if needed */
+            .modal-content {
+                 max-width: 800px;
             }
         }
 
         /* Hide element when AlpineJS x-cloak is used */
         [x-cloak] { display: none !important; }
 
+        .math-section-title {
+            font-size: 1.8rem; /* Slightly larger title for the main section */
+            font-weight: bold;
+            color: var(--theme-text-accent);
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            text-align: center; /* Center titles */
+        }
+         .section-description {
+            font-size: 1.1rem;
+            color: var(--theme-text-secondary);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
     </style>
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body dir="ltr">
+<body x-data="numbersIconApp()">
 
-    <a href="index.html" class="back-button" aria-label="Back to home">
+    <!-- The single back button that always links to index.html -->
+    <a href="index.html" class="back-button" aria-label="گەڕانەوە بۆ سەرەتا">
        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
        </svg>
     </a>
 
-    <div class="container" x-data="englishApp()">
-        <h1 style="text-align: center; margin-bottom: 2rem; color: var(--theme-text-accent); font-size: 2.5rem; font-weight: bold;">Alphabet</h1>
-
+    <div class="container">
+        <h1 class="math-section-title">
+            ژمارەکان بە ئایکۆن
+        </h1>
+        <!-- Main Content: Numbers with Icons (0-100) -->
         <div class="grid-container">
-             <!-- Loop through letters data -->
-            <template x-for="letterData in letters" :key="letterData.letter">
-                <div class="grid-item"
-                     @click="openModal(letterData)">
-                    <span x-text="letterData.letter"></span>
+            <template x-for="number in numbers" :key="'icon-num-' + number">
+                <div class="grid-item" @click="openIconModal(number)">
+                    <span x-text="toKurdishDigits(number)" dir="ltr"></span> <!-- Convert to Kurdish digits -->
                 </div>
             </template>
         </div>
 
-        <!-- Modal -->
-        <template x-if="showModal">
+        <!-- Icon Detail Modal -->
+        <template x-if="modalOpen">
             <div class="modal-backdrop" @click.self="closeModal()"> <!-- Close modal when clicking outside (on backdrop) -->
                 <div class="modal-content" @click.stop> <!-- Prevent click inside modal from closing it -->
-                    <button class="back-button" @click="closeModal()" aria-label="Back">
-                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
-                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-                       </svg>
+                    <!-- Modal Back Button -->
+                    <!-- This internal back button calls closeModal() -->
+                    <button @click="closeModal()" class="back-button" aria-label="گەڕانەوە">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
+                        </svg>
                     </button>
-                    <h2 class="modal-title" x-text="currentLetter"></h2>
 
-                    <div class="example-grid">
-                        <!-- Loop through examples -->
-                        <template x-for="example in examples" :key="example.text">
-                            <div class="example-item" @click="speakText(example.text)">
-                                <!-- TODO: Replace with actual image paths -->
-                                <img :src="example.image" :alt="example.text + ' image'">
-                                <span x-text="example.text"></span>
-                            </div>
+                    <h3 class="modal-title">
+                        ژمارەی <span x-text="toKurdishDigits(selectedNumberForIcons)" dir="ltr"></span> <!-- Convert to Kurdish digits -->
+                    </h3>
+
+                    <!-- Area to display Icons -->
+                    <!-- Conditional class based on number size and layout preference -->
+                    <div class="icon-display-area" :class="iconGridClass">
+                        <template x-for="(iconSrc, index) in displayedIcons" :key="'icon-item-' + index">
+                            <!-- TODO: Replace with actual animal icon image paths -->
+                            <img :src="iconSrc" :alt="'Icon ' + (index + 1)" class="math-icon" :class="iconSizeClass">
                         </template>
+                        <p x-show="selectedNumberForIcons === 0" class="text-center text-xl" style="color: var(--theme-text-secondary);">هیچ</p>
                     </div>
                 </div>
             </div>
@@ -326,207 +338,384 @@
 
     </div>
 
+    <!-- Audio elements for Math Numbers (0-100) -->
+    <!-- You MUST add 101 <audio> tags here, one for each number from 0 to 100 -->
+    <!-- Ensure the src path is correct, e.g., "audio/math/0.mp3" -->
+    <audio id="sound-0" src="audio/math/0.wav" preload="auto"></audio>
+    <audio id="sound-1" src="audio/math/1.mp3" preload="auto"></audio>
+    <audio id="sound-2" src="audio/math/2.mp3" preload="auto"></audio>
+    <audio id="sound-3" src="audio/math/3.wav" preload="auto"></audio>
+    <audio id="sound-4" src="audio/math/4.mp3" preload="auto"></audio>
+    <audio id="sound-5" src="audio/math/5.mp3" preload="auto"></audio>
+    <audio id="sound-6" src="audio/math/6.mp3" preload="auto"></audio>
+    <audio id="sound-7" src="audio/math/7.mp3" preload="auto"></audio>
+    <audio id="sound-8" src="audio/math/8.mp3" preload="auto"></audio>
+    <audio id="sound-9" src="audio/math/9.mp3" preload="auto"></audio>
+    <audio id="sound-10" src="audio/math/10.mp3" preload="auto"></audio>
+    <audio id="sound-11" src="audio/math/11.mp3" preload="auto"></audio>
+    <audio id="sound-12" src="audio/math/12.mp3" preload="auto"></audio>
+    <audio id="sound-13" src="audio/math/13.mp3" preload="auto"></audio>
+    <audio id="sound-14" src="audio/math/14.mp3" preload="auto"></audio>
+    <audio id="sound-15" src="audio/math/15.mp3" preload="auto"></audio>
+    <audio id="sound-16" src="audio/math/16.mp3" preload="auto"></audio>
+    <audio id="sound-17" src="audio/math/17.mp3" preload="auto"></audio>
+    <audio id="sound-18" src="audio/math/18.mp3" preload="auto"></audio>
+    <audio id="sound-19" src="audio/math/19.mp3" preload="auto"></audio>
+    <audio id="sound-20" src="audio/math/20.mp3" preload="auto"></audio>
+    <audio id="sound-21" src="audio/math/21.mp3" preload="auto"></audio>
+    <audio id="sound-22" src="audio/math/22.mp3" preload="auto"></audio>
+    <audio id="sound-23" src="audio/math/23.mp3" preload="auto"></audio>
+    <audio id="sound-24" src="audio/math/24.mp3" preload="auto"></audio>
+    <audio id="sound-25" src="audio/math/25.mp3" preload="auto"></audio>
+    <audio id="sound-26" src="audio/math/26.mp3" preload="auto"></audio>
+    <audio id="sound-27" src="audio/math/27.mp3" preload="auto"></audio>
+    <audio id="sound-28" src="audio/math/28.mp3" preload="auto"></audio>
+    <audio id="sound-29" src="audio/math/29.mp3" preload="auto"></audio>
+    <audio id="sound-30" src="audio/math/30.mp3" preload="auto"></audio>
+    <audio id="sound-31" src="audio/math/31.mp3" preload="auto"></audio>
+    <audio id="sound-32" src="audio/math/32.mp3" preload="auto"></audio>
+    <audio id="sound-33" src="audio/math/33.mp3" preload="auto"></audio>
+    <audio id="sound-34" src="audio/math/34.mp3" preload="auto"></audio>
+    <audio id="sound-35" src="audio/math/35.mp3" preload="auto"></audio>
+    <audio id="sound-36" src="audio/math/36.mp3" preload="auto"></audio>
+    <audio id="sound-37" src="audio/math/37.mp3" preload="auto"></audio>
+    <audio id="sound-38" src="audio/math/38.mp3" preload="auto"></audio>
+    <audio id="sound-39" src="audio/math/39.mp3" preload="auto"></audio>
+    <audio id="sound-40" src="audio/math/40.mp3" preload="auto"></audio>
+    <audio id="sound-41" src="audio/math/41.mp3" preload="auto"></audio>
+    <audio id="sound-42" src="audio/math/42.mp3" preload="auto"></audio>
+    <audio id="sound-43" src="audio/math/43.mp3" preload="auto"></audio>
+    <audio id="sound-44" src="audio/math/44.mp3" preload="auto"></audio>
+    <audio id="sound-45" src="audio/math/45.mp3" preload="auto"></audio>
+    <audio id="sound-46" src="audio/math/46.mp3" preload="auto"></audio>
+    <audio id="sound-47" src="audio/math/47.mp3" preload="auto"></audio>
+    <audio id="sound-48" src="audio/math/48.mp3" preload="auto"></audio>
+    <audio id="sound-49" src="audio/math/49.mp3" preload="auto"></audio>
+    <audio id="sound-50" src="audio/math/50.mp3" preload="auto"></audio>
+    <audio id="sound-51" src="audio/math/51.mp3" preload="auto"></audio>
+    <audio id="sound-52" src="audio/math/52.mp3" preload="auto"></audio>
+    <audio id="sound-53" src="audio/math/53.mp3" preload="auto"></audio>
+    <audio id="sound-54" src="audio/math/54.mp3" preload="auto"></audio>
+    <audio id="sound-55" src="audio/math/55.mp3" preload="auto"></audio>
+    <audio id="sound-56" src="audio/math/56.mp3" preload="auto"></audio>
+    <audio id="sound-57" src="audio/math/57.mp3" preload="auto"></audio>
+    <audio id="sound-58" src="audio/math/58.mp3" preload="auto"></audio>
+    <audio id="sound-59" src="audio/math/59.mp3" preload="auto"></audio>
+    <audio id="sound-60" src="audio/math/60.mp3" preload="auto"></audio>
+    <audio id="sound-61" src="audio/math/61.mp3" preload="auto"></audio>
+    <audio id="sound-62" src="audio/math/62.mp3" preload="auto"></audio>
+    <audio id="sound-63" src="audio/math/63.mp3" preload="auto"></audio>
+    <audio id="sound-64" src="audio/math/64.mp3" preload="auto"></audio>
+    <audio id="sound-65" src="audio/math/65.mp3" preload="auto"></audio>
+    <audio id="sound-66" src="audio/math/66.mp3" preload="auto"></audio>
+    <audio id="sound-67" src="audio/math/67.mp3" preload="auto"></audio>
+    <audio id="sound-68" src="audio/math/68.mp3" preload="auto"></audio>
+    <audio id="sound-69" src="audio/math/69.mp3" preload="auto"></audio>
+    <audio id="sound-70" src="audio/math/70.mp3" preload="auto"></audio>
+    <audio id="sound-71" src="audio/math/71.mp3" preload="auto"></audio>
+    <audio id="sound-72" src="audio/math/72.mp3" preload="auto"></audio>
+    <audio id="sound-73" src="audio/math/73.mp3" preload="auto"></audio>
+    <audio id="sound-74" src="audio/math/74.mp3" preload="auto"></audio>
+    <audio id="sound-75" src="audio/math/75.mp3" preload="auto"></audio>
+    <audio id="sound-76" src="audio/math/76.mp3" preload="auto"></audio>
+    <audio id="sound-77" src="audio/math/77.mp3" preload="auto"></audio>
+    <audio id="sound-78" src="audio/math/78.mp3" preload="auto"></audio>
+    <audio id="sound-79" src="audio/math/79.mp3" preload="auto"></audio>
+    <audio id="sound-80" src="audio/math/80.mp3" preload="auto"></audio>
+    <audio id="sound-81" src="audio/math/81.mp3" preload="auto"></audio>
+    <audio id="sound-82" src="audio/math/82.mp3" preload="auto"></audio>
+    <audio id="sound-83" src="audio/math/83.mp3" preload="auto"></audio>
+    <audio id="sound-84" src="audio/math/84.mp3" preload="auto"></audio>
+    <audio id="sound-85" src="audio/math/85.mp3" preload="auto"></audio>
+    <audio id="sound-86" src="audio/math/86.mp3" preload="auto"></audio>
+    <audio id="sound-87" src="audio/math/87.mp3" preload="auto"></audio>
+    <audio id="sound-88" src="audio/math/88.mp3" preload="auto"></audio>
+    <audio id="sound-89" src="audio/math/89.mp3" preload="auto"></audio>
+    <audio id="sound-90" src="audio/math/90.mp3" preload="auto"></audio>
+    <audio id="sound-91" src="audio/math/91.mp3" preload="auto"></audio>
+    <audio id="sound-92" src="audio/math/92.mp3" preload="auto"></audio>
+    <audio id="sound-93" src="audio/math/93.mp3" preload="auto"></audio>
+    <audio id="sound-94" src="audio/math/94.mp3" preload="auto"></audio>
+    <audio id="sound-95" src="audio/math/95.mp3" preload="auto"></audio>
+    <audio id="sound-96" src="audio/math/96.mp3" preload="auto"></audio>
+    <audio id="sound-97" src="audio/math/97.mp3" preload="auto"></audio>
+    <audio id="sound-98" src="audio/math/98.mp3" preload="auto"></audio>
+    <audio id="sound-99" src="audio/math/99.mp3" preload="auto"></audio>
+    <audio id="sound-100" src="audio/math/100.mp3" preload="auto"></audio>
+
     <!-- Alpine.js data object -->
     <script>
-        function englishApp() {
+        function numbersIconApp() {
             return {
-                showModal: false,
-                currentLetter: '',
-                examples: [],
-                letters: [
-                    { letter: 'A', examples: [
-                        { text: 'Apple', image: 'images/en/apple.png' },
-                        { text: 'Ant', image: 'images/en/ant.png' },
-                        { text: 'Aeroplane', image: 'images/en/aeroplane.png' },
-                        { text: 'Alligator', image: 'images/en/alligator.png' }
-                    ]},
-                     { letter: 'B', examples: [
-                        { text: 'Ball', image: 'images/en/ball.png' },
-                        { text: 'Bird', image: 'images/en/bird.png' },
-                        { text: 'Book', image: 'images/en/book.png' },
-                        { text: 'Banana', image: 'images/en/banana.png' }
-                    ]},
-                     { letter: 'C', examples: [
-                        { text: 'Cat', image: 'images/en/cat.png' },
-                        { text: 'Car', image: 'images/en/car.png' },
-                        { text: 'Cake', image: 'images/en/cake.png' },
-                        { text: 'Cow', image: 'images/en/cow.png' }
-                    ]},
-                     { letter: 'D', examples: [
-                        { text: 'Dog', image: 'images/en/dog.png' },
-                        { text: 'Duck', image: 'images/en/duck.png' },
-                        { text: 'Drum', image: 'images/en/drum.png' },
-                        { text: 'Dolphin', image: 'images/en/dolphin.png' }
-                    ]},
-                    { letter: 'E', examples: [{ text: 'Elephant', image: 'images/en/elephant.png' }, { text: 'Egg', image: 'images/en/egg.png' }, { text: 'Eagle', image: 'images/en/eagle.png' }, { text: 'Earth', image: 'images/en/earth.png' }] },
-                    { letter: 'F', examples: [{ text: 'Fish', image: 'images/en/fish.png' }, { text: 'Frog', image: 'images/en/frog.png' }, { text: 'Fan', image: 'images/en/fan.png' }, { text: 'Flower', image: 'images/en/flower.png' }] },
-                    { letter: 'G', examples: [{ text: 'Grape', image: 'images/en/grape.png' }, { text: 'Goat', image: 'images/en/goat.png' }, { text: 'Guitar', image: 'images/en/guitar.png' }, { text: 'Giraffe', image: 'images/en/giraffe.png' }] },
-                    { letter: 'H', examples: [{ text: 'Hat', image: 'images/en/hat.png' }, { text: 'House', image: 'images/en/house.png' }, { text: 'Horse', image: 'images/en/horse.png' }, { text: 'Hen', image: 'images/en/hen.png' }] },
-                    { letter: 'I', examples: [{ text: 'Ice', image: 'images/en/ice.png' }, { text: 'Igloo', image: 'images/en/igloo.png' }, { text: 'Insect', image: 'images/en/insect.png' }, { text: 'Iron', image: 'images/en/iron.png' }] },
-                    { letter: 'J', examples: [{ text: 'Jar', image: 'images/en/jar.png' }, { text: 'Jellyfish', image: 'images/en/jellyfish.png' }, { text: 'Jacket', image: 'images/en/jacket.png' }, { text: 'Jeep', image: 'images/en/jeep.png' }] },
-                    { letter: 'K', examples: [{ text: 'Kite', image: 'images/en/kite.png' }, { text: 'King', image: 'images/en/king.png' }, { text: 'Kangaroo', image: 'images/en/kangaroo.png' }, { text: 'Key', image: 'images/en/key.png' }] },
-                    { text: 'L', examples: [{ text: 'Lion', image: 'images/en/lion.png' }, { text: 'Lamp', image: 'images/en/lamp.png' }, { text: 'Leaf', image: 'images/en/leaf.png' }, { text: 'Lemon', image: 'images/en/lemon.png' }] },
-                    { letter: 'M', examples: [{ text: 'Monkey', image: 'images/en/monkey.png' }, { text: 'Mouse', image: 'images/en/mouse.png' }, { text: 'Moon', image: 'images/en/moon.png' }, { text: 'Milk', image: 'images/en/milk.png' }] },
-                    { letter: 'N', examples: [{ text: 'Nest', image: 'images/en/nest.png' }, { text: 'Nurse', image: 'images/en/nurse.png' }, { text: 'Nine', image: 'images/en/nine.png' }, { text: 'Nose', image: 'images/en/nose.png' }] },
-                    { letter: 'O', examples: [{ text: 'Orange', image: 'images/en/orange.png' }, { text: 'Owl', image: 'images/en/owl.png' }, { text: 'Octopus', image: 'images/en/octopus.png' }, { text: 'Onion', image: 'images/en/onion.png' }] },
-                    { letter: 'P', examples: [{ text: 'Pig', image: 'images/en/pig.png' }, { text: 'Panda', image: 'images/en/panda.png' }, { text: 'Pencil', image: 'images/en/pencil.png' }, { text: 'Pear', image: 'images/en/pear.png' }] },
-                    { letter: 'Q', examples: [{ text: 'Queen', image: 'images/en/queen.png' }, { text: 'Quail', image: 'images/en/quail.png' }, { text: 'Quilt', image: 'images/en/quilt.png' }, { text: 'Question', image: 'images/en/question.png' }] },
-                    { letter: 'R', examples: [{ text: 'Rabbit', image: 'images/en/rabbit.png' }, { text: 'Rain', image: 'images/en/rain.png' }, { text: 'Rose', image: 'images/en/rose.png' }, { text: 'Ring', image: 'images/en/ring.png' }] },
-                    { letter: 'S', examples: [{ text: 'Sun', image: 'images/en/sun.png' }, { text: 'Snake', image: 'images/en/snake.png' }, { text: 'Star', image: 'images/en/star.png' }, { text: 'Shoe', image: 'images/en/shoe.png' }] },
-                    { letter: 'T', examples: [{ text: 'Tiger', image: 'images/en/tiger.png' }, { text: 'Tree', image: 'images/en/tree.png' }, { text: 'Train', image: 'images/en/train.png' }, { text: 'Table', image: 'images/en/table.png' }] },
-                    { letter: 'U', examples: [{ text: 'Umbrella', image: 'images/en/umbrella.png' }, { text: 'Uniform', image: 'images/en/uniform.png' }, { text: 'Up', image: 'images/en/up.png' }, { text: 'Us', image: 'images/en/us.png' }] },
-                    { letter: 'V', examples: [{ text: 'Van', image: 'images/en/van.png' }, { text: 'Violin', image: 'images/en/violin.png' }, { text: 'Vase', image: 'images/en/vase.png' }, { text: 'Vegetables', image: 'images/en/vegetables.png' }] },
-                    { letter: 'W', examples: [{ text: 'Wolf', image: 'images/en/wolf.png' }, { text: 'Water', image: 'images/en/water.png' }, { text: 'Watch', image: 'images/en/watch.png' }, { text: 'Window', image: 'images/en/window.png' }] },
-                    { letter: 'X', examples: [{ text: 'X-ray', image: 'images/en/xray.png' }, { text: 'Xylophone', image: 'images/en/xylophone.png' }, { text: 'Fox', image: 'images/en/fox.png' }, { text: 'Box', image: 'images/en/box.png' }] },
-                    { letter: 'Y', examples: [{ text: 'Yacht', image: 'images/en/yacht.png' }, { text: 'Yak', image: 'images/en/yak.png' }, { text: 'Yarn', image: 'images/en/yarn.png' }, { text: 'Yellow', image: 'images/en/yellow.png' }] },
-                    { letter: 'Z', examples: [{ text: 'Zebra', image: 'images/en/zebra.png' }, { text: 'Zipper', image: 'images/en/zipper.png' }, { text: 'Zoo', image: 'images/en/zoo.png' }, { text: 'Zero', image: 'images/en/zero.png' }] }
+                numbers: Array.from({ length: 101 }, (_, i) => i), // Numbers from 0 to 100
+                modalOpen: false, // For icon modal
+                selectedNumberForIcons: 0, // Number selected for icon display
+                displayedIcons: [], // Array to hold the src of icons to display
+                selectedAnimalIcon: '', // Store the path of the single selected animal icon
+
+                // Audio player elements
+                numberSoundElements: {}, // To store references to individual number audio elements
+                synth: window.speechSynthesis, // For potential TTS fallback
+
+                // List of animal icon paths (TODO: Replace with your actual paths)
+                animalIconPaths: [
+                    'images/icons/animal_cat.png',
+                    'images/icons/animal_dog.png',
+                    'images/icons/animal_elephant.png',
+                    'images/icons/animal_fish.png',
+                    'images/icons/animal_lion.png',
+                    'images/icons/animal_monkey.png',
+                    'images/icons/animal_owl.png',
+                    'images/icons/animal_pig.png',
+                    'images/icons/animal_rabbit.png',
+                    'images/icons/animal_zebra.png',
+                    'images/icons/animal_bird.png',
+                    'images/icons/animal_cow.png',
+                    'images/icons/animal_frog.png',
+                    'images/icons/animal_horse.png',
+                    'images/icons/animal_mouse.png',
+                    'images/icons/animal_snake.png',
+                    'images/icons/animal_tiger.png',
+                    'images/icons/animal_wolf.png',
+                    // Add more animal icon paths here (ensure these paths are correct in your project)
                 ],
-                synth: window.speechSynthesis,
-                voices: [], // To store available voices
-                selectedVoice: null, // To store the selected female English voice
+
+                // Kurdish digits mapping
+                kurdishDigits: ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'],
 
                 init() {
-                    console.log("English App Initializing.");
+                    console.log("Numbers with Icons App Initializing"); // Debugging log
+                    // Initialize number sound elements (find them by ID)
+                    this.$nextTick(() => { // Ensure DOM is ready and audio tags exist
+                        for(let i = 0; i <= 100; i++) {
+                            const soundElement = document.getElementById(`sound-${i}`);
+                            if(soundElement) {
+                                this.numberSoundElements[i] = soundElement;
+                                soundElement.onerror = (e) => console.error(`Error loading audio for number ${i}:`, soundElement.src, e);
+                            } else {
+                                // Create a dummy object if element not found to prevent errors
+                                this.numberSoundElements[i] = { play: () => { console.warn(`Audio tag not found for number ${i}. Expected ID: sound-${i}.`); }, pause: () => {}, currentTime: 0 };
+                            }
+                        }
+                        console.log('Number sound elements count:', Object.keys(this.numberSoundElements).length); // Debugging
+                    });
 
-                    if (!this.synth) {
-                        console.error('Text-to-Speech not supported in this browser.');
-                        return;
-                    }
+                    // Stop sounds if the window/tab becomes inactive (optional but good practice)
+                    document.addEventListener('visibilitychange', () => {
+                        if (document.hidden) {
+                            this.stopAllSounds();
+                            if (this.synth && this.synth.speaking) {
+                                this.synth.cancel();
+                            }
+                        }
+                    });
 
-                    // This event fires when voices are loaded or change.
-                    // It's crucial for mobile browsers.
-                    this.synth.onvoiceschanged = () => {
-                        console.log("Voices changed event fired. Attempting to load and select voice.");
-                        this.loadAndSelectVoice();
-                    };
+                    // --- Add Popstate Listener for Back Button ---
+                    window.addEventListener('popstate', (event) => {
+                        // This event fires when the user presses the browser/device back button.
+                        console.log('Popstate event fired. event.state:', event.state, 'Modal Open:', this.modalOpen);
 
-                    // Try to load voices immediately if they are already available (e.g., on desktop browsers).
-                    // If not available, the onvoiceschanged event will handle it later.
-                    if (this.synth.getVoices().length > 0) {
-                         console.log("Voices available on init. Selecting voice.");
-                         this.loadAndSelectVoice();
-                    } else {
-                         console.log("Voices not immediately available. Waiting for 'onvoiceschanged' event.");
+                        // If the modal is currently open when popstate fires,
+                        // it means the user pressed back *from* the modal state we pushed.
+                        // We want to intercept this and just close the modal.
+                        if (this.modalOpen) {
+                            console.log('Modal was open during popstate. Closing modal.');
+                            // We just need to update our UI state (close the modal).
+                            // The history state has already been handled by the browser popping the state.
+                            this.closeModal(); // This updates Alpine state, hiding the modal UI.
+                        } else {
+                            // If the modal was NOT open, it means the user was likely on the main grid view.
+                            // Allowing the default popstate action will navigate them away from this page.
+                             console.log('Modal was not open during popstate. Allowing browser navigation.');
+                             // No action needed here, the browser handles the navigation.
+                        }
+                    });
+                    // --- End Add Popstate Listener ---
+
+                    // Optional: Handle initial load with a modal hash (e.g., numbers.html#modal-25)
+                    // This allows direct links or refresh to open the specific modal.
+                    const initialHash = window.location.hash;
+                    if (initialHash && initialHash.startsWith('#modal-')) {
+                        const initialNumber = parseInt(initialHash.substring('#modal-'.length), 10);
+                        if (!isNaN(initialNumber) && initialNumber >= 0 && initialNumber <= 100) {
+                             console.log('Page loaded with modal hash, attempting to open modal for number:', initialNumber);
+                             // Use a timeout or $nextTick to ensure Alpine and audio are fully ready
+                             // before trying to open the modal and play sound.
+                             this.$nextTick(() => {
+                                this.openIconModal(initialNumber); // This will also push state, which is fine on load
+                             });
+                        }
                     }
                 },
 
-                loadAndSelectVoice() {
-                    // Always get the latest list of voices
-                    this.voices = this.synth.getVoices();
-                    console.log(`Found ${this.voices.length} voices.`);
-                    // console.log("Available voices:", this.voices.map(v => `${v.name} (${v.lang})`)); // Uncomment for detailed voice list
-
-                    if (this.voices.length === 0) {
-                        console.warn('No voices available yet.');
-                        this.selectedVoice = null; // Explicitly set to null if no voices
-                        return; // Can't select if none exist
-                    }
-
-                    // Prioritize a high-quality US English female voice (like Google's if available)
-                    // We'll prioritize common Google voices like "Google US English" and then general female voices.
-                    this.selectedVoice = this.voices.find(voice =>
-                        voice.lang === 'en-US' && voice.name.toLowerCase().includes('google') && voice.name.toLowerCase().includes('female')
-                    ) || this.voices.find(voice =>
-                        voice.lang === 'en-US' && voice.name.toLowerCase().includes('female')
-                    ) || this.voices.find(voice =>
-                         // Check for English female voices from other regions
-                        voice.lang.startsWith('en') && voice.name.toLowerCase().includes('female')
-                         // Add more specific checks if needed, e.g., voice.name.includes('Samantha')
-                    ) || this.voices.find(voice =>
-                        voice.lang === 'en-US' // Fallback to any US English voice
-                    ) || this.voices.find(voice =>
-                        voice.lang.startsWith('en') // Fallback to any English voice
-                    ) || this.voices[0]; // Fallback to the first available voice
-
-                    if (this.selectedVoice) {
-                        console.log('Selected voice:', this.selectedVoice.name, `(${this.selectedVoice.lang})`);
-                    } else {
-                        console.warn('No suitable English voice found based on criteria. Using browser default if available.');
-                        // The browser will typically use a default voice if utterance.voice is not set or set to null.
-                    }
+                // Convert Western number to Kurdish digits string
+                toKurdishDigits(number) {
+                    return String(number).split('').map(digit => {
+                        if (digit === '.') return '.';
+                        const westernDigit = parseInt(digit, 10);
+                        return isNaN(westernDigit) ? digit : this.kurdishDigits[westernDigit];
+                    }).join('');
                 },
 
-                stopSpeaking() {
-                    if (this.synth && this.synth.speaking) {
-                        console.log("Stopping current speech.");
+                // --- Sound Control ---
+                stopAllSounds() {
+                    // Stop all currently playing number sounds
+                    Object.values(this.numberSoundElements).forEach(audio => {
+                         // Check if audio exists and has pause/currentTime properties (handles dummy objects)
+                        if (audio && typeof audio.pause === 'function' && typeof audio.currentTime !== 'undefined' && !audio.paused) {
+                            audio.pause();
+                            audio.currentTime = 0;
+                        }
+                    });
+                    if (this.synth && this.synth.speaking) { // Also stop TTS fallback if it was used
                         this.synth.cancel();
                     }
                 },
 
-                speakText(text) {
-                    // --- Crucial checks before speaking ---
-                    if (!this.synth) {
-                        console.error('Text-to-Speech not supported in this browser.');
+                playNumberSound(number) {
+                    console.log("Attempting to play sound for number:", number); // Debugging log
+                    const soundElement = this.numberSoundElements[number];
+                     // Check if soundElement is a valid audio element object
+                    if (soundElement && soundElement instanceof HTMLAudioElement) {
+                        this.stopAllSounds(); // Stop any other number sound or TTS
+                        soundElement.currentTime = 0; // Reset to start
+                        soundElement.play().catch(error => console.error(`Error playing sound for number ${number}:`, error));
+                    } else {
+                        console.warn(`Sound element not found or is not an audio element for number ${number}. Check audio tags and paths.`);
+                        // Fallback: Text-to-Speech for numbers if audio is missing (optional)
+                        if (window.speechSynthesis && this.synth) {
+                            this.synth.cancel(); // Stop any other TTS
+                            const utterance = new SpeechSynthesisUtterance(number.toString()); // Speak the actual number string (e.g., "25")
+                            // Attempt to find a suitable voice, prioritizing English or Kurdish (if available)
+                            const voices = this.synth.getVoices();
+                            let voice = voices.find(v => v.lang === 'ckb-IQ' || v.lang === 'ckb-IR'); // Check for Kurdish voice
+                            if (!voice) {
+                                voice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('child') || v.name.toLowerCase().includes('male'))); // Fallback to English child/male voice
+                            }
+                             if (!voice) {
+                                voice = voices.find(v => v.lang.startsWith('en')); // Any English voice
+                            }
+                            if (voice) utterance.voice = voice;
+                             utterance.lang = voice ? voice.lang : 'en-US'; // Set language based on chosen voice or default to en-US
+                            this.synth.speak(utterance);
+                            utterance.onerror = (event) => {
+                                console.error('TTS fallback error for number:', number, event);
+                            };
+                        }
+                    }
+                },
+
+                // --- Numbers with Icons Section Functions ---
+                generateAnimalIcons(count) {
+                    if (count === 0) {
+                        this.displayedIcons = [];
+                        this.selectedAnimalIcon = '';
+                        return;
+                    }
+                    const numAnimals = this.animalIconPaths.length;
+                    if (numAnimals === 0) {
+                        console.warn("No animal icons available in animalIconPaths array.");
+                        this.displayedIcons = [];
+                        this.selectedAnimalIcon = '';
                         return;
                     }
 
-                    // If voices haven't been loaded/selected yet, try again.
-                    // This handles cases where the first attempt in init() didn't work.
-                    if (!this.selectedVoice || this.voices.length === 0) {
-                        console.warn('Speech voice not ready yet or not found. Attempting to select voice before speaking.');
-                        this.loadAndSelectVoice(); // This call is synchronous but updates this.selectedVoice
-                         // After attempting to load, check again if a voice was found
-                        if (!this.selectedVoice) {
-                             console.error('Failed to load or select a suitable voice. Cannot speak.');
-                             return; // Stop if no voice is available
-                        }
-                    }
+                    // Pick one random animal type for this number
+                    const randomIndex = Math.floor(Math.random() * numAnimals);
+                    this.selectedAnimalIcon = this.animalIconPaths[randomIndex];
 
-                    // Stop any previous speech to avoid overlapping
-                    this.stopSpeaking();
-
-                    const utterance = new SpeechSynthesisUtterance(text);
-                    utterance.lang = 'en-US'; // Always specify language
-
-                    // Assign the selected voice if one was found
-                    if (this.selectedVoice) {
-                         utterance.voice = this.selectedVoice;
-                         console.log(`Speaking "${text}" using selected voice: ${this.selectedVoice.name}`);
-                    } else {
-                         // Fallback: Browser will use a default voice for en-US if voice is null
-                         console.warn(`Speaking "${text}" using browser default voice for en-US (No specific voice selected).`);
-                         // utterance.voice remains null, browser picks default
-                    }
-
-
-                    utterance.rate = 0.9; // Slightly slower for clearer pronunciation
-                    utterance.pitch = 1; // Standard pitch
-
-                    // Add event listeners for more debugging
-                    utterance.onstart = () => console.log(`Speech started for: "${text}"`);
-                    utterance.onend = () => console.log(`Speech finished for: "${text}"`);
-                    utterance.onerror = (event) => {
-                        console.error('Speech synthesis error:', event.error, event); // event.error gives the type of error
-                        // Common errors: 'canceled', 'interrupted', 'not-allowed' (due to autoplay policy violations)
-                        // If 'not-allowed' occurs frequently despite being in a click handler,
-                        // it might indicate a tricky browser policy or timing issue.
-                    };
-
-
-                    // Speak the utterance
-                    try {
-                         this.synth.speak(utterance);
-                    } catch (e) {
-                         console.error('Error calling synth.speak():', e);
-                    }
+                    // Create an array with the selected icon path repeated 'count' times
+                    this.displayedIcons = Array(count).fill(this.selectedAnimalIcon);
+                    console.log(`Generated ${count} icons of type: ${this.selectedAnimalIcon}`); // Debugging log
                 },
 
-                openModal(letterData) {
-                    console.log("Opening modal for:", letterData.letter);
-                    this.currentLetter = letterData.letter;
-                    this.examples = letterData.examples;
-                    // Trigger speaking the letter first, inside the user's click event.
-                    // This is key for satisfying autoplay policies.
-                    this.speakText(letterData.letter);
+                openIconModal(number) {
+                    console.log("Opening icon modal for number:", number); // Debugging log
+                    this.selectedNumberForIcons = number;
+                    this.generateAnimalIcons(number); // Generate icons based on the number
 
-                    // Then open the modal
-                    this.showModal = true;
+                    // Play the number sound when the modal opens
+                    this.playNumberSound(number);
+
+                    // --- Add History State for Back Button Support ---
+                    // We push a state indicating the modal is open.
+                    // This makes the browser treat this as a new "page view" for history purposes.
+                    // We also add a unique hash to the URL, e.g., #modal-25.
+                    // This is useful for persistence (though refresh won't restore animal type)
+                    // and helps ensure pushState is treated as a distinct history entry.
+                     // Check if the current state or hash already indicates the modal is open for this number
+                     const currentState = history.state;
+                     const currentHash = window.location.hash;
+                     const targetHash = `#modal-${number}`;
+
+                    // Only push state if we are not already at this specific modal state
+                    if (!(currentState && currentState.modalOpen === true && currentState.number === number) || currentHash !== targetHash) {
+                         console.log('Pushing history state for modal:', number);
+                         try {
+                             // Add a unique key like 'appModalState' to prevent potential conflicts
+                             history.pushState({ appModalState: true, modalOpen: true, number: number }, '', targetHash);
+                         } catch (e) {
+                              console.error("Error pushing history state:", e);
+                             // Fallback: just update hash if pushState fails (e.g. state object too large)
+                              window.location.hash = targetHash;
+                         }
+                     } else {
+                          console.log('History state already indicates modal is open for number, not pushing.');
+                     }
+                    // --- End Add History State ---
+
+
+                    this.modalOpen = true; // Show the modal UI
+
+                    // Scroll modal content to top on next tick after DOM updates
+                    this.$nextTick(() => {
+                        const modalContent = document.querySelector('.modal-content');
+                        if (modalContent) {
+                            modalContent.scrollTo({top: 0, behavior: 'smooth'});
+                        }
+                    });
                 },
 
                 closeModal() {
-                    console.log("Closing modal");
-                    this.showModal = false;
-                    this.stopSpeaking(); // Stop speaking when closing modal
+                    console.log("Closing icon modal"); // Debugging log
+                    this.modalOpen = false; // Hide the modal UI first
+                    this.selectedNumberForIcons = 0; // Reset icon count
+                    this.displayedIcons = []; // Clear icons array
+                    this.selectedAnimalIcon = ''; // Clear selected animal icon
+                    this.stopAllSounds(); // Stop sounds when modal closes
+
+                    // --- History Management on Close ---
+                    // When the modal is closed by clicking the close button or backdrop,
+                    // we DO NOT want to navigate back in history. The user stays on the
+                    // current page (numbers.html, potentially with the #modal- hash still).
+                    // The popstate listener handles navigation when the user presses
+                    // the device's back button.
+                    // If the user closes the modal manually, the state we pushed
+                    // remains in history. The next time they press the device back button,
+                    // it will go to the state *before* the modal state (e.g., index.html).
+                    // This is a standard pattern for modal history integration.
+                    // --- End History Management ---
+                },
+
+                // Computed property/function to dynamically calculate icon size class based on number
+                iconSizeClass() {
+                    if (this.selectedNumberForIcons === 0) return ''; // No icons
+
+                    // Adjust size thresholds based on the expected grid layout (5 or 10 columns)
+                    if (this.selectedNumberForIcons <= 5) return 'xlarge'; // Very few, very large (fits 5-col)
+                    if (this.selectedNumberForIcons <= 10) return 'large'; // Still few, large (fits 5-col)
+                    if (this.selectedNumberForIcons <= 40) return 'medium'; // Up to 40 (fits well in 5 columns with medium size)
+                    // For numbers > 40 (which use 10 columns), use small size to fit more icons
+                    return 'small';
+                },
+
+                // Computed class for the icon container grid layout (5 or 10 columns)
+                iconGridClass() {
+                    if (this.selectedNumberForIcons === 0) return ''; // No grid needed for 0
+                    // Apply 5-column grid for numbers 1 through 40
+                    if (this.selectedNumberForIcons <= 40) return 'icons-grid-5-per-row';
+                    // Apply 10-column grid for numbers 41 through 100
+                    return 'icons-grid-10-per-row';
                 }
             }
         }
