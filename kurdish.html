@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>زمانی کوردی</title>
+    <title>پیتە کوردییەکان</title> <!-- Updated Title -->
     <!-- Google Fonts for Vazirmatn (friendly, modern Kurdish support) -->
-    <!-- ئەمە فۆنتی Vazirmatn'ە کە شێوازێکی دۆستانەی هەیە و پشتیوانی پیتەکانی کوردی دەکات -->
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- CSS Styles -->
     <style>
@@ -38,8 +37,6 @@
 
         /* Apply font and background to body */
         body {
-            /* فۆنتی Vazirmatn وەک فۆنتی سەرەکی دانراوە بۆ شێوازێکی منداڵانە و دۆستانە. */
-            /* فۆنتەکانی تری کوردی وەک پشتگیری (fallback) دانراون. */
             font-family: "Vazirmatn", "NRT Reg", "Rudaw", "Unikurd Web", "Tahoma", sans-serif;
             background-color: var(--theme-bg-main);
             color: var(--theme-text-primary);
@@ -89,43 +86,15 @@
             /* Arrow points left in RTL */
             transform: rotate(0deg);
         }
+        /* Keep arrow pointing left in LTR explicitly */
         html[dir="ltr"] .back-button svg {
-             transform: rotate(180deg); /* Arrow points left in LTR */
+             transform: rotate(0deg); /* Arrow stays left */
         }
+
 
         /* Subject Button Styles (Not used here) */
-        .subject-button {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background-color: var(--theme-card-bg);
-            border: 2px solid var(--theme-card-border);
-            border-radius: 1rem; /* More rounded for a friendly look */
-            padding: 1.5rem;
-            text-decoration: none;
-            color: var(--theme-text-primary);
-            font-size: 1.2rem;
-            font-weight: 600;
-            text-align: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* Subtle shadow */
-            min-height: 180px; /* Minimum height for consistency */
-            width: 100%;
-        }
+        /* (Styles for subject buttons are included but not used on this specific page) */
 
-        .subject-button:hover {
-            border-color: var(--theme-card-hover-border);
-            transform: translateY(-5px); /* More pronounced lift on hover */
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-        }
-
-        .subject-button img {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-            margin-bottom: 0.75rem;
-        }
 
         /* --- Letter/Number Grid Styles --- */
         .grid-container {
@@ -230,6 +199,7 @@
         }
 
         /* Back button inside modal (positioning relative to modal-content) */
+        /* It reuses the .back-button style but adjusts positioning */
         .modal-content .back-button {
             position: absolute;
             top: 1rem;
@@ -243,13 +213,14 @@
             cursor: pointer;
             transition: background-color 0.2s ease, border-color 0.2s ease;
             z-index: 20; /* Ensure it's above modal content */
-             /* Arrow direction adjustment handled by global back-button rule */
-             transform: none; /* Reset potential rotation from grid-item */
+             /* Arrow direction adjustment handled by global back-button rule - stays left */
+             transform: none; /* Reset potential transform from grid-item */
         }
          .modal-content .back-button:hover {
              background-color: var(--theme-border-light);
              border-color: var(--theme-border-accent);
          }
+
 
         .example-grid {
             display: grid;
@@ -325,92 +296,19 @@
 
 
          /* --- Math Icons Section Styles (Not used here) --- */
-         .icon-display-area {
-            margin-top: 1.5rem;
-            padding: 1rem;
-            border: 1px solid var(--theme-card-border);
-            border-radius: 1rem;
-            background-color: var(--theme-card-bg);
-            /* Default flexbox removed, using grid now */
-            /* display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.5rem; */
-            overflow-y: auto; /* Allow vertical scrolling if needed */
-            max-height: 400px; /* Limit height to prevent excessive scrolling */
-            display: grid; /* Use grid for controlled layout */
-            gap: 0.5rem; /* Default gap */
-             justify-items: center; /* Center items within their grid cells */
-             align-items: center;
-        }
-
-         /* Specific styles for math icons scaling and grid density based on number size */
-        .icon-display-area.grid-icons {
-            /* Base density for large numbers (e.g. > 50) */
-            grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
-            gap: 0.2rem; /* Small gap */
-        }
-         .icon-display-area.large-icons {
-             /* For numbers up to ~25 */
-             grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
-             gap: 0.5rem;
-         }
-         .icon-display-area.medium-icons {
-             /* For numbers up to ~50 */
-             grid-template-columns: repeat(auto-fit, minmax(25px, 1fr));
-             gap: 0.3rem;
-         }
-         .icon-display-area.xlarge-icons {
-              /* For numbers up to ~10 */
-             grid-template-columns: repeat(auto-fit, minmax(40px, 1fr)); /* Might fit 5-10 per row depending on screen */
-             gap: 1rem;
-         }
-
-
-         .math-icon { object-fit: contain; flex-shrink: 0;}
-
-         /* Define icon sizes */
-        .math-icon.small { width: 20px; height: 20px; }
-        .math-icon.medium { width: 30px; height: 30px; }
-        .math-icon.large { width: 40px; height: 40px; }
-        .math-icon.xlarge { width: 50px; height: 50px; }
-
-
-         /* --- Math Arithmetic Section Styles (Not used here) --- */
-         /* (Arithmetic styles kept in math.html) */
+         /* (Math styles are included but not used on this specific page) */
 
 
         /* --- Responsive Adjustments --- */
          /* Home page buttons grid layout (Not used here) */
-        .home-buttons-grid {
-            display: grid;
-            gap: 1.5rem; /* Space between buttons */
-            /* Default: 1 column on very small screens */
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            justify-content: center; /* Center grid if items don't fill line */
-             /* Inherits padding-top from .container */
-        }
+        /* (Home styles are included but not used on this specific page) */
 
-         @media (min-width: 500px) { /* Custom breakpoint for 2 columns */
-             .home-buttons-grid {
-                 grid-template-columns: repeat(2, minmax(250px, 1fr)); /* Force 2 columns */
-             }
-         }
 
         @media (min-width: 768px) { /* md breakpoint */
             .container {
                 padding: 2rem;
             }
-            /* Home page buttons side by side */
-             .home-buttons-grid {
-                 grid-template-columns: repeat(3, 1fr);
-                 gap: 2rem; /* Slightly larger gap */
-             }
-             /* Math main buttons grid layout */
-             .math-main-buttons-grid {
-                display: grid; /* Ensure display is grid */
-                grid-template-columns: repeat(3, 1fr); /* Force 3 columns on md+ */
-                gap: 2rem; /* Larger gap on md+ */
-                 justify-content: center;
-             }
-
+            /* Home page buttons side by side (Not used here) */
 
             /* Grid container for numbers/letters becomes denser on larger screens */
             .grid-container {
@@ -425,6 +323,7 @@
             .modal-content .back-button {
                 left: 2rem; /* Position slightly further in on larger screens */
             }
+             /* Ensure modal back button position consistency regardless of RTL */
              html[dir="rtl"] .modal-content .back-button {
                  left: 2rem;
             }
@@ -432,16 +331,6 @@
                 left: 2rem;
             }
         }
-
-         @media (max-width: 767px) { /* Styles specific to screens smaller than md */
-             /* Math main buttons grid responsive on small screens */
-            .math-main-buttons-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive on small */
-                 gap: 1.5rem;
-                 justify-content: center;
-            }
-         }
 
 
         @media (min-width: 1024px) { /* lg */
@@ -454,22 +343,15 @@
         /* Hide element when AlpineJS x-cloak is used */
         [x-cloak] { display: none !important; }
 
-         .math-section-title {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: var(--theme-text-secondary);
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            border-bottom: 2px solid var(--theme-border-light);
-            padding-bottom: 0.5rem;
-            text-align: center; /* Center titles */
-        }
+         /* Math section title (Not used here) */
+         /* (Math styles are included but not used on this specific page) */
     </style>
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body dir="rtl">
 
+    <!-- Visible Back Button: This explicitly links to index.html -->
     <a href="index.html" class="back-button" aria-label="گەڕانەوە بۆ سەرەتا">
        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
@@ -494,6 +376,7 @@
         <template x-if="showModal">
             <div class="modal-backdrop" @click.self="closeModal()"> <!-- Close modal when clicking outside (on backdrop) -->
                 <div class="modal-content" @click.stop> <!-- Prevent click inside modal from closing it -->
+                     <!-- Modal specific back button - closes the modal -->
                      <button @click="closeModal()" class="back-button" aria-label="گەڕانەوە">
                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
@@ -539,7 +422,7 @@
                     { letter: 'ئ', audio: 'audio/ku/alif.mp3', examples: [
                         { text: 'ئەستێرە', image: 'images/ku/astera.png', audio: 'audio/ku/astera.mp3' },
                         { text: 'ئاو', image: 'images/ku/aw.png', audio: 'audio/ku/aw.mp3' },
-                        { text: 'ئاگر', image: 'images/kurdish/fire.jpg', audio: 'audio/ku/agir.mp3' },
+                        { text: 'ئاگر', image: 'images/kurdish/fire.jpg', audio: 'audio/ku/agir.mp3' }, // Using original image path
                         { text: 'ئازا', image: 'images/ku/aza.png', audio: 'audio/ku/aza.mp3' }
                     ]},
                     { letter: 'ا', audio: 'audio/ku/a.mp3', examples: [
@@ -550,8 +433,8 @@
                     ]},
                      { letter: 'ب', audio: 'audio/ku/b.mp3', examples: [
                         { text: 'باڵندە', image: 'images/ku/balnda.png', audio: 'audio/ku/balnda.mp3' },
-                        { text: 'باب', image: 'images/ku/bab.png', audio: 'audio/ku/bab.mp3' }, // Corrected text: باب (bab)
-                        { text: 'نان', image: 'images/ku/nan.png', audio: 'audio/ku/nan.mp3' }, // Check if this example fits 'ب'
+                        { text: 'باب', image: 'images/ku/bab.png', audio: 'audio/ku/bab.mp3' },
+                        { text: 'نان', image: 'images/ku/nan.png', audio: 'audio/ku/nan.mp3' }, // Check if this example fits 'ب' - it does if the letter is in the word
                         { text: 'کاب', image: 'images/ku/kab.png', audio: 'audio/ku/kab.mp3' }
                     ]},
                      { letter: 'پ', audio: 'audio/ku/p.mp3', examples: [
@@ -600,7 +483,7 @@
                          { text: 'ڕادیۆ', image: 'images/ku/radio.png', audio: 'audio/ku/radio.mp3' },
                         { text: 'ڕێگا', image: 'images/ku/rega.png', audio: 'audio/ku/rega.mp3' },
                         { text: 'ڕوبار', image: 'images/ku/rubar.png', audio: 'audio/ku/rubar.mp3' },
-                        { text: 'ڕەنسا', image: 'images/ku/ransa.png', audio: 'audio/ku/ransa.mp3' } // Example seems less common
+                        { text: 'ڕەنسا', image: 'images/ku/ransa.png', audio: 'audio/ku/ransa.mp3' } // Example seems less common, but kept
                     ]},
                      { letter: 'ڕ', audio: 'audio/ku/rr.mp3', examples: [
                         { text: 'مەڕ', image: 'images/ku/marr.png', audio: 'audio/ku/marr.mp3' },
@@ -617,8 +500,8 @@
                      { letter: 'ژ', audio: 'audio/ku/zh.mp3', examples: [
                         { text: 'ژمارە', image: 'images/ku/zhmara.png', audio: 'audio/ku/zhmara.mp3' },
                         { text: 'ژوور', image: 'images/ku/zhoor.png', audio: 'audio/ku/zhoor.mp3' },
-                        { text: 'پژیلە', image: 'images/ku/pizhila.png', audio: 'audio/ku/pizhila.mp3' }, // Example seems less common
-                        { text: 'توێژاڵ', image: 'images/ku/twezhal2.png', audio: 'audio/ku/twezhal2.mp3' } // Example seems less common
+                        { text: 'پژیلە', image: 'images/ku/pizhila.png', audio: 'audio/ku/pizhila.mp3' }, // Example seems less common, but kept
+                        { text: 'توێژاڵ', image: 'images/ku/twezhal2.png', audio: 'audio/ku/twezhal2.mp3' } // Example seems less common, but kept
                     ]},
                      { letter: 'س', audio: 'audio/ku/s.mp3', examples: [
                         { text: 'سێو', image: 'images/ku/sew.png', audio: 'audio/ku/sew.mp3' },
@@ -653,8 +536,8 @@
                      { letter: 'ڤ', audio: 'audio/ku/v.mp3', examples: [
                         { text: 'ڤیۆلا', image: 'images/ku/viola.png', audio: 'audio/ku/viola.mp3' },
                         { text: 'ڤایرۆس', image: 'images/ku/vayrus.png', audio: 'audio/ku/vayrus.mp3' },
-                        { text: 'ڤیست', image: 'images/ku/vist.png', audio: 'audio/ku/vist.mp3' }, // Example seems less common
-                        { text: 'ڤار', image: 'images/ku/var.png', audio: 'audio/ku/var.mp3' } // Example seems less common
+                        { text: 'ڤیست', image: 'images/ku/vist.png', audio: 'audio/ku/vist.mp3' }, // Example seems less common, but kept
+                        { text: 'ڤار', image: 'images/ku/var.png', audio: 'audio/ku/var.mp3' } // Example seems less common, but kept
                     ]},
                      { letter: 'ق', audio: 'audio/ku/q.mp3', examples: [
                          { text: 'قەڵەم', image: 'images/ku/qalam.png', audio: 'audio/ku/qalam.mp3' },
@@ -683,12 +566,12 @@
                      { letter: 'ڵ', audio: 'audio/ku/ll.mp3', examples: [
                         { text: 'سەوڵ', image: 'images/ku/sawll.png', audio: 'audio/ku/sawll.mp3' },
                         { text: 'کۆڵان', image: 'images/ku/kolan.png', audio: 'audio/ku/kolan.mp3' },
-                        { text: 'دووکان', image: 'images/ku/dukan.png', audio: 'audio/ku/dukan.mp3' }, // Example seems less common
+                        { text: 'دووکان', image: 'images/ku/dukan.png', audio: 'audio/ku/dukan.mp3' }, // Example seems less common, but kept
                         { text: 'ماڵ', image: 'images/ku/mall.png', audio: 'audio/ku/mall.mp3' }
                     ]},
                      { letter: 'م', audio: 'audio/ku/m.mp3', examples: [
                          { text: 'مریشک', image: 'images/ku/mriishk.png', audio: 'audio/ku/mriishk.mp3' },
-                        { text: 'مۆز', image: 'images/ku/moz.png', audio: 'audio/ku/moz.png' },
+                        { text: 'مۆز', image: 'images/ku/moz.png', audio: 'audio/ku/moz.png' }, // Image extension might be wrong?
                         { text: 'ماسی', image: 'images/ku/masi.png', audio: 'audio/ku/masi.mp3' },
                         { text: 'مێروو', image: 'images/ku/miroo.png', audio: 'audio/ku/miroo.mp3' }
                     ]},
@@ -729,8 +612,7 @@
                         { text: 'یەک', image: 'images/ku/yak.png', audio: 'audio/ku/yak.mp3' }
                     ]}
                      // Add other Kurdish letters... (زنجیرەی پیتە کوردییەکانی تر لێرە زیاد بکە)
-                     // Ensure you have audio files for each letter sound (audio/ku/alif.mp3, audio/ku/a.mp3, audio/ku/b.mp3, etc.)
-                     // And audio files for each example word (audio/ku/astera.mp3, audio/ku/aw.mp3, etc.)
+                     // Ensure you have audio files for each letter sound and example word.
                 ],
                 audioPlayer: null, // Use a single Audio object
                 lastClickedElement: null, // To store the element that was clicked
@@ -742,15 +624,24 @@
                     this.audioPlayer.onended = () => console.log('Audio finished playing');
 
                     // Add popstate listener for browser/mobile back button
+                    // This listener *only* manages the modal state.
+                    // Standard browser back behavior handles navigation when modal is closed.
                     window.addEventListener('popstate', (event) => {
+                         console.log("Popstate detected. Current state:", event.state);
                         // Check if the modal is currently open AND the new history state
-                        // does NOT indicate the modal should be open.
-                        if (this.showModal && (!event.state || event.state.modalOpen !== true)) {
-                            console.log("Popstate detected, closing modal.");
-                            this.closeModal(); // Use the general close function
+                        // does NOT indicate the modal should be open (or state is null).
+                        // The logic is: if a back press happens, and the modal is open,
+                        // assume the user wanted to close the modal UNLESS the history state
+                        // explicitly says the modal *should* still be open (which our pushState doesn't).
+                        if (this.showModal) { // If modal is open, assume user wants to close it
+                            console.log("Modal is open. Closing modal via popstate.");
+                             this.closeModal(); // Close the modal
+                             // The default browser back navigation *after* this state is popped
+                             // will then take the user to the previous page (likely index.html)
+                             // on the *next* back press.
                         }
-                         // If the state indicates modal *should* be open but it's not (e.g., user navigated back *to* a modal state from history),
-                         // you might want to re-open the modal based on event.state data. This is more complex and not covered here.
+                         // If the modal is NOT open when popstate fires, do nothing here.
+                         // The default browser behavior will handle the navigation to the previous page.
                     });
                 },
 
@@ -766,13 +657,14 @@
                     console.log("Attempting to play:", path);
                     if (path) {
                          this.stopAllSounds(); // Stop any previous sounds
-                         if (this.audioPlayer.src !== window.location.origin + '/' + path) {
-                              this.audioPlayer.src = path;
+                         // Avoid setting src if it's already the same to prevent unnecessary reloads
+                         const fullPath = window.location.origin + '/' + path.replace(/^\//, ''); // Make path absolute from origin
+                         if (this.audioPlayer.src !== fullPath) {
+                              this.audioPlayer.src = path; // Use the relative path for src
                          }
-                         // this.audioPlayer.load(); // Load is often implicit on play/setting src
-                         this.audioPlayer.play().catch(e => console.error('Autoplay prevented or other play error:', path, e));
+                         this.audioPlayer.play().catch(e => console.error('Autoplay prevented or other play error for', path, ':', e));
                     } else {
-                        console.warn('Audio path is missing for:', path);
+                        console.warn('Audio path is missing.');
                     }
                 },
                 // Accept the event object from Alpine ($event)
@@ -783,42 +675,58 @@
                     this.showModal = true;
 
                     // Store the specific DOM element that was clicked
-                    // event.currentTarget is safer than event.target as it refers to the element with the @click listener
                     this.lastClickedElement = event.currentTarget;
-                    console.log("Stored clicked element:", this.lastClickedElement); // Debug log
+                    console.log("Stored clicked element:", this.lastClickedElement);
 
-                    // **** Add the active class to the clicked element ****
+                    // Add the active class to the clicked element for visual feedback
                     if (this.lastClickedElement) {
                          this.lastClickedElement.classList.add('is-active-modal-opener');
-                         console.log("Added class 'is-active-modal-opener' to:", this.lastClickedElement); // Debug log
+                         console.log("Added class 'is-active-modal-opener' to:", this.lastClickedElement);
                     }
-                    // **** End Add Class ****
 
+                    // Add history state when modal opens. This makes the browser back button
+                    // close the modal via the popstate listener above.
+                    // We push an empty state or state indicating modal is open.
+                    // The URL doesn't change, keeping the user visually on the same page.
+                    history.pushState({ modalOpen: true }, '', '');
+                     console.log("Pushed history state for modal.");
 
-                    // Add history state when modal opens
-                    history.pushState({ modalOpen: true, letter: letterData.letter }, '', ''); // Pass letter in state if needed later
 
                     this.$nextTick(() => {
-                         this.playAudio(letterData.audio); // Play letter sound
+                         this.playAudio(letterData.audio); // Play letter sound after modal is shown
                     });
                 },
                 closeModal() {
-                    console.log("Closing modal..."); // Debug log
+                    console.log("Closing modal...");
 
                     this.showModal = false;
                     this.stopAllSounds(); // Stop sounds when closing modal
 
-                    // **** Remove the active class and clear the reference ****
+                    // Remove the active class and clear the reference
                     if (this.lastClickedElement) {
-                         console.log("Removing class 'is-active-modal-opener' from:", this.lastClickedElement); // Debug log
+                         console.log("Removing class 'is-active-modal-opener' from:", this.lastClickedElement);
                          this.lastClickedElement.classList.remove('is-active-modal-opener');
 
-                         // Optional: Keep the reflow trick as a safety measure, although class removal is primary
+                         // This line forces a reflow, which can sometimes help ensure the animation resets.
                          void this.lastClickedElement.offsetHeight;
 
                          this.lastClickedElement = null; // Clear the reference
                     }
-                    // **** End Remove Class ****
+
+                    // When closing the modal programmatically (e.g., by clicking the modal's close button
+                    // or backdrop, but NOT via browser back button which triggers popstate),
+                    // we should remove the history state we added for the modal.
+                    // This prevents a subsequent browser back button press from doing nothing.
+                    // We check if the current state is the one we pushed for the modal before popping.
+                    if (history.state && history.state.modalOpen === true) {
+                         history.back(); // Go back in history to the state *before* the modal was opened
+                         console.log("Called history.back() to clean up modal history state.");
+                         // Note: calling history.back() *also* triggers popstate, but the popstate listener
+                         // checks if the modal is *still* open. Since we just set showModal to false,
+                         // the popstate listener will see showModal is false and will *not* try to close the modal again.
+                    } else {
+                         console.log("No modal history state found to pop.");
+                    }
                 }
             }
         }
