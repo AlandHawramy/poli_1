@@ -652,7 +652,7 @@
                     ]},
                      { letter: 'ق', audio: 'audio/ku/q.mp3', examples: [
                          { text: 'قەڵەم', image: 'images/ku/qalam.png', audio: 'audio/ku/qalam.mp3' },
-                        { text: 'قوتابی', image: 'images/ku/qutabi.png', audio: 'audio/ku/qutabi.mp3' },
+                        { text: 'قوتابي', image: 'images/ku/qutabi.png', audio: 'audio/ku/qutabi.mp3' },
                         { text: 'قاز', image: 'images/ku/qaz.png', audio: 'audio/ku/qaz.mp3' },
                         { text: 'قاوە', image: 'images/ku/qawa.png', audio: 'audio/ku/qawa.mp3' }
                     ]},
@@ -682,7 +682,7 @@
                     ]},
                      { letter: 'م', audio: 'audio/ku/m.mp3', examples: [
                          { text: 'مریشک', image: 'images/ku/mriishk.png', audio: 'audio/ku/mriishk.mp3' },
-                        { text: 'مۆز', image: 'images/ku/moz.png', audio: 'audio/ku/moz.mp3' },
+                        { text: 'مۆز', image: 'images/ku/moz.png', audio: 'audio/ku/moz.png' },
                         { text: 'ماسی', image: 'images/ku/masi.png', audio: 'audio/ku/masi.mp3' },
                         { text: 'مێروو', image: 'images/ku/miroo.png', audio: 'audio/ku/miroo.mp3' }
                     ]},
@@ -739,6 +739,27 @@
                     // Optional: Add error handling for the audio player
                     this.audioPlayer.onerror = (e) => console.error('Audio playback error:', e);
                     this.audioPlayer.onended = () => console.log('Audio finished playing');
+
+                    // Add popstate listener for browser/mobile back button
+                    // Listener needs access to 'this', so bind it or use arrow function
+                    window.addEventListener('popstate', (event) => {
+                        // Check if the modal is currently open AND the new history state
+                        // does NOT indicate the modal should be open.
+                        // This happens when the user presses the back button FROM the modal state.
+                        // If event.state is null, it means we've gone back past our pushed state.
+                        if (this.showModal && (!event.state || event.state.modalOpen !== true)) {
+                            console.log("Popstate detected, closing modal."); // Debug log
+                            this.showModal = false; // Close the modal
+                            this.stopAllSounds(); // Stop any playing sound
+                        }
+                        // Note: This implementation does not handle navigating *forward* back into a modal state.
+                        // That requires storing more information in the state object and reconstructing the modal.
+                    });
+
+                     // Add a history state when the page loads initially, so there's somewhere to go back *to*
+                     // if the user opens the modal right away. This might prevent exiting the app entirely on the first back press.
+                     // This is often optional but can improve feel.
+                     // history.replaceState({ page: 'letters-list' }, '', ''); // Replace initial state if needed
                 },
 
                 stopAllSounds() {
@@ -753,30 +774,44 @@
                     console.log("Attempting to play:", path); // Debugging log
                     if (path) {
                          this.stopAllSounds(); // Stop any previous sounds
-                         // Check if the path is different before setting src again
-                         if (this.audioPlayer.src !== window.location.origin + '/' + path) { // Compare full URLs
+                         // Check if the path is different before setting src again (minor optimization)
+                         // window.location.origin + '/' is needed to get the absolute path for comparison
+                         if (this.audioPlayer.src !== window.location.origin + '/' + path) {
                               this.audioPlayer.src = path;
                          }
-                         this.audioPlayer.load(); // Load the audio
-                         this.audioPlayer.play().catch(e => console.error('Autoplay prevented or other play error:', path, e)); // Attempt to play
+                         // audioPlayer.load(); // Load is often implicit on play/setting src, but explicit can help
+                         this.audioPlayer.play().catch(e => console.error('Autoplay prevented or other play error:', path, e)); // Attempt to play, catch potential errors
                     } else {
                         console.warn('Audio path is missing for:', path);
                     }
                 },
+
                 openModal(letterData) {
                     console.log("Opening modal for:", letterData.letter); // Debugging log
                     this.currentLetter = letterData.letter;
                     this.examples = letterData.examples;
                     this.showModal = true;
+
+                    // **** Add history state when modal opens ****
+                    // Push a new state onto the history stack.
+                    // The state object ({ modalOpen: true }) helps us identify this history entry later.
+                    // The URL part ('') can be empty, keeping the URL clean, or could be '#modal' for clarity.
+                    history.pushState({ modalOpen: true, letter: letterData.letter }, '', ''); // Pass letter in state if needed later
+
                     // Use $nextTick to ensure modal is rendered before playing sound (sometimes helps)
                     this.$nextTick(() => {
                          this.playAudio(letterData.audio); // Play letter sound
                     });
                 },
+
                 closeModal() {
-                    console.log("Closing modal"); // Debugging log
+                    console.log("Closing modal manually"); // Debugging log
+                    // **** Simply set showModal to false ****
+                    // The popstate handler will take care of the history navigation.
+                    // We do *not* call history.back() here when closing manually,
+                    // as that would cause issues with the popstate listener.
                     this.showModal = false;
-                    this.stopAllSounds(); // Stop sounds when closing modal
+                    this.stopAllSounds(); // Stop sounds when closing modal manually
                 }
             }
         }
