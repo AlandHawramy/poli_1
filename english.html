@@ -152,6 +152,15 @@
             z-index: 50;
             padding: 1rem;
             overflow-y: auto;
+            /* Add transition for smoother appearance */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-backdrop.show {
+             opacity: 1;
+             visibility: visible;
         }
 
         .modal-content {
@@ -163,7 +172,15 @@
             position: relative;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             text-align: left;
+            /* Add transform for entry animation */
+             transform: translateY(20px);
+             transition: transform 0.3s ease;
         }
+
+         .modal-backdrop.show .modal-content {
+             transform: translateY(0);
+         }
+
 
         @keyframes gentle-pulse-title {
             0%, 100% { transform: scale(1); }
@@ -192,7 +209,7 @@
             cursor: pointer;
             transition: background-color 0.2s ease, border-color 0.2s ease;
             z-index: 20;
-            transform: none;
+            transform: none; /* Override translateY from main back button */
         }
         .modal-content .back-button:hover {
             background-color: var(--theme-border-light);
@@ -259,9 +276,11 @@
             }
             .modal-content {
                 max-width: 700px;
+                padding: 3rem 2rem 2rem; /* Adjust padding when wider */
             }
             .modal-content .back-button {
-                left: 2rem;
+                left: 2rem; /* Adjust back button position in wider modal */
+                top: 1.5rem;
             }
         }
 
@@ -293,16 +312,18 @@
              <!-- Loop through letters data -->
             <template x-for="letterData in letters" :key="letterData.letter">
                 <div class="grid-item"
-                     @click="handleLetterClick(letterData)"> <!-- Changed click handler -->
+                     @click="handleLetterClick(letterData)">
                     <span x-text="letterData.letter"></span>
                 </div>
             </template>
         </div>
 
         <!-- Modal -->
-        <template x-if="showModal">
-            <div class="modal-backdrop" @click.self="closeModal()"> <!-- Close modal when clicking outside (on backdrop) -->
-                <div class="modal-content" @click.stop> <!-- Prevent click inside modal from closing it -->
+        <!-- Use x-cloak to hide during Alpine init if needed, though transitions handle this -->
+        <!-- Add 'show' class dynamically for transitions -->
+        <div class="modal-backdrop" x-show="showModal" :class="{ 'show': showModal }"
+             @click.self="closeModal()"> <!-- Close modal when clicking outside (on backdrop) -->
+             <div class="modal-content" @click.stop> <!-- Prevent click inside modal from closing it -->
                     <button class="back-button" @click="closeModal()" aria-label="Back">
                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
@@ -314,7 +335,6 @@
                         <!-- Loop through examples -->
                         <template x-for="example in examples" :key="example.text">
                             <div class="example-item" @click="speakText(example.text)">
-                                <!-- TODO: Replace with actual image paths -->
                                 <img :src="example.image" :alt="example.text + ' image'">
                                 <span x-text="example.text"></span>
                             </div>
@@ -322,7 +342,7 @@
                     </div>
                 </div>
             </div>
-        </template>
+
 
     </div>
 
@@ -372,14 +392,14 @@
                     { letter: 'P', examples: [{ text: 'Pig', image: 'images/en/pig.png' }, { text: 'Panda', image: 'images/en/panda.png' }, { text: 'Pencil', image: 'images/en/pencil.png' }, { text: 'Pear', image: 'images/en/pear.png' }] },
                     { letter: 'Q', examples: [{ text: 'Queen', image: 'images/en/queen.png' }, { text: 'Quail', image: 'images/en/quail.png' }, { text: 'Quilt', image: 'images/en/quilt.png' }, { text: 'Question', image: 'images/en/question.png' }] },
                     { letter: 'R', examples: [{ text: 'Rabbit', image: 'images/en/rabbit.png' }, { text: 'Rain', image: 'images/en/rain.png' }, { text: 'Rose', image: 'images/en/rose.png' }, { text: 'Ring', image: 'images/en/ring.png' }] },
-                    { letter: 'S', examples: [{ text: 'Sun', image: 'images/en/sun.png' }, { text: 'Snake', image: 'images/en/snake.png' }, { text: 'Star', image: 'images/en/star.png' }, { text: 'Shoe', image: 'images/en/shoe.png' }] },
-                    { letter: 'T', examples: [{ text: 'Tiger', image: 'images/en/tiger.png' }, { text: 'Tree', image: 'images/en/tree.png' }, { text: 'Train', image: 'images/en/train.png' }, { text: 'Table', image: 'images/en/table.png' }] },
-                    { letter: 'U', examples: [{ text: 'Umbrella', image: 'images/en/umbrella.png' }, { text: 'Uniform', image: 'images/en/uniform.png' }, { text: 'Up', image: 'images/en/up.png' }, { text: 'Us', image: 'images/en/us.png' }] },
-                    { letter: 'V', examples: [{ text: 'Van', image: 'images/en/van.png' }, { text: 'Violin', image: 'images/en/violin.png' }, { text: 'Vase', image: 'images/en/vase.png' }, { text: 'Vegetables', image: 'images/en/vegetables.png' }] },
-                    { letter: 'W', examples: [{ text: 'Wolf', image: 'images/en/wolf.png' }, { text: 'Water', image: 'images/en/water.png' }, { text: 'Watch', image: 'images/en/watch.png' }, { text: 'Window', image: 'images/en/window.png' }] },
-                    { letter: 'X', examples: [{ text: 'X-ray', image: 'images/en/xray.png' }, { text: 'Xylophone', image: 'images/en/xylophone.png' }, { text: 'Fox', image: 'images/en/fox.png' }, { text: 'Box', image: 'images/en/box.png' }] },
-                    { letter: 'Y', examples: [{ text: 'Yacht', image: 'images/en/yacht.png' }, { text: 'Yak', image: 'images/en/yak.png' }, { text: 'Yarn', image: 'images/en/yarn.png' }, { text: 'Yellow', image: 'images/en/yellow.png' }] },
-                    { letter: 'Z', examples: [{ text: 'Zebra', image: 'images/en/zebra.png' }, { text: 'Zipper', image: 'images/en/zipper.png' }, { text: 'Zoo', image: 'images/en/zoo.png' }, { text: 'Zero', image: 'images/en/zero.png' }] }
+                    { text: 'S', examples: [{ text: 'Sun', image: 'images/en/sun.png' }, { text: 'Snake', image: 'images/en/snake.png' }, { text: 'Star', image: 'images/en/star.png' }, { text: 'Shoe', image: 'images/en/shoe.png' }] },
+                    { text: 'T', examples: [{ text: 'Tiger', image: 'images/en/tiger.png' }, { text: 'Tree', image: 'images/en/tree.png' }, { text: 'Train', image: 'images/en/train.png' }, { text: 'Table', image: 'images/en/table.png' }] },
+                    { text: 'U', examples: [{ text: 'Umbrella', image: 'images/en/umbrella.png' }, { text: 'Uniform', image: 'images/en/uniform.png' }, { text: 'Up', image: 'images/en/up.png' }, { text: 'Us', image: 'images/en/us.png' }] },
+                    { text: 'V', examples: [{ text: 'Van', image: 'images/en/van.png' }, { text: 'Violin', image: 'images/en/violin.png' }, { text: 'Vase', image: 'images/en/vase.png' }, { text: 'Vegetables', image: 'images/en/vegetables.png' }] },
+                    { text: 'W', examples: [{ text: 'Wolf', image: 'images/en/wolf.png' }, { text: 'Water', image: 'images/en/water.png' }, { text: 'Watch', image: 'images/en/watch.png' }, { text: 'Window', image: 'images/en/window.png' }] },
+                    { text: 'X', examples: [{ text: 'X-ray', image: 'images/en/xray.png' }, { text: 'Xylophone', image: 'images/en/xylophone.png' }, { text: 'Fox', image: 'images/en/fox.png' }, { text: 'Box', image: 'images/en/box.png' }] },
+                    { text: 'Y', examples: [{ text: 'Yacht', image: 'images/en/yacht.png' }, { text: 'Yak', image: 'images/en/yak.png' }, { text: 'Yarn', image: 'images/en/yarn.png' }, { text: 'Yellow', image: 'images/en/yellow.png' }] },
+                    { text: 'Z', examples: [{ text: 'Zebra', image: 'images/en/zebra.png' }, { text: 'Zipper', image: 'images/en/zipper.png' }, { text: 'Zoo', image: 'images/en/zoo.png' }, { text: 'Zero', image: 'images/en/zero.png' }] }
                 ],
                 synth: null, // Initialize as null, check availability later
                 voices: [],
@@ -406,7 +426,35 @@
                     } else {
                         console.error('Text-to-Speech not supported in this browser.');
                     }
+
+                    // --- Add Popstate Listener for Mobile Back Button ---
+                    // Bind 'this' so the method has access to the Alpine data scope
+                    window.addEventListener('popstate', this.handlePopState.bind(this));
+                    console.log("Popstate listener added.");
+                    // --- End Popstate Listener ---
+
+                    // Optional: If the page is loaded with a state (e.g., user navigates forward),
+                    // you might want to check event.state on initial load, but for a simple modal this is usually not needed.
                 },
+
+                 // --- New method to handle popstate event ---
+                handlePopState(event) {
+                    console.log("popstate event fired. State:", event.state);
+                    // Check if the modal is currently open AND the state indicates we've navigated away from the modal state.
+                    // The state pushed when opening the modal is { modalOpen: true }.
+                    // When we navigate back from that state, event.state becomes the state *before* the push (usually null or the base page state).
+                    // So, if the modal is open, and the state is NOT the one indicating the modal should be open, close the modal.
+                    // This handles both the native back button press and the history.back() call from closeModal.
+                    if (this.showModal && (!event.state || !event.state.modalOpen)) {
+                        console.log("Popstate: Closing modal.");
+                        this.closeModalInternal(); // Use internal method to avoid pushing history again
+                    }
+                    // Note: Handling navigating *forward* into a state that *should* have the modal open
+                    // requires storing more info (like which letter was clicked) in the history state.
+                    // For this simple use case, we only focus on closing the modal on back navigation.
+                },
+                // --- End Popstate Handler ---
+
 
                 loadAndSelectVoice() {
                      if (!this.synth) return;
@@ -474,7 +522,6 @@
                         // We will proceed, but won't set utterance.voice, letting browser pick default
                     }
 
-
                     // Stop any previous speech
                     this.stopSpeaking();
 
@@ -490,7 +537,6 @@
                          // browser will use its default voice for the specified language (en-US).
                          console.log(`Speaking "${text}" using browser default voice for ${utterance.lang}.`);
                     }
-
 
                     utterance.rate = 0.9; // Slightly slower
                     utterance.pitch = 1;
@@ -512,29 +558,56 @@
                     }
                 },
 
-                // Changed handler name slightly for clarity, but does the same thing
                 handleLetterClick(letterData) {
                     console.log("Letter clicked:", letterData.letter);
 
-                    // 1. Immediately attempt to speak the letter.
-                    // This is the user interaction that should satisfy autoplay policies.
-                    // Added a small timeout as a *potential* workaround for specific mobile timing issues.
-                    // Remove the timeout if it doesn't help or causes issues.
-                    setTimeout(() => {
-                         this.speakText(letterData.letter);
-                    }, 100); // 100ms delay - test if this helps on the specific device/browser
-
-                    // 2. Then, open the modal to show examples.
+                    // Store data needed for the modal
                     this.currentLetter = letterData.letter;
                     this.examples = letterData.examples;
+
+                    // Show the modal
                     this.showModal = true;
+
+                    // Push a state to history *after* the modal starts showing.
+                    // Use $nextTick to ensure Alpine has processed the state change before history push.
+                    this.$nextTick(() => {
+                         console.log("Pushing history state for modal.");
+                         // Push a simple state indicating the modal is open.
+                         // Using {} or null for URL keeps the current URL.
+                         history.pushState({ modalOpen: true }, '', null);
+                    });
+
+                    // Immediately attempt to speak the letter
+                    this.speakText(letterData.letter);
                 },
 
+                // Internal method to close modal without affecting history (used by popstate handler)
+                closeModalInternal() {
+                     console.log("Internal modal close triggered.");
+                     this.showModal = false;
+                     this.stopSpeaking();
+                },
+
+                // Method to close modal via web button (handles history)
                 closeModal() {
-                    console.log("Closing modal");
-                    this.showModal = false;
-                    this.stopSpeaking(); // Stop speaking when closing modal
+                    console.log("Closing modal via button.");
+                    this.showModal = false; // Set modal to false first
+                    this.stopSpeaking();
+
+                    // Navigate back in history to remove the state pushed when the modal opened.
+                    // This will trigger the popstate event, but our handler will see showModal is false
+                    // and won't try to close it again.
+                    console.log("Calling history.back() to remove modal state.");
+                    history.back();
                 }
+
+                // Optional: Add a cleanup method for the popstate listener if this component
+                // could be removed from the DOM without a full page navigation.
+                // e.g., using x-init="init()" and a corresponding x-destroy="cleanup()"
+                // cleanup() {
+                //    window.removeEventListener('popstate', this.handlePopState.bind(this));
+                //    console.log("Popstate listener removed.");
+                // }
             }
         }
     </script>
