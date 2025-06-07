@@ -286,6 +286,7 @@
 
     <!-- The single back button that always links to index.html -->
     <!-- This button remains visible when the modal is closed -->
+    <!-- It uses a standard link to ensure it goes to index.html -->
     <a href="index.html" class="back-button" aria-label="گەڕانەوە بۆ سەرەتا" x-show="!modalOpen">
        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
@@ -307,11 +308,12 @@
 
         <!-- Icon Detail Modal -->
         <template x-if="modalOpen">
-            <div class="modal-backdrop" @click.self="closeModal()"> <!-- Close modal when clicking outside (on backdrop) -->
+            <div class="modal-backdrop" @click.self="closeModalFromUI()"> <!-- Use closeModalFromUI -->
                 <div class="modal-content" @click.stop> <!-- Prevent click inside modal from closing it -->
                     <!-- Modal Back Button -->
-                    <button @click="closeModal()" class="back-button" aria-label="گەڕانەوە">
-                        <svg xmlns="http://www.w3.org/24/stroke-svgrepo-com" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <!-- This button also uses closeModalFromUI -->
+                    <button @click="closeModalFromUI()" class="back-button" aria-label="گەڕانەوە">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
                         </svg>
                     </button>
@@ -483,36 +485,54 @@
                     console.log("Numbers with Icons App Initializing"); // Debugging log
 
                     // --- History API Setup ---
-                    // 1. Replace the initial history state with a state indicating the modal is closed.
-                    //    This is important so that the first back button press *from* the modal state
-                    //    correctly lands on a state where modal should be closed.
-                    history.replaceState({ modal: false }, '', '');
-                    console.log('Initial history state set:', history.state);
+                    // Replace the initial history state. This is crucial.
+                    // We set the initial state to point to the base page where the modal is closed.
+                    // This ensures that the FIRST 'popstate' event from the modal goes to this state.
+                     history.replaceState({ modal: false }, '', '');
+                    console.log('Initial history state replaced:', history.state);
 
-                    // 2. Listen for the 'popstate' event. This fires when the browser's active history entry changes,
-                    //    typically on back/forward button presses or history.back()/forward()/go().
+                    // Listen for the 'popstate' event (browser back/forward button or history.back()).
                     window.addEventListener('popstate', (event) => {
                         console.log('Popstate triggered', event.state);
-                        // Check the state object associated with the history entry we've navigated to.
+                        // Check the state object.
                         if (event.state && event.state.modal === true) {
-                            // If the state indicates the modal should be open, open it for the specified number.
-                            console.log('Navigated to a history state where modal should be open for number:', event.state.number);
+                            // If the state indicates the modal should be open, open it.
+                            console.log('Popstate navigated to a modal state for number:', event.state.number);
                             this.selectedNumberForIcons = event.state.number;
                             this.generateAnimalIcons(this.selectedNumberForIcons);
-                            this.playNumberSound(this.selectedNumberForIcons); // Re-play sound on back navigation
+                             // Only play sound if modal is NOT already open (avoids re-playing on forward nav into open modal state)
+                            if (!this.modalOpen) {
+                                 this.playNumberSound(this.selectedNumberForIcons);
+                            }
                             this.modalOpen = true;
-                            // Scroll modal content to top if needed after opening
+                             // Scroll modal content to top if needed
                             this.$nextTick(() => {
                                 const modalContent = document.querySelector('.modal-content');
                                 if (modalContent) {
                                     modalContent.scrollTo({top: 0, behavior: 'smooth'});
                                 }
                             });
+
                         } else {
-                             // If the state is null (initial state) or doesn't have the modal flag,
-                             // ensure the modal is closed.
-                             console.log('Navigated to a history state where modal should be closed.');
-                             this.closeModalWithoutHistory(); // Use the function that doesn't affect history
+                             // If the state indicates modal should be closed (or is null/undefined).
+                             console.log('Popstate navigated to a non-modal state.');
+                             if (this.modalOpen) {
+                                // If modal is currently open, close it without affecting history (popstate already changed history).
+                                console.log('Modal was open, closing modal UI via popstate.');
+                                this.closeModalWithoutHistoryChange(); // Use the function that only changes UI state
+                            } else {
+                                // If modal is already closed AND popstate happened, it means the user
+                                // pressed back while on the main numbers grid page (or navigated here).
+                                // According to the requirement, we should go to index.html.
+                                // We explicitly navigate because the browser's default 'back' might just
+                                // go to the state *before* the numbers page, which might not be index.html
+                                // if the user navigated here differently.
+                                console.log('Modal was closed, navigating to index.html as per requirement.');
+                                window.location.href = 'index.html';
+                                // Important: Returning false or preventing default might be needed in some complex cases,
+                                // but usually setting location.href is enough and stops further popstate handling
+                                // for the current page load.
+                            }
                         }
                     });
                     // --- End History API Setup ---
@@ -528,7 +548,7 @@
                             } else {
                                 // Create a dummy object if element not found to prevent errors
                                 console.warn(`Audio tag not found for number ${i}. Expected ID: sound-${i}. Using dummy.`);
-                                this.numberSoundElements[i] = { play: () => { }, pause: () => {}, currentTime: 0 };
+                                this.numberSoundElements[i] = { play: () => { console.warn(`Dummy play for sound-${i}`); }, pause: () => {}, currentTime: 0 };
                             }
                         }
                         console.log('Number sound elements count:', Object.keys(this.numberSoundElements).length); // Debugging
@@ -543,6 +563,22 @@
                             }
                         }
                     });
+
+                     // Check if the page was loaded with a history state indicating modal open (e.g., after a refresh on modal page)
+                    // This might not happen with simple pushState, but good for completeness.
+                    // If we came from history back/forward into an open modal state on page load,
+                    // the popstate listener above handles it immediately. This check might be redundant
+                    // if the popstate listener is guaranteed to fire on page load when navigating history.
+                     /*
+                    if (history.state && history.state.modal === true) {
+                         console.log('Page loaded with modal history state, opening modal.');
+                         this.selectedNumberForIcons = history.state.number;
+                         this.generateAnimalIcons(this.selectedNumberForIcons);
+                         this.playNumberSound(this.selectedNumberForIcons);
+                         this.modalOpen = true;
+                    }
+                    */
+
                 },
 
                 // Convert Western number to Kurdish digits string
@@ -627,38 +663,42 @@
                 },
 
                  // Function to close modal UI state without affecting browser history
-                 closeModalWithoutHistory() {
+                 // Used by the popstate listener when navigating AWAY from a modal state
+                 closeModalWithoutHistoryChange() {
                      console.log("Closing modal UI state (no history change)");
-                     if (this.modalOpen) { // Only do this if modal is actually open
+                     if (this.modalOpen) { // Only perform actions if modal is currently open
                         this.modalOpen = false;
                         this.selectedNumberForIcons = 0; // Reset icon count
                         this.displayedIcons = []; // Clear icons array
                         this.selectedAnimalIcon = ''; // Clear selected animal icon
                         this.stopAllSounds(); // Stop sounds when modal closes
+                        // No history action here, as popstate already handled it
                      }
                  },
-
 
                 // Function to open modal and handle history state
                 openIconModal(number) {
                     console.log("Opening icon modal for number:", number);
-                    // Check if the modal is already open for this number. If so, do nothing.
-                    // If it's open for a *different* number, we might replace the state,
-                    // but the current UI design hides the grid, so this isn't a typical case.
-                    // We'll proceed assuming modal is only opened from the main grid.
+
+                    // Only proceed if modal is not already open for the same number
+                    if (this.modalOpen && this.selectedNumberForIcons === number) {
+                         console.log(`Modal already open for number ${number}. Skipping.`);
+                         return; // Do nothing if already open for this number
+                    }
+                     // If modal is open for a *different* number, closing it and reopening it
+                     // might be complex with history. For this design, we assume clicks
+                     // happen only when the modal is closed.
 
                     this.selectedNumberForIcons = number;
                     this.generateAnimalIcons(number);
                     // Play the number sound when the modal opens
                     this.playNumberSound(number);
 
-                    // Set modalOpen to true *before* pushing history state,
-                    // so the state object reflects the *new* UI state.
+                    // Set modalOpen to true *before* pushing history state
                     this.modalOpen = true;
 
                     // Add a new entry to the browser history stack.
-                    // The state object { modal: true, number: number } is saved with this history entry.
-                    // When the user clicks back, the popstate event will fire, and event.state will be this object.
+                    // This state indicates the modal is open for this specific number.
                     history.pushState({ modal: true, number: number }, '', ''); // Empty title and URL (keeps current URL)
                     console.log('History state pushed:', history.state);
 
@@ -671,20 +711,20 @@
                     });
                 },
 
-                // Function to close modal and go back in history (used by internal modal close button/backdrop click)
-                closeModal() {
-                    console.log("Closing modal and going back in history");
-                    // Only perform history back if modal is currently open
-                    // This prevents potential issues if closeModal is somehow called when it shouldn't be
-                     if (this.modalOpen) {
-                        // Close the UI first without affecting history
-                        this.closeModalWithoutHistory();
-                        // Now, go back one step in browser history.
-                        // This will trigger the 'popstate' event, which our listener will catch
-                        // and determine that the modal should now be closed (because the state
-                        // it navigates *to* is not the modal state).
-                         history.back();
-                     }
+                // Function called by UI elements (modal back button, backdrop) to close the modal
+                // This function initiates the browser history back action.
+                closeModalFromUI() {
+                    console.log("Closing modal from UI element, initiating history.back()");
+                    if (this.modalOpen) { // Only do this if the modal is currently open
+                        // This will trigger the 'popstate' event listener.
+                        // The popstate listener will see that the state navigated TO is NOT a modal state,
+                        // and it will call closeModalWithoutHistoryChange() to update the UI.
+                        history.back();
+                    } else {
+                        console.warn("closeModalFromUI called but modal is not open.");
+                        // If somehow called when modal is not open, maybe explicitly go back?
+                        // window.history.back(); // Uncomment if you want this button to always go back
+                    }
                 },
 
                 // Computed property/function to dynamically calculate icon size class based on number
