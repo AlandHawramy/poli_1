@@ -154,19 +154,9 @@
              transition: all 0.3s ease, transform 0.1s ease;
         }
 
-        /* Use this class to force styles similar to hover when modal is open from this element */
-        .grid-item.is-active-visual {
-             /* Apply the hover background, border, and scale */
-             background-color: var(--theme-bg-accent);
-             border-color: var(--theme-card-hover-border);
-             /* Keep the scale transformation minimal or remove it if it looks weird */
-             /* transform: scale(1.02); */
-             /* Ensure the span animation is applied */
-             animation: none; /* Reset potential hover animation */
-        }
-
-        /* Apply hover styles AND the active visual styles */
-        .grid-item:hover, .grid-item.is-active-visual {
+        /* Apply hover styles AND the active visual class */
+        .grid-item:hover,
+        .grid-item.is-active-modal-opener { /* Apply styles when this class is present */
             background-color: var(--theme-bg-accent);
             border-color: var(--theme-card-hover-border);
             transform: scale(1.05); /* Apply slight scale on hover/active */
@@ -187,8 +177,9 @@
              display: block; /* Allow transform */
              transform-origin: center; /* Center the transform */
         }
-         /* Apply animation on hover AND when the element has the active visual class */
-         .grid-item:hover span, .grid-item.is-active-visual span {
+         /* Apply animation on hover AND when the element has the active class */
+         .grid-item:hover span,
+         .grid-item.is-active-modal-opener span { /* Apply animation when this class is present */
              animation: gentle-pulse 1.5s infinite ease-in-out; /* Apply animation on hover/active */
         }
 
@@ -758,6 +749,8 @@
                             console.log("Popstate detected, closing modal.");
                             this.closeModal(); // Use the general close function
                         }
+                         // If the state indicates modal *should* be open but it's not (e.g., user navigated back *to* a modal state from history),
+                         // you might want to re-open the modal based on event.state data. This is more complex and not covered here.
                     });
                 },
 
@@ -794,32 +787,38 @@
                     this.lastClickedElement = event.currentTarget;
                     console.log("Stored clicked element:", this.lastClickedElement); // Debug log
 
+                    // **** Add the active class to the clicked element ****
+                    if (this.lastClickedElement) {
+                         this.lastClickedElement.classList.add('is-active-modal-opener');
+                         console.log("Added class 'is-active-modal-opener' to:", this.lastClickedElement); // Debug log
+                    }
+                    // **** End Add Class ****
+
 
                     // Add history state when modal opens
-                    history.pushState({ modalOpen: true, letter: letterData.letter }, '', '');
+                    history.pushState({ modalOpen: true, letter: letterData.letter }, '', ''); // Pass letter in state if needed later
 
                     this.$nextTick(() => {
                          this.playAudio(letterData.audio); // Play letter sound
                     });
                 },
                 closeModal() {
-                    console.log("Closing modal manually or via popstate");
+                    console.log("Closing modal..."); // Debug log
+
                     this.showModal = false;
                     this.stopAllSounds(); // Stop sounds when closing modal
 
-                    // **** Fix for lingering hover state on mobile ****
-                    // Use the stored element to try and clear the visual state
+                    // **** Remove the active class and clear the reference ****
                     if (this.lastClickedElement) {
-                         console.log("Attempting to clear lingering state on element:", this.lastClickedElement); // Debug log
-                         // Force a reflow by accessing a layout property
-                         // This often prompts the browser to recalculate styles and clear hover/active states
-                         void this.lastClickedElement.offsetHeight; // Reading offsetHeight forces reflow
-                         // You could also try removing/re-adding a class, but this is simpler
-                         // e.g., this.lastClickedElement.classList.remove('some-temp-class'); setTimeout(() => this.lastClickedElement.classList.add('some-temp-class'), 0);
+                         console.log("Removing class 'is-active-modal-opener' from:", this.lastClickedElement); // Debug log
+                         this.lastClickedElement.classList.remove('is-active-modal-opener');
 
-                         this.lastClickedElement = null; // Clear the reference after use
+                         // Optional: Keep the reflow trick as a safety measure, although class removal is primary
+                         void this.lastClickedElement.offsetHeight;
+
+                         this.lastClickedElement = null; // Clear the reference
                     }
-                    // **** End Fix ****
+                    // **** End Remove Class ****
                 }
             }
         }
