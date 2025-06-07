@@ -200,32 +200,29 @@
             overflow-y: auto; /* Allow vertical scrolling if needed */
             max-height: 400px; /* Limit height to prevent excessive scrolling */
             display: grid; /* Use grid for controlled layout */
-            gap: 0.5rem; /* Default gap */
+            /* Default gap, adjusted by specific group classes */
+            gap: 0.5rem;
             justify-items: center; /* Center items within their grid cells */
             align-items: center;
         }
 
-        /* Specific styles for math icons scaling and grid density based on number size */
-        .icon-display-area.grid-icons {
-            grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
-            gap: 0.2rem; /* Small gap */
-        }
-        .icon-display-area.large-icons {
-            grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
-            gap: 0.5rem;
-        }
-        .icon-display-area.medium-icons {
-            grid-template-columns: repeat(auto-fit, minmax(25px, 1fr));
-            gap: 0.3rem;
-        }
-        .icon-display-area.xlarge-icons {
-            grid-template-columns: repeat(auto-fit, minmax(40px, 1fr)); /* Might fit 5-10 per row depending on screen */
-            gap: 1rem;
+        /* NEW: Specific grid styles for grouping */
+        .icon-display-area.icons-group-5 {
+            /* Force 5 columns */
+            grid-template-columns: repeat(5, minmax(0, 1fr)); /* Use minmax(0, 1fr) for flexible but equal width columns */
+            gap: 0.5rem; /* Gap suitable for 5 columns */
         }
 
+        .icon-display-area.icons-group-10 {
+            /* Force 10 columns */
+            grid-template-columns: repeat(10, minmax(0, 1fr)); /* Force 10 columns */
+            gap: 0.2rem; /* Smaller gap for more icons */
+        }
+
+        /* Math icon styling */
         .math-icon { object-fit: contain; flex-shrink: 0;}
 
-        /* Define icon sizes */
+        /* Define icon sizes - these will interact with the grid columns */
         .math-icon.small { width: 20px; height: 20px; }
         .math-icon.medium { width: 30px; height: 30px; }
         .math-icon.large { width: 40px; height: 40px; }
@@ -488,6 +485,7 @@
                                 this.numberSoundElements[i] = soundElement;
                                 soundElement.onerror = (e) => console.error(`Error loading audio for number ${i}:`, soundElement.src, e);
                             } else {
+                                // Provide a dummy object if element is not found to prevent errors
                                 this.numberSoundElements[i] = { play: () => { console.warn(`Audio tag not found for number ${i}. Expected ID: sound-${i}.`); }, pause: () => {}, currentTime: 0 };
                             }
                         }
@@ -531,26 +529,55 @@
                 playNumberSound(number) {
                     console.log("Attempting to play sound for number:", number); // Debugging log
                     const soundElement = this.numberSoundElements[number];
-                    if (soundElement && typeof soundElement.play === 'function') {
+                    if (soundElement && typeof soundElement.play === 'function' && soundElement.src) { // Check if src is also set
                         this.stopAllSounds(); // Stop any other number sound or TTS
                         soundElement.currentTime = 0; // Reset to start
-                        soundElement.play().catch(error => console.error(`Error playing sound for number ${number}:`, error));
-                    } else {
-                        console.warn(`Sound element not found or play function missing for number ${number}. Check audio tags and paths.`);
-                        // Fallback: Text-to-Speech for numbers if audio is missing (optional)
-                        if (window.speechSynthesis && this.synth) {
-                            this.synth.cancel(); // Stop any other TTS
-                            const utterance = new SpeechSynthesisUtterance(number.toString()); // Speak the actual number string (e.g., "25")
-                            utterance.lang = 'en-US'; // Use English TTS for numbers, which is more likely to pronounce digits correctly
-                            const voice = this.synth.getVoices().find(v => v.lang === 'en-US' && (v.name.toLowerCase().includes('child') || v.name.toLowerCase().includes('male')));
-                            if (voice) utterance.voice = voice;
-                            this.synth.speak(utterance);
-                            utterance.onerror = (event) => {
-                                console.error('TTS fallback error for number:', number, event);
-                            };
+                        // Play only if the audio element loaded successfully
+                        if (soundElement.readyState >= 2) { // Check if data is available (HAVE_CURRENT_DATA)
+                            soundElement.play().catch(error => console.error(`Error playing sound for number ${number}:`, error));
+                        } else {
+                            console.warn(`Audio for number ${number} is not ready to play. State: ${soundElement.readyState}`);
+                             this.fallbackToTTS(number); // Use TTS if audio not ready
                         }
+                    } else {
+                        console.warn(`Sound element not found, play function missing, or src is empty for number ${number}. Check audio tags and paths.`);
+                        this.fallbackToTTS(number); // Use TTS if audio element is missing or invalid
                     }
                 },
+
+                fallbackToTTS(number) {
+                     // Fallback: Text-to-Speech for numbers if audio is missing or failed
+                    if (window.speechSynthesis && this.synth) {
+                        this.synth.cancel(); // Stop any other TTS
+                        const utterance = new SpeechSynthesisUtterance(number.toString()); // Speak the actual number string (e.g., "25")
+                        // Using English TTS for numbers is often better for standard digit pronunciation
+                        // If you have a Kurdish TTS voice installed that pronounces numbers correctly, use that.
+                        // Find a suitable voice - maybe English or a generic voice.
+                         const voices = this.synth.getVoices();
+                         let voice = voices.find(v => v.lang.startsWith('en-') && (v.name.toLowerCase().includes('child') || v.name.toLowerCase().includes('male')));
+                         if (!voice) { // Fallback to any English voice if specific ones not found
+                             voice = voices.find(v => v.lang.startsWith('en-'));
+                         }
+                         if (!voice) { // Fallback to any available voice if no English found
+                             voice = voices[0]; // Use the first available voice
+                         }
+                         if (voice) {
+                             utterance.voice = voice;
+                             utterance.lang = voice.lang; // Use the language of the selected voice
+                         } else {
+                              utterance.lang = 'en-US'; // Default to English if no voice found
+                         }
+
+                        console.log(`Falling back to TTS for number ${number} using voice: ${voice ? voice.name : 'default'}`);
+                        this.synth.speak(utterance);
+                        utterance.onerror = (event) => {
+                            console.error('TTS fallback error for number:', number, event);
+                        };
+                    } else {
+                        console.warn("TTS not available in this browser.");
+                    }
+                },
+
 
                 // --- Numbers with Icons Section Functions ---
                 generateAnimalIcons(count) {
@@ -602,22 +629,28 @@
                 },
 
                 // Computed property/function to dynamically calculate icon size class based on number
+                // Adjust icon size to fit 5 or 10 columns reasonably
                 iconSizeClass() {
-                    if (this.selectedNumberForIcons === 0) return ''; // No icons
-                    if (this.selectedNumberForIcons <= 10) return 'xlarge'; // up to 10 icons, largest size
-                    if (this.selectedNumberForIcons <= 25) return 'large'; // up to 25 icons, large size
-                    if (this.selectedNumberForIcons <= 50) return 'medium'; // up to 50 icons, medium size
-                    return 'small'; // For numbers > 50 icons, small size
+                    const num = this.selectedNumberForIcons;
+                    if (num === 0) return ''; // No icons
+                    if (num > 0 && num <= 30) { // For 5-column layout
+                        if (num <= 5) return 'xlarge'; // Very large for 1 row or less
+                        if (num <= 15) return 'large'; // Large for a few rows
+                        if (num <= 30) return 'medium'; // Medium for more rows in 5-col
+                    } else if (num > 30) { // For 10-column layout
+                        // Icons need to be smaller to fit 10 per row comfortably
+                        if (num <= 60) return 'small'; // Small for up to 6 rows
+                        if (num <= 100) return 'small'; // Small for larger numbers
+                    }
+                    return 'small'; // Default/fallback
                 },
-                // Computed class for the icon container grid layout
+                // Computed class for the icon container grid layout based on grouping rule
                 iconGridClass() {
-                    if (this.selectedNumberForIcons === 0) return '';
-                    // Use specific grid classes based on size to control column density
-                    if (this.selectedNumberForIcons <= 10) return 'xlarge-icons'; // Use xlarge-icons class
-                    if (this.selectedNumberForIcons <= 25) return 'large-icons'; // Use large-icons class
-                    if (this.selectedNumberForIcons <= 50) return 'medium-icons'; // Use medium-icons class
-                    // For very large numbers, use the base grid-icons with smallest minmax/gap
-                    return 'grid-icons';
+                    const num = this.selectedNumberForIcons;
+                    if (num === 0) return '';
+                    if (num > 0 && num <= 30) return 'icons-group-5'; // Apply 5-column grid
+                    if (num > 30) return 'icons-group-10'; // Apply 10-column grid
+                    return ''; // Should not happen for numbers 1-100
                 }
             }
         }
