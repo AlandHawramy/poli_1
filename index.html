@@ -89,43 +89,80 @@
         html[dir="ltr"] .back-button svg {
             transform: rotate(180deg); /* Arrow points left in LTR */
         }
-        
-        /* Download button style (Added to index page) */
-        .download-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center; /* Center the icon */
-            position: absolute;
+
+        /* NEW: Download Button (Icon only) and Menu Container */
+        .download-container {
+            position: absolute; /* Position relative to its containing block (body in this case) */
             top: 1rem;
-            right: 1rem; /* Position on the right visually in RTL */
-            left: auto;
+            right: 1rem;
+            z-index: 40; /* Ensure it's above most other content */
+        }
+
+        /* The download button is now just the icon */
+        .download-button {
+            display: flex; /* Use flex to center icon */
+            align-items: center;
+            justify-content: center;
             background-color: var(--theme-button-primary-bg);
             color: var(--theme-button-primary-text);
             border: 1px solid transparent;
             border-radius: 0.5rem;
-            padding: 0.5rem; /* Padding for icon only */
+            padding: 0.5rem; /* Keep padding for icon */
             cursor: pointer;
             transition: all 0.2s ease;
-            z-index: 10;
-            text-decoration: none;
-            /* Added box-shadow for consistency */
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 2.5rem; /* Ensure it's a square button */
+            height: 2.5rem; /* Ensure it's a square button */
+            flex-shrink: 0; /* Prevent shrinking */
+            outline: none; /* Remove focus outline */
+            -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
         }
 
-        .download-button:hover {
+        .download-button:hover,
+        .download-button:focus { /* Add focus state */
             background-color: var(--theme-button-primary-hover-bg);
             transform: translateY(-1px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-        
+
         .download-button svg {
-            width: 1.5rem; /* Slightly larger icon */
-            height: 1.5rem; /* Slightly larger icon */
-            flex-shrink: 0; /* Prevent icon from shrinking */
+            width: 1.5rem;
+            height: 1.5rem;
+            flex-shrink: 0;
         }
-        /* Hide the span text inside download button */
-        .download-button span {
-            display: none;
+
+        /* NEW: Download Menu Styles */
+        .download-menu {
+            position: absolute;
+            top: calc(100% + 10px); /* Position below the button */
+            right: 0; /* Align right edge with button's right edge */
+            background-color: var(--theme-card-bg);
+            border: 1px solid var(--theme-card-border);
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: max-content; /* Adjust width to content */
+            min-width: 180px; /* Minimum width */
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 39; /* Ensure it's below the button's Z-index if needed, but above general content */
+            text-align: right; /* Ensure text aligns right in the menu */
+        }
+
+        .download-menu-item {
+            display: block; /* Make links fill container width */
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            color: var(--theme-text-primary);
+            border-radius: 0.3rem;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            font-weight: 500;
+        }
+
+        .download-menu-item:hover {
+            background-color: var(--theme-bg-accent); /* Or var(--theme-border-light) */
+            color: var(--theme-text-accent); /* Or keep primary */
         }
 
 
@@ -142,7 +179,7 @@
             line-height: 0; /* Hide text visually */
             transition: all 0.3s ease;
             box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-            height: 250px; /* Fixed height for consistent size, adjust as needed */
+            height: 280px; /* Increased height for consistent size */
             position: relative;
             overflow: hidden; /* Hide parts of the image or overlay that exceed the border radius */
         }
@@ -215,6 +252,7 @@
             user-select: none;
             min-height: 80px;
              transition: all 0.3s ease, transform 0.3s ease;
+             -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
         }
 
         .grid-item:hover {
@@ -251,6 +289,7 @@
             z-index: 50;
             padding: 1rem;
             overflow-y: auto;
+             -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
         }
 
         .modal-content {
@@ -310,6 +349,7 @@
             background-color: var(--theme-card-bg);
             transition: all 0.2s ease;
             user-select: none;
+             -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
         }
 
         .example-item:hover {
@@ -348,6 +388,7 @@
              border-radius: 0.5rem;
              transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
              cursor: pointer;
+              -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
          }
          .modal-footer-button:hover {
              background-color: var(--theme-button-primary-hover-bg);
@@ -458,6 +499,7 @@
             cursor: pointer;
             transition: all 0.2s ease;
             user-select: none;
+             -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
         }
 
         .arithmetic-button:hover {
@@ -479,6 +521,7 @@
             font-size: 1rem;
             background-color: var(--theme-text-secondary);
             border-color: var(--theme-text-secondary);
+             color: white; /* Added white color for contrast */
         }
 
         .arithmetic-button.action:hover {
@@ -487,8 +530,8 @@
         }
 
         .arithmetic-button.clear:hover {
-            background-color: #6b5f54;
-            border-color: #6b5f54;
+            background-color: #5a4e44; /* Slightly darker gray */
+            border-color: #5a4e44;
         }
 
         .feedback-message {
@@ -530,6 +573,7 @@
              transition: all 0.3s ease;
              user-select: none;
              min-height: 120px;
+              -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
          }
          .level-button:hover {
              border-color: var(--theme-card-hover-border);
@@ -590,6 +634,7 @@
              border-radius: 0.5rem;
              transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
              cursor: pointer;
+              -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
          }
           .results-container button:hover {
              background-color: var(--theme-button-primary-hover-bg);
@@ -617,7 +662,7 @@
                  gap: 2rem; /* Slightly larger gap */
              }
              .subject-button {
-                 height: 280px; /* Slightly taller on larger screens */
+                 height: 320px; /* Increased height on larger screens */
              }
 
              /* Math main buttons grid layout (Keep as is) */
@@ -656,7 +701,7 @@
             }
              /* Adjust height if desired for even larger screens */
              .subject-button {
-                 height: 300px; /* Even taller on larger screens */
+                 height: 340px; /* Increased height on even larger screens */
              }
         }
 
@@ -668,7 +713,7 @@
                  gap: 1rem;
               }
               .subject-button {
-                  height: 180px; /* Reduce height on very small screens */
+                  height: 200px; /* Increased height on very small screens */
               }
          }
 
@@ -686,24 +731,69 @@
             padding-bottom: 0.5rem;
             text-align: center;
         }
+
+        /* AlpineJS x-transition styles */
+        [x-transition] {
+          transition-property: opacity, transform;
+          transition-duration: 200ms; /* Reduced duration for faster fade/scale */
+        }
+        [x-transition:enter] {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+        [x-transition:enter-start] {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+        [x-transition:enter-end] {
+          opacity: 1;
+          transform: scale(1);
+        }
+        [x-transition:leave] {
+          opacity: 1;
+          transform: scale(1);
+        }
+        [x-transition:leave-start] {
+          opacity: 1;
+          transform: scale(1);
+        }
+        [x-transition:leave-end] {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+
     </style>
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body>
 
-    <!-- NEW: Download button (Icon only) -->
-    <!-- TODO: Replace "https://drive.google.com/drive/folders/1mzZxyoJC_CIWbS_5V71kbLbgK9x41J62?usp=sharing" with the actual link to your PDF file -->
-    <a href="https://drive.google.com/drive/folders/1mzZxyoJC_CIWbS_5V71kbLbgK9x41J62?usp=sharing" class="download-button" target="_blank" download aria-label="دابەزاندن">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-        </svg>
-    </a>
+    <!-- NEW: Download button and menu container -->
+    <div class="download-container" x-data="{ open: false }" @click.outside="open = false">
+        <!-- Download Button (Icon only) -->
+        <button type="button" class="download-button" @click="open = !open" aria-label="دابەزاندن" title="دابەزاندن">
+             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+               <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+             </svg>
+        </button>
+
+        <!-- Download Menu -->
+        <!-- Use x-cloak to hide during page load if Alpine is slow -->
+        <div class="download-menu" x-show="open" x-transition.origin.top-right x-cloak>
+            <a href="https://drive.google.com/drive/folders/1mzZxyoJC_CIWbS_5V71kbLbgK9x41J62?usp=sharing" target="_blank" class="download-menu-item">
+                کتێبەکان
+            </a>
+            <!-- Assuming kurdish.html is the page for Kurdish letters -->
+            <a href="https://t.me/AW_Graphic_IT" class="download-menu-item">
+                پیتەکانی کوردی
+            </a>
+        </div>
+    </div>
 
 
     <div class="container">
         <!-- Reduced font-size for the main title -->
-        <h1 style="text-align: center; margin-bottom: 2rem; color: var(--theme-text-accent); font-size: 2.2rem; font-weight: bold;"> پۆلی یەکەم</h1>
+        <h1 style="text-align: center; margin-bottom: 2rem; color: var(--theme-text-accent); font-size: 2.2rem; font-weight: bold;">پۆلی یەکەم</h1>
 
         <!-- Use grid for buttons -->
         <div class="home-buttons-grid">
